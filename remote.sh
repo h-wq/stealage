@@ -75,7 +75,7 @@ function smart_run() {
     if [ "$_hostname" == "$host" ] || [ "$host" == "localhost" ] ; then
         eval "$_command"
     else
-        ssh app@$host /bin/bash <<EOF
+        ssh root@$host /bin/bash <<EOF
         $_command
 EOF
     fi
