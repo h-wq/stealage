@@ -4,8 +4,6 @@ MODULE=$1
 env=$2
 index=$3
 
-parse_locations $MODULE $env
-
 function parse_locations() {
     local _module=$1
     local _env=$2
@@ -35,6 +33,8 @@ function parse_locations() {
     fi
 }
 
+parse_locations $MODULE $env
+
 if [ "$host" == "" ]; then
     echo "skip deploy to host $index!"
     exit 0
@@ -48,24 +48,31 @@ fi
 
 ALL_MODULES=( $(cat $SERVICE_FILE) )
 
-if [ "$MODULE" == "" ]; then
-    MODULE="all"
-fi
-if [ "$MODULE" != "all" ] && ! [ -d $MODULE ]; then
-    usage
-    exit 1
-fi
-
 function usage() {
     echo "Usage: $0 [all ${ALL_MODULES[@]}]"
 }
 
-smart_run ""
+if [ "$MODULE" == "" ]; then
+    MODULE="all"
+fi
+if [ "$MODULE" != "all" ] && ! [ -d $MODULE ] && [ "$MODULE" != "mylife" ]; then
+    usage
+    exit 1
+fi
 
 function smart_run() {
-    ssh root@$host /bin/bash <<EOF
+    local _command=$1
+    local _hostname=`hostname`
+    if [ "$_hostname" == "$host" ] || [ "$host" == "localhost" ] ; then
+        eval "$_command"
+    else
+        ssh root@$host /bin/bash <<EOF
+        $_command
 EOF
+    fi
 }
+
+smart_run
 
 cd $remote_path
 git checkout $env
