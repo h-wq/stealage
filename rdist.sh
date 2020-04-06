@@ -68,15 +68,14 @@ function smart_run() {
     else
         ssh root@$host /bin/bash <<EOF
         $_command
+        cd $remote_path
+        git checkout $env
+        git pull
 EOF
     fi
 }
 
 smart_run
-
-cd $remote_path
-git checkout $env
-git pull
 
 echo "
 #######################################
