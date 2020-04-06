@@ -13,7 +13,7 @@ fi
 
 function usage() {
     echo "Usage: $0 command service env index"
-    echo "       commands: up|down|status|restart|start|stop "
+    echo "       commands: status|restart|start|stop "
 }
 
 function parse_locations() {
@@ -62,46 +62,31 @@ EOF
     fi
 }
 
-function up() {
-
-    smart_run "
-        cd $remote_path &&
-        ./commons_deploy.sh up $env
-    "
-}
-
-function down() {
-    smart_run "
-        cd $remote_path &&
-        ./commons_deploy.sh down $env
-    "
-}
-
 function status() {
     smart_run "
-        cd $remote_path &&
-        ./commons_deploy.sh status
+        cd $remote_path/target &&
+        ./run.sh status
     "
 }
 
 function restart() {
     smart_run "
-        cd $remote_path &&
-        ./commons_deploy.sh restart $env
+        cd $remote_path/target &&
+        ./run.sh restart $env
     "
 }
 
 function start() {
     smart_run "
-        cd $remote_path &&
-        ./commons_deploy.sh start $env
+        cd $remote_path/target &&
+        ./run.sh start $env
     "
 }
 
 function stop() {
     smart_run "
-        cd $remote_path &&
-        ./commons_deploy.sh stop $env
+        cd $remote_path/target &&
+        ./run.sh stop $env
     "
 }
 
@@ -112,12 +97,6 @@ if [ "$host" == "" ]; then
 fi
 
 case "$command" in
-    up)
-        up
-        ;;
-    down)
-        down
-        ;;
     status)
         status
         ;;
