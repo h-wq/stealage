@@ -1,3 +1,5 @@
+#!/bin/bash
+
 MODULE=$1
 ALL_MODULES=$2
 echo "
