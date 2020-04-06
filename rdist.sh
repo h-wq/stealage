@@ -71,7 +71,7 @@ function smart_run() {
         cd $remote_path
         git checkout $env
         git pull
-        ./run.sh $MODULE $ALL_MODULES
+        ./build.sh $MODULE $ALL_MODULES
 EOF
     fi
 }
