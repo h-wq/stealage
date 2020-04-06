@@ -65,8 +65,7 @@ function start() {
         NEW_RELIC_OPT="-Dnewrelic.environment=$ENV -Dnewrelic.config.file=newrelic.yml -javaagent:newrelic/newrelic.jar"
     fi
 
-    nohup java $OTHER_OPTS $NEW_RELIC_OPT -jar $NAME.jar >> log 2>&1 &
-    echo "$(pwd)"
+    nohup java $OTHER_OPTS $NEW_RELIC_OPT -jar $NAME.jar >> /project/logs/mylife.log 2>&1 &
     echo "nohup java $OTHER_OPTS $NEW_RELIC_OPT -jar $NAME.jar"
     new_pid=$!
     echo $new_pid > RUNNING_PID
