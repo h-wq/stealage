@@ -66,7 +66,8 @@ function start() {
     fi
 
     nohup java $OTHER_OPTS $NEW_RELIC_OPT -jar $NAME.jar >> log 2>&1 &
-    echo pwd
+    x=pwd
+    echo $x
     echo "nohup java $OTHER_OPTS $NEW_RELIC_OPT -jar $NAME.jar"
     new_pid=$!
     echo $new_pid > RUNNING_PID
