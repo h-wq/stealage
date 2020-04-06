@@ -13,22 +13,23 @@ fi
 
 function usage() {
     echo "Usage: $0 command service env index"
-    echo "       commands: up|down|status|restart|start|stop|cp "
+#    echo "       commands: up|down|status|restart|start|stop|cp "
+    echo "       commands: up|down|status|restart|start|stop "
 }
 
-function smart_copy() {
-    local _source=$1
-    local _target_host=$2
-    local _target_path=$3
-    local _hostname=`hostname`
-    if [ "$_hostname" == "$_target_host" ] || [ "$_target_host" == "localhost" ]; then
-        echo "cp $_source to $_target_path"
-        cp $_source $_target_path
-    else
-        echo "scp $_source to $_target_host:$_target_path"
-        scp $_source $_target_host:$_target_path
-    fi
-}
+#function smart_copy() {
+#    local _source=$1
+#    local _target_host=$2
+#    local _target_path=$3
+#    local _hostname=`hostname`
+#    if [ "$_hostname" == "$_target_host" ] || [ "$_target_host" == "localhost" ]; then
+#        echo "cp $_source to $_target_path"
+#        cp $_source $_target_path
+#    else
+#        echo "scp $_source to $_target_host:$_target_path"
+#        scp $_source $_target_host:$_target_path
+#    fi
+#}
 
 function parse_locations() {
     local _service=$1
@@ -64,9 +65,9 @@ function parse_locations() {
     fi
 }
 
-function scp_zip() {
-    smart_copy $service/target/*.zip $host $remote_path
-}
+#function scp_zip() {
+#    smart_copy $service/target/*.zip $host $remote_path
+#}
 
 function smart_run() {
     local _command=$1
@@ -81,7 +82,7 @@ EOF
 }
 
 function up() {
-    scp_zip
+#    scp_zip
 
     smart_run "
         cd $remote_path &&
@@ -124,21 +125,21 @@ function stop() {
     "
 }
 
-function copy_deploy_sh() {
-    if [ $isProd -eq 0 ] ; then
-        smart_run "
-            mkdir -p $remote_path
-        "
-    fi
-    smart_copy commons_deploy.sh $host $remote_path
-}
+#function copy_deploy_sh() {
+#    if [ $isProd -eq 0 ] ; then
+#        smart_run "
+#            mkdir -p $remote_path
+#        "
+#    fi
+#    smart_copy commons_deploy.sh $host $remote_path
+#}
 
 parse_locations $service $env $index
 if [ "$host" == "" ]; then
     echo "skip deploy to host $index!"
     exit 0
 fi
-copy_deploy_sh
+#copy_deploy_sh
 
 case "$command" in
     up)
@@ -159,9 +160,9 @@ case "$command" in
     start)
         start
         ;;
-    cp)
-        scp_zip
-        ;;
+#    cp)
+#        scp_zip
+#        ;;
     *)
         usage
         ;;
