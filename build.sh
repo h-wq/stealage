@@ -1,10 +1,11 @@
 #!/bin/bash
-env=$1
-MODULE=$2
-ALL_MODULES=$3
+remote_path=$1
+env=$2
+MODULE=$3
+ALL_MODULES=$4
 
-git checkout $env
-git pull
+`pwd`/git checkout $env
+`pwd`/git pull
 
 echo "
 #######################################
@@ -13,7 +14,7 @@ clean and install all modules
 
 #######################################
 "
-mvn clean install -DskipTests=true
+/maven/apache-maven-3.6.3/bin/mvn clean install -DskipTests=true
 ret=$?
 if [ $ret != 0 ]; then
     echo ""
@@ -37,7 +38,7 @@ packaging $service
 #######################################
 "
     cd $service
-    mvn clean package -DskipTests=true
+    /maven/apache-maven-3.6.3/bin/mvn clean package -DskipTests=true
     ret=$?
     if [ $ret != 0 ]; then
         echo ""
