@@ -8,6 +8,7 @@ function usage() {
     echo "  run.sh stop"
 }
 
+cd target
 PARAM_COUNT=$#
 if [ $PARAM_COUNT -lt 3 ]; then
     usage

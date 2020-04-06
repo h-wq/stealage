@@ -64,28 +64,28 @@ EOF
 
 function status() {
     smart_run "
-        cd $remote_path/target &&
+        cd $remote_path &&
         ./run.sh status
     "
 }
 
 function restart() {
     smart_run "
-        cd $remote_path/target &&
+        cd $remote_path &&
         ./run.sh restart $env
     "
 }
 
 function start() {
     smart_run "
-        cd $remote_path/target &&
+        cd $remote_path &&
         ./run.sh start $env
     "
 }
 
 function stop() {
     smart_run "
-        cd $remote_path/target &&
+        cd $remote_path &&
         ./run.sh stop $env
     "
 }
