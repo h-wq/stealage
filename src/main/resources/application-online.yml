@@ -1,0 +1,20 @@
+spring:
+  dubbo:
+    consumer:
+      timeout: 3000
+      check: false
+      application:
+        name: mylife
+      registry:
+        address: zookeeper://39.97.96.131:2181
+      protocol:
+        name: dubbo
+        port: 20666
+      server: true
+      scan: com.hello.mylife.controller
+
+
+debug: false
+
+zookeeper:
+  address: 39.97.96.131:2181
