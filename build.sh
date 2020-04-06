@@ -4,8 +4,8 @@ MODULE=$2
 ALL_MODULES=$3
 
 echo `pwd`
-git checkout $env
-git pull
+sudo git checkout $env
+sudo git pull
 
 echo "
 #######################################
@@ -14,7 +14,7 @@ clean and install all modules
 
 #######################################
 "
-mvn clean install -DskipTests=true
+sudo mvn clean install -DskipTests=true
 ret=$?
 if [ $ret != 0 ]; then
     echo ""
@@ -38,7 +38,7 @@ packaging $service
 #######################################
 "
     cd $service
-    mvn clean package -DskipTests=true
+    sudo mvn clean package -DskipTests=true
     ret=$?
     if [ $ret != 0 ]; then
         echo ""
