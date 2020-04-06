@@ -1,7 +1,11 @@
 #!/bin/bash
+env=$1
+MODULE=$2
+ALL_MODULES=$3
 
-MODULE=$1
-ALL_MODULES=$2
+git checkout $env
+git pull
+
 echo "
 #######################################
 

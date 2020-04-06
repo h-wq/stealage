@@ -74,7 +74,5 @@ EOF
 
 smart_run "
         cd $remote_path &&
-        git checkout $env &&
-        git pull &&
-        ./build.sh $MODULE $ALL_MODULES
+        ./build.sh $env $MODULE $ALL_MODULES
     "
