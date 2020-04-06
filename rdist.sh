@@ -60,18 +60,11 @@ function usage() {
     echo "Usage: $0 [all ${ALL_MODULES[@]}]"
 }
 
-smart_run
+smart_run ""
 
 function smart_run() {
-    local _command=$1
-    local _hostname=`hostname`
-    if [ "$_hostname" == "$host" ] || [ "$host" == "localhost" ] ; then
-        eval "$_command"
-    else
-        ssh root@$host /bin/bash <<EOF
-        $_command
+    ssh root@$host /bin/bash <<EOF
 EOF
-    fi
 }
 
 cd $remote_path
