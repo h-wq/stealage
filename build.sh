@@ -1,8 +1,7 @@
 #!/bin/bash
-remote_path=$1
-env=$2
-MODULE=$3
-ALL_MODULES=$4
+env=$1
+MODULE=$2
+ALL_MODULES=$3
 
 git checkout $env
 git pull
