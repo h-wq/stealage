@@ -4,8 +4,8 @@ env=$2
 MODULE=$3
 ALL_MODULES=$4
 
-`pwd`/git checkout $env
-`pwd`/git pull
+git checkout $env
+git pull
 
 echo "
 #######################################
@@ -14,7 +14,7 @@ clean and install all modules
 
 #######################################
 "
-/maven/apache-maven-3.6.3/bin/mvn clean install -DskipTests=true
+mvn clean install -DskipTests=true
 ret=$?
 if [ $ret != 0 ]; then
     echo ""
@@ -38,7 +38,7 @@ packaging $service
 #######################################
 "
     cd $service
-    /maven/apache-maven-3.6.3/bin/mvn clean package -DskipTests=true
+    mvn clean package -DskipTests=true
     ret=$?
     if [ $ret != 0 ]; then
         echo ""
