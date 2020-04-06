@@ -3,6 +3,7 @@ env=$1
 MODULE=$2
 ALL_MODULES=$3
 
+echo "$pwd"
 git checkout $env
 git pull
 
