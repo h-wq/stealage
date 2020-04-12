@@ -3,6 +3,7 @@ env=$1
 MODULE=$2
 ALL_MODULES=$3
 
+source /etc/profile
 git checkout $env
 git pull
 
