@@ -21,6 +21,8 @@ APP="$2"
 COMMAND="$3"
 ENV="$4"
 
+git checkout $env
+
 if [ "$ENV" != "" ]; then
     shift 4
     OTHER_OPTS="$@"  #other opts, like jvm opts
