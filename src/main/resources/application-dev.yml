@@ -4,14 +4,14 @@ spring:
       timeout: 3000
       check: false
       application:
-        name: mylife
+        name: read-backend
       registry:
         address: zookeeper://39.97.96.131:2181
       protocol:
         name: dubbo
         port: 20889
       server: true
-      base-package: com.hello.mylife
+      base-package: com.xupt.read.backend
 
 
 debug: false

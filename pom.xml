@@ -8,10 +8,10 @@
 		<version>2.2.6.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.hello</groupId>
-	<artifactId>mylife</artifactId>
+	<groupId>com.xupt</groupId>
+	<artifactId>read-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>mylife</name>
+	<name>read-backend</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
@@ -74,8 +74,8 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.hello</groupId>
-			<artifactId>micro-sdk</artifactId>
+			<groupId>com.xupt</groupId>
+			<artifactId>read-sdk</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>

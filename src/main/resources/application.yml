@@ -1,6 +1,6 @@
 spring:
   application:
-    name: mylife
+    name: read-backend
   profiles:
     active: dev
 

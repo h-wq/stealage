@@ -1,4 +1,4 @@
-package com.hello.mylife.common.result;
+package com.xupt.read.backend.common.result;
 
 import lombok.Data;
 
