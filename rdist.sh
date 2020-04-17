@@ -24,7 +24,7 @@ fi
 
 ALL_MODULES=( $(cat $SERVICE_FILE) )
 
-if ! [ -d $MODULE ] && [ "$MODULE" != "mylife" ]; then
+if ! [ -d $MODULE ] && [ "$MODULE" != "read-backend" ]; then
     usage
     exit 1
 fi
