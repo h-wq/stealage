@@ -3,6 +3,7 @@ package com.xupt.read.controller;
 import com.xupt.read.common.result.JsonResult;
 import com.xupt.read.service.HelloWorldService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class HelloWorldController {
 
+    @Autowired
     private HelloWorldService helloWorldService;
 
     @RequestMapping(method = RequestMethod.GET)
