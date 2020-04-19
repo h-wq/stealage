@@ -8,6 +8,6 @@ public class HelloWorldServiceImpl implements HelloWorldService {
 
     @Override
     public String helloWorld() {
-        return "success, helloWorld1";
+        return "success, helloWorld";
     }
 }
