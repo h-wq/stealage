@@ -40,7 +40,7 @@ public class BookController {
         return JsonResult.success(respPageResult);
     }
 
-    @RequestMapping(name = "/book_type", method = RequestMethod.GET)
+    @RequestMapping(value = "/book_type", method = RequestMethod.GET)
     public JsonResult queryByBookTypeId(@RequestParam(name = "book_type_id") Integer bookTypeId,
                                         @RequestParam(name = "page_num", defaultValue = "1") int pageNum,
                                         @RequestParam(name = "page_size", defaultValue = "20") int pageSize) {
@@ -51,7 +51,7 @@ public class BookController {
         return JsonResult.success(respPageResult);
     }
 
-    @RequestMapping(name = "/ranking", method = RequestMethod.GET)
+    @RequestMapping(value = "/ranking", method = RequestMethod.GET)
     public JsonResult queryByPopularity(@RequestParam(name = "page_num", defaultValue = "1") int pageNum,
                                         @RequestParam(name = "page_size", defaultValue = "20") int pageSize) {
 
@@ -61,7 +61,7 @@ public class BookController {
         return JsonResult.success(respPageResult);
     }
 
-    @RequestMapping(name = "/newest", method = RequestMethod.GET)
+    @RequestMapping(value = "/newest", method = RequestMethod.GET)
     public JsonResult queryByNewest(@RequestParam(name = "page_num", defaultValue = "1") int pageNum,
                                     @RequestParam(name = "page_size", defaultValue = "20") int pageSize) {
 
@@ -71,7 +71,7 @@ public class BookController {
         return JsonResult.success(respPageResult);
     }
 
-    @RequestMapping(name = "/end", method = RequestMethod.GET)
+    @RequestMapping(value = "/end", method = RequestMethod.GET)
     public JsonResult queryByEnd(@RequestParam(name = "page_num", defaultValue = "1") int pageNum,
                                  @RequestParam(name = "page_size", defaultValue = "20") int pageSize) {
 

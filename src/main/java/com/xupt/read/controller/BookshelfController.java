@@ -48,7 +48,7 @@ public class BookshelfController {
         return JsonResult.success(respPageResult);
     }
 
-    @RequestMapping(name = "/{id}/notes", method = RequestMethod.GET)
+    @RequestMapping(value = "/{id}/notes", method = RequestMethod.GET)
     public JsonResult queryNotes(@PathVariable("id") Integer id) {
 
         List<String> notes = bookshelfService.getNotes(id).stream().map(Note::getNote).collect(Collectors.toList());
