@@ -27,3 +27,8 @@ spring:
       remove-abandoned-on-borrow: true
       remove-abandoned-on-maintenance: true
       connection-init-sqls: set names utf8mb4
+
+
+file:
+  upload:
+    path: /project/file/upload/read/

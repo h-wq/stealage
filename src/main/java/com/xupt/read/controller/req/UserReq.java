@@ -12,12 +12,10 @@ public class UserReq {
     @NotBlank
     private String name;
 
-    @NotBlank
-    private String picture;
-
-    public static User convert(UserReq req) {
+    public static User convert(UserReq req, String path) {
         User user = new User();
         BeanUtils.copyProperties(req, user);
+        user.setPicture(path);
         return user;
     }
 }

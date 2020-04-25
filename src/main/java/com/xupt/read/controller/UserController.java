@@ -6,10 +6,13 @@ import com.xupt.read.controller.req.UserReq;
 import com.xupt.read.controller.resp.UserResp;
 import com.xupt.read.model.User;
 import com.xupt.read.service.UserService;
+import com.xupt.read.util.FileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -21,6 +24,9 @@ import java.util.stream.Collectors;
 @Slf4j
 public class UserController {
 
+    @Value("${file.upload.path}")
+    private String fileUploadPath;
+
     @Autowired
     private UserService userService;
 
@@ -31,11 +37,12 @@ public class UserController {
         return JsonResult.success(users);
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    public JsonResult addUser(@RequestBody @Valid UserReq userReq) {
+    @RequestMapping(method = RequestMethod.POST, consumes = "multipart/form-data")
+    public JsonResult addUser(@Valid UserReq userReq, @RequestParam("file") MultipartFile file) {
 
-        // todo 图片上传处理
-        Integer result = userService.addUser(UserReq.convert(userReq));
+        // 图片上传处理
+        String path = FileUtils.uploadFile(fileUploadPath, file);
+        Integer result = userService.addUser(UserReq.convert(userReq, path));
         return result == 1 ? JsonResult.success() : JsonResult.fail(-1, "添加用户失败！");
     }
 

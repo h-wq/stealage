@@ -40,9 +40,10 @@ public class BookReq {
     @JsonProperty(value = "is_end", access = JsonProperty.Access.WRITE_ONLY)
     private Boolean isEnd;
 
-    public static Book convert(BookReq req) {
+    public static Book convert(BookReq req, String path) {
         Book book = new Book();
         BeanUtils.copyProperties(req, book);
+        book.setPicture(path);
         return book;
     }
 }

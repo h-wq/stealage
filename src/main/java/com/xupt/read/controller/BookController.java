@@ -6,9 +6,12 @@ import com.xupt.read.controller.req.BookReq;
 import com.xupt.read.controller.resp.BookResp;
 import com.xupt.read.model.Book;
 import com.xupt.read.service.BookService;
+import com.xupt.read.util.FileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -19,14 +22,18 @@ import java.util.stream.Collectors;
 @Slf4j
 public class BookController {
 
+    @Value("${file.upload.path}")
+    private String fileUploadPath;
+
     @Autowired
     private BookService bookService;
 
-    @RequestMapping(method = RequestMethod.POST)
-    public JsonResult addBook(@RequestBody @Valid BookReq bookReq) {
+    @RequestMapping(method = RequestMethod.POST, consumes = "multipart/form-data")
+    public JsonResult addBook(@Valid BookReq bookReq, @RequestParam("file") MultipartFile file) {
 
-        //todo 图片上传
-        Integer result = bookService.addBook(BookReq.convert(bookReq));
+        // 图片上传
+        String path = FileUtils.uploadFile(fileUploadPath, file);
+        Integer result = bookService.addBook(BookReq.convert(bookReq, path));
         return result == 1 ? JsonResult.success() : JsonResult.fail(-1, "添加书失败！");
     }
 
