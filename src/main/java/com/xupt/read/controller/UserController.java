@@ -3,6 +3,7 @@ package com.xupt.read.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.xupt.read.common.result.JsonResult;
 import com.xupt.read.controller.req.UserReq;
+import com.xupt.read.controller.resp.UserResp;
 import com.xupt.read.model.User;
 import com.xupt.read.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -10,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -21,8 +24,15 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @RequestMapping(method = RequestMethod.GET)
+    public JsonResult query(@RequestParam(name = "name") String name) {
+
+        List<UserResp> users = userService.getByName(name).stream().map(UserResp::convert).collect(Collectors.toList());
+        return JsonResult.success(users);
+    }
+
     @RequestMapping(method = RequestMethod.POST)
-    public JsonResult addUser(@RequestBody UserReq userReq) {
+    public JsonResult addUser(@RequestBody @Valid UserReq userReq) {
 
         // todo 图片上传处理
         Integer result = userService.addUser(UserReq.convert(userReq));

@@ -1,0 +1,48 @@
+package com.xupt.read.controller;
+
+import com.xupt.read.common.result.JsonResult;
+import com.xupt.read.common.result.PageResult;
+import com.xupt.read.controller.req.OpinionReq;
+import com.xupt.read.controller.resp.OpinionResp;
+import com.xupt.read.model.Opinion;
+import com.xupt.read.model.User;
+import com.xupt.read.service.OpinionService;
+import com.xupt.read.service.UserService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@RestController
+@RequestMapping(value = "/opinions")
+@Slf4j
+public class OpinionController {
+
+    @Autowired
+    private OpinionService opinionService;
+
+    @Autowired
+    private UserService userService;
+
+    @RequestMapping(method = RequestMethod.POST)
+    public JsonResult addOpinion(@RequestBody @Valid OpinionReq opinionReq) {
+
+        Integer result = opinionService.addOpinion(OpinionReq.convert(opinionReq));
+        return result == 1 ? JsonResult.success() : JsonResult.fail(-1, "意见反馈失败！");
+    }
+
+    @RequestMapping(method = RequestMethod.GET)
+    public JsonResult query(@RequestParam(name = "page_num", defaultValue = "1") int pageNum,
+                            @RequestParam(name = "page_size", defaultValue = "20") int pageSize) {
+
+        PageResult<Opinion> pageResult = opinionService.getOpinions((pageNum - 1) * pageSize, pageSize);
+        List<Integer> userIds = pageResult.getItems().stream().map(Opinion::getUserId).collect(Collectors.toList());
+        List<User> users = userService.getByIds(userIds);
+        List<OpinionResp> opinionResps = pageResult.getItems().stream().map(opinion -> OpinionResp.convert(users, opinion)).collect(Collectors.toList());
+        PageResult<OpinionResp> respPageResult = PageResult.fromPageResult(opinionResps, pageResult);
+        return JsonResult.success(respPageResult);
+    }
+}

@@ -22,7 +22,7 @@ public class CircleServiceImpl implements CircleService {
     public PageResult<Circle> getCircles(List<Integer> userIds, int offset, int size) {
         CircleExample example = new CircleExample();
         example.createCriteria().andUserIdIn(userIds);
-        example.setOrderByClause("create_at desc");
+        example.setOrderByClause("created_at desc");
 
         PageHelper.offsetPage(offset, size, true);
         List<Circle> circleList = circleMapper.selectByExample(example);

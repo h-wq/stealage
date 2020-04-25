@@ -10,6 +10,8 @@ public interface UserService {
 
     List<User> getByIds(List<Integer> ids);
 
+    List<User> getByName(String name);
+
     Integer addUser(User user);
 
     Integer addFriend(Integer id, String friendIds);

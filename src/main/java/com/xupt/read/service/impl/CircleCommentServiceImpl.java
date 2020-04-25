@@ -19,7 +19,7 @@ public class CircleCommentServiceImpl implements CircleCommentService {
     public List<CircleComment> getCircleComments(List<Integer> circleIds) {
         CircleCommentExample example = new CircleCommentExample();
         example.createCriteria().andCircleIdIn(circleIds);
-        example.setOrderByClause("create_at desc");
+        example.setOrderByClause("created_at desc");
 
         return circleCommentMapper.selectByExample(example);
     }

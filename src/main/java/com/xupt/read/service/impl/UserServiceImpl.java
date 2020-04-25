@@ -28,6 +28,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> getByName(String name) {
+        UserExample example = new UserExample();
+        example.createCriteria().andNameEqualTo(name);
+        return userMapper.selectByExample(example);
+    }
+
+    @Override
     public Integer addUser(User user) {
         return userMapper.insertSelective(user);
     }
