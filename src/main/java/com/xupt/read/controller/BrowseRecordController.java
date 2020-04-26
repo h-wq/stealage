@@ -45,12 +45,10 @@ public class BrowseRecordController {
                                     @RequestParam(name = "page_size", defaultValue = "20") int pageSize) {
 
         PageResult<BrowseRecord> pageResult = browseRecordService.getByUserId(userId, (pageNum - 1) * pageSize, pageSize);
-        List<Integer> userIds = pageResult.getItems().stream().map(BrowseRecord::getUserId).collect(Collectors.toList());
-        List<User> users = userService.getByIds(userIds);
 
         List<Integer> bookIds = pageResult.getItems().stream().map(BrowseRecord::getBookId).collect(Collectors.toList());
         List<Book> books = bookService.getByIds(bookIds);
-        List<BrowseRecordResp> browseRecordResps = pageResult.getItems().stream().map(browseRecord -> BrowseRecordResp.convert(users, books, browseRecord)).collect(Collectors.toList());
+        List<BrowseRecordResp> browseRecordResps = pageResult.getItems().stream().map(browseRecord -> BrowseRecordResp.convert(books, browseRecord)).collect(Collectors.toList());
         PageResult<BrowseRecordResp> respPageResult = PageResult.fromPageResult(browseRecordResps, pageResult);
         return JsonResult.success(respPageResult);
     }

@@ -45,12 +45,9 @@ public class EvaluateController {
                                     @RequestParam(name = "page_size", defaultValue = "20") int pageSize) {
 
         PageResult<Evaluate> pageResult = evaluateService.getByBookId(bookId, (pageNum - 1) * pageSize, pageSize);
-
-        List<Integer> bookIds = pageResult.getItems().stream().map(Evaluate::getBookId).collect(Collectors.toList());
-        List<Book> books = bookService.getByIds(bookIds);
         List<Integer> userIds = pageResult.getItems().stream().map(Evaluate::getUserId).collect(Collectors.toList());
         List<User> users = userService.getByIds(userIds);
-        List<EvaluateResp> evaluateResps = pageResult.getItems().stream().map(evaluate -> EvaluateResp.convert(books, users, evaluate)).collect(Collectors.toList());
+        List<EvaluateResp> evaluateResps = pageResult.getItems().stream().map(evaluate -> EvaluateResp.convert(users, evaluate)).collect(Collectors.toList());
         PageResult<EvaluateResp> respPageResult = PageResult.fromPageResult(evaluateResps, pageResult);
         return JsonResult.success(respPageResult);
     }
