@@ -3,7 +3,9 @@ package com.xupt.read.util;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class FileUtils {
 
@@ -40,5 +42,14 @@ public class FileUtils {
             }
         }
         return path;
+    }
+
+    public static List<String> uploadFile(String uploadPath, List<MultipartFile> files) {
+        List<String> paths= new ArrayList<>();
+        for (MultipartFile file : files) {
+            String path = uploadFile(uploadPath, file);
+            paths.add(path);
+        }
+        return paths;
     }
 }

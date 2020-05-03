@@ -30,6 +30,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    /**
+     * 查找好友
+     */
     @RequestMapping(method = RequestMethod.GET)
     public JsonResult query(@RequestParam(name = "name") String name) {
 
@@ -37,6 +40,9 @@ public class UserController {
         return JsonResult.success(users);
     }
 
+    /**
+     * 添加用户
+     */
     @RequestMapping(method = RequestMethod.POST, consumes = "multipart/form-data")
     public JsonResult addUser(@Valid UserReq userReq, @RequestParam("file") MultipartFile file) {
 
@@ -46,6 +52,9 @@ public class UserController {
         return result == 1 ? JsonResult.success() : JsonResult.fail(-1, "添加用户失败！");
     }
 
+    /**
+     * 添加好友
+     */
     @RequestMapping(value = "/{id}/add_friend", method = RequestMethod.POST)
     public JsonResult addFriend(@PathVariable Integer id, @RequestParam(name = "friend_id") Integer friendId) {
 

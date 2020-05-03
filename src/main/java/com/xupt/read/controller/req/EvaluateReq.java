@@ -23,6 +23,9 @@ public class EvaluateReq {
     private Integer userId;
 
     @NotBlank
+    /**
+     * 评价
+     */
     private String remarks;
 
     public static Evaluate convert(EvaluateReq req) {

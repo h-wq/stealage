@@ -18,6 +18,11 @@ public class BookTypeController {
     @Autowired
     private BookTypeService bookTypeService;
 
+    /**
+     * 添加书类型
+     * @param name name
+     * @return
+     */
     @RequestMapping(method = RequestMethod.POST)
     public JsonResult addBookType(@RequestParam(name = "name") String name) {
 
@@ -25,6 +30,10 @@ public class BookTypeController {
         return result == 1 ? JsonResult.success() : JsonResult.fail(-1, "添加类型失败！");
     }
 
+    /**
+     * 获取所有书类型
+     * @return
+     */
     @RequestMapping(method = RequestMethod.GET)
     public JsonResult query() {
 

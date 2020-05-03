@@ -7,7 +7,10 @@ import org.springframework.beans.BeanUtils;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 public class CircleReq {
@@ -25,13 +28,18 @@ public class CircleReq {
     @NotBlank
     private String comment;
 
-    @NotNull
-    @Min(value = 1)
+    /**
+     * 评分
+     */
     private Integer coefficient;
 
-    public static Circle convert(CircleReq req) {
+    @NotEmpty
+    private String location;
+
+    public static Circle convert(CircleReq req, List<String> paths) {
         Circle circle = new Circle();
         BeanUtils.copyProperties(req, circle);
+        circle.setPictures(paths.stream().map(String::valueOf).collect(Collectors.joining(",")));
         return circle;
     }
 }

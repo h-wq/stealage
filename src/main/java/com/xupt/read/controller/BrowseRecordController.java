@@ -32,6 +32,9 @@ public class BrowseRecordController {
     @Autowired
     private BookService bookService;
 
+    /**
+     * 添加浏览记录
+     */
     @RequestMapping(method = RequestMethod.POST)
     public JsonResult addBrowseRecord(@RequestBody @Valid BrowseRecordReq browseRecordReq) {
 
@@ -39,6 +42,10 @@ public class BrowseRecordController {
         return result == 1 ? JsonResult.success() : JsonResult.fail(-1, "添加浏览记录失败！");
     }
 
+    /**
+     * 获取浏览记录
+     * @return
+     */
     @RequestMapping(method = RequestMethod.GET)
     public JsonResult queryByUserId(@RequestParam(name = "user_id") Integer userId,
                                     @RequestParam(name = "page_num", defaultValue = "1") int pageNum,

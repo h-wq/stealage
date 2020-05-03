@@ -32,6 +32,9 @@ public class EvaluateController {
     @Autowired
     private UserService userService;
 
+    /**
+     * 发表评价
+     */
     @RequestMapping(method = RequestMethod.POST)
     public JsonResult addEvaluate(@RequestBody @Valid EvaluateReq evaluateReq) {
 
@@ -39,6 +42,9 @@ public class EvaluateController {
         return result == 1 ? JsonResult.success() : JsonResult.fail(-1, "评论失败！");
     }
 
+    /**
+     * 获取评价
+     */
     @RequestMapping(method = RequestMethod.GET)
     public JsonResult queryByBookId(@RequestParam(name = "book_id") Integer bookId,
                                     @RequestParam(name = "page_num", defaultValue = "1") int pageNum,

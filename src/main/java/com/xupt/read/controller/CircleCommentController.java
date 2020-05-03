@@ -20,6 +20,9 @@ public class CircleCommentController {
     @Autowired
     private CircleCommentService circleCommentService;
 
+    /**
+     * 发表评论
+     */
     @RequestMapping(method = RequestMethod.POST)
     public JsonResult addCircleComment(@RequestBody @Valid CircleCommentReq circleCommentReq) {
 

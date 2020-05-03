@@ -28,6 +28,11 @@ public class BookshelfController {
     @Autowired
     private BookService bookService;
 
+    /**
+     * 加入书架
+     * @param bookshelfReq bookshelfReq
+     * @return
+     */
     @RequestMapping(method = RequestMethod.POST)
     public JsonResult addBookshelf(@RequestBody @Valid BookshelfReq bookshelfReq) {
 
@@ -35,6 +40,13 @@ public class BookshelfController {
         return result == 1 ? JsonResult.success() : JsonResult.fail(-1, "添加书架失败！");
     }
 
+    /**
+     * 获取我的书架
+     * @param userId userId
+     * @param pageNum pageNum
+     * @param pageSize pageSize
+     * @return
+     */
     @RequestMapping(method = RequestMethod.GET)
     public JsonResult query(@RequestParam(name = "user_id") Integer userId,
                             @RequestParam(name = "page_num", defaultValue = "1") int pageNum,
@@ -48,10 +60,15 @@ public class BookshelfController {
         return JsonResult.success(respPageResult);
     }
 
-    @RequestMapping(value = "/{id}/notes", method = RequestMethod.GET)
-    public JsonResult queryNotes(@PathVariable("id") Integer id) {
+    /**
+     * 获取笔记
+     * @param bookshelf_id bookshelf_id
+     * @return
+     */
+    @RequestMapping(value = "/{bookshelf_id}/notes", method = RequestMethod.GET)
+    public JsonResult queryNotes(@PathVariable("bookshelf_id") Integer bookshelf_id) {
 
-        List<String> notes = bookshelfService.getNotes(id).stream().map(Note::getNote).collect(Collectors.toList());
+        List<String> notes = bookshelfService.getNotes(bookshelf_id).stream().map(Note::getNote).collect(Collectors.toList());
         return JsonResult.success(notes);
     }
 }

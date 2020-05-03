@@ -3,10 +3,12 @@ package com.xupt.read.controller.resp;
 import com.xupt.read.model.Book;
 import com.xupt.read.model.Bookshelf;
 import lombok.Builder;
+import lombok.Data;
 
 import java.util.List;
 
 @Builder
+@Data
 public class BookResp {
 
     private Integer id;
@@ -15,23 +17,49 @@ public class BookResp {
 
     private String author;
 
+    /**
+     * 简介
+     */
     private String synopsis;
 
+    /**
+     * 评分
+     */
     private Integer score;
 
+    /**
+     * 链接
+     */
     private String link;
 
     private Integer typeId;
 
     private String picture;
 
+    /**
+     * 人气
+     */
     private Integer popularity;
 
+    /**
+     * 是否最新
+     */
     private Boolean isNewest;
 
+    /**
+     * 是否完结
+     */
     private Boolean isEnd;
 
+    /**
+     * 书架id
+     */
     private Integer bookshelfId;
+
+    /**
+     * 书架添加时间
+     */
+    private long addTime;
 
     public static BookResp convert(Book book) {
 
@@ -66,6 +94,7 @@ public class BookResp {
                 .isNewest(book.getIsNewest())
                 .isEnd(book.getIsEnd())
                 .bookshelfId(bookshelf.getId())
+                .addTime(bookshelf.getCreatedAt().getTime())
                 .build();
     }
 }

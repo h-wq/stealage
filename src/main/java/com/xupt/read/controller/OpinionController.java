@@ -27,6 +27,9 @@ public class OpinionController {
     @Autowired
     private UserService userService;
 
+    /**
+     * 意见反馈
+     */
     @RequestMapping(method = RequestMethod.POST)
     public JsonResult addOpinion(@RequestBody @Valid OpinionReq opinionReq) {
 

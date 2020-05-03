@@ -24,14 +24,18 @@ public class CircleResp {
      */
     private String bookName;
 
-    private String bookPicture;
-
     /**
      * 朋友圈内容
      */
+    private String pictures;
+
     private String comment;
 
     private Integer coefficient;
+
+    private String location;
+
+    private long time;
 
     private List<CircleCommentResp> circleCommentRespList;
 
@@ -51,9 +55,11 @@ public class CircleResp {
         circleResp.setUserPicture(circleUser.getPicture());
         Book circleBook = books.stream().filter(book -> book.getId().equals(circle.getBookId())).findFirst().get();
         circleResp.setBookName(circleBook.getName());
-        circleResp.setBookPicture(circleBook.getPicture());
+        circleResp.setPictures(circle.getPictures());
         circleResp.setComment(circle.getComment());
         circleResp.setCoefficient(circle.getCoefficient());
+        circleResp.setLocation(circle.getLocation());
+        circleResp.setTime(circle.getCreatedAt().getTime());
         circleComments = circleComments.stream().filter(circleComment -> circleComment.getCircleId().equals(circle.getId())).collect(Collectors.toList());
         List<CircleCommentResp> circleCommentRespList = circleComments.stream().map(circleComment -> {
             CircleCommentResp circleCommentResp = new CircleCommentResp();

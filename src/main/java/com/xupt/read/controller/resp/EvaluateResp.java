@@ -9,8 +9,14 @@ import java.util.List;
 @Builder
 public class EvaluateResp {
 
+    /**
+     * 用户信息
+     */
     private UserResp userResp;
 
+    /**
+     * 评价
+     */
     private String remarks;
 
     private long time;

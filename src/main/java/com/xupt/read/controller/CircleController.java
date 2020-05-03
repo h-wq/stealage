@@ -13,11 +13,16 @@ import com.xupt.read.service.BookService;
 import com.xupt.read.service.CircleCommentService;
 import com.xupt.read.service.CircleService;
 import com.xupt.read.service.UserService;
+import com.xupt.read.util.FileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +32,9 @@ import java.util.stream.Stream;
 @RequestMapping(value = "/circles")
 @Slf4j
 public class CircleController {
+
+    @Value("${file.upload.path}")
+    private String fileUploadPath;
 
     @Autowired
     private UserService userService;
@@ -40,6 +48,9 @@ public class CircleController {
     @Autowired
     private BookService bookService;
 
+    /**
+     * 获取朋友圈
+     */
     @RequestMapping(method = RequestMethod.GET)
     public JsonResult getCircles(@RequestParam(name = "user_id") Integer userId,
                                  @RequestParam(name = "page_num", defaultValue = "1") int pageNum,
@@ -69,10 +80,15 @@ public class CircleController {
         return JsonResult.success(respPageResult);
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    public JsonResult addCircle(@RequestBody @Valid CircleReq circleReq) {
+    /**
+     * 发送朋友圈
+     */
+    @RequestMapping(method = RequestMethod.POST, consumes = "multipart/form-data")
+    public JsonResult addCircle(@Valid CircleReq circleReq, HttpServletRequest request) {
 
-        Integer result = circleService.addCircle(CircleReq.convert(circleReq));
+        List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
+        List<String> paths = FileUtils.uploadFile(fileUploadPath, files);
+        Integer result = circleService.addCircle(CircleReq.convert(circleReq, paths));
         return result == 1 ? JsonResult.success() : JsonResult.fail(-1, "发表朋友圈失败！");
     }
 }
