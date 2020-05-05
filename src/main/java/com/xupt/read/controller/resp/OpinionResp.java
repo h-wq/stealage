@@ -3,6 +3,7 @@ package com.xupt.read.controller.resp;
 import com.xupt.read.model.Opinion;
 import com.xupt.read.model.User;
 import lombok.Builder;
+import lombok.Data;
 
 import java.util.List;
 
@@ -10,6 +11,7 @@ import java.util.List;
  * 意见反馈返回实体类
  */
 @Builder
+@Data
 public class OpinionResp {
 
     private UserResp userResp;

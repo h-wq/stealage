@@ -2,11 +2,13 @@ package com.xupt.read.controller.resp;
 
 import com.xupt.read.model.User;
 import lombok.Builder;
+import lombok.Data;
 
 /**
  * 用户返回实体类
  */
 @Builder
+@Data
 public class UserResp {
 
     private Integer id;

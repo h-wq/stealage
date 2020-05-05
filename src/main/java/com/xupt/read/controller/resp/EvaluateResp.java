@@ -3,6 +3,7 @@ package com.xupt.read.controller.resp;
 import com.xupt.read.model.Evaluate;
 import com.xupt.read.model.User;
 import lombok.Builder;
+import lombok.Data;
 
 import java.util.List;
 
@@ -10,6 +11,7 @@ import java.util.List;
  * 图书评价返回实体类
  */
 @Builder
+@Data
 public class EvaluateResp {
 
     /**
