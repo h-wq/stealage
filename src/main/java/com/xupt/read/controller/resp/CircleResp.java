@@ -9,6 +9,9 @@ import lombok.Data;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * 朋友圈返回实体类
+ */
 @Data
 public class CircleResp {
 

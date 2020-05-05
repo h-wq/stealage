@@ -8,6 +8,9 @@ import org.springframework.beans.BeanUtils;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+/**
+ * 书架请求实体类
+ */
 @Data
 public class BookshelfReq {
 

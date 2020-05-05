@@ -3,6 +3,9 @@ package com.xupt.read.controller.resp;
 import com.xupt.read.model.User;
 import lombok.Builder;
 
+/**
+ * 用户返回实体类
+ */
 @Builder
 public class UserResp {
 

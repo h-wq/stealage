@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+/**
+ * 朋友圈评论相关接口
+ */
 @RestController
 @RequestMapping(value = "/circle_comments")
 @Slf4j

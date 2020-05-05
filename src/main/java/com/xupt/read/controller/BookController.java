@@ -21,6 +21,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * 图书相关接口
+ */
 @RestController
 @RequestMapping(value = "/books")
 @Slf4j
@@ -35,6 +38,9 @@ public class BookController {
     @Autowired
     private BookTypeService bookTypeService;
 
+    /**
+     * 添加图书
+     */
     @RequestMapping(method = RequestMethod.POST, consumes = "multipart/form-data")
     public JsonResult addBook(@Valid BookReq bookReq, @RequestParam("file") MultipartFile file) {
 

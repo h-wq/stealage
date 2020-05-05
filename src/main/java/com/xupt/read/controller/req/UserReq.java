@@ -6,6 +6,9 @@ import org.springframework.beans.BeanUtils;
 
 import javax.validation.constraints.NotBlank;
 
+/**
+ * 用户请求实体类
+ */
 @Data
 public class UserReq {
 

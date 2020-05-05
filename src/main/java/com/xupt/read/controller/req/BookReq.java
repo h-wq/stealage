@@ -9,6 +9,9 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+/**
+ * 图书请求实体类
+ */
 @Data
 public class BookReq {
 

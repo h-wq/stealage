@@ -17,6 +17,9 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * 书架相关接口
+ */
 @RestController
 @RequestMapping(value = "/bookshelves")
 @Slf4j

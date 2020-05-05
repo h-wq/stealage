@@ -6,6 +6,9 @@ import lombok.Builder;
 
 import java.util.List;
 
+/**
+ * 用户浏览记录请求实体类
+ */
 @Builder
 public class BrowseRecordResp {
 

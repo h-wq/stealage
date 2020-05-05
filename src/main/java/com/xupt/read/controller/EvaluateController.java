@@ -4,10 +4,8 @@ import com.xupt.read.common.result.JsonResult;
 import com.xupt.read.common.result.PageResult;
 import com.xupt.read.controller.req.EvaluateReq;
 import com.xupt.read.controller.resp.EvaluateResp;
-import com.xupt.read.model.Book;
 import com.xupt.read.model.Evaluate;
 import com.xupt.read.model.User;
-import com.xupt.read.service.BookService;
 import com.xupt.read.service.EvaluateService;
 import com.xupt.read.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +16,9 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * 图书评价相关接口
+ */
 @RestController
 @RequestMapping(value = "/evaluates")
 @Slf4j
@@ -25,9 +26,6 @@ public class EvaluateController {
 
     @Autowired
     private EvaluateService evaluateService;
-
-    @Autowired
-    private BookService bookService;
 
     @Autowired
     private UserService userService;

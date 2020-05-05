@@ -6,6 +6,9 @@ import lombok.Builder;
 
 import java.util.List;
 
+/**
+ * 意见反馈返回实体类
+ */
 @Builder
 public class OpinionResp {
 

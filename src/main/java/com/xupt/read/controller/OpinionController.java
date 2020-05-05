@@ -16,6 +16,9 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * 意见反馈相关接口
+ */
 @RestController
 @RequestMapping(value = "/opinions")
 @Slf4j
@@ -37,6 +40,9 @@ public class OpinionController {
         return result == 1 ? JsonResult.success() : JsonResult.fail(-1, "意见反馈失败！");
     }
 
+    /**
+     * 查询意见反馈
+     */
     @RequestMapping(method = RequestMethod.GET)
     public JsonResult query(@RequestParam(name = "page_num", defaultValue = "1") int pageNum,
                             @RequestParam(name = "page_size", defaultValue = "20") int pageSize) {

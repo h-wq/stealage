@@ -7,6 +7,9 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * 图书返回实体类
+ */
 @Builder
 @Data
 public class BookResp {

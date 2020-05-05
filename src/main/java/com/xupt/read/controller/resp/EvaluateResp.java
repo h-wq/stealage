@@ -6,6 +6,9 @@ import lombok.Builder;
 
 import java.util.List;
 
+/**
+ * 图书评价返回实体类
+ */
 @Builder
 public class EvaluateResp {
 

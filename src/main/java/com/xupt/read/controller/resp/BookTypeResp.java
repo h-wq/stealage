@@ -3,6 +3,9 @@ package com.xupt.read.controller.resp;
 import com.xupt.read.model.BookType;
 import lombok.Builder;
 
+/**
+ * 书类型返回实体类
+ */
 @Builder
 public class BookTypeResp {
 

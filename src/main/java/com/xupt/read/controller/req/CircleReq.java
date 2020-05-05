@@ -12,6 +12,9 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * 朋友圈请求实体类
+ */
 @Data
 public class CircleReq {
 

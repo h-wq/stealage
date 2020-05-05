@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * 书类型相关接口
+ */
 @RestController
 @RequestMapping(value = "/book_types")
 @Slf4j

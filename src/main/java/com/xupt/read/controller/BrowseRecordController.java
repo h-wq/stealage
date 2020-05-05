@@ -6,10 +6,8 @@ import com.xupt.read.controller.req.BrowseRecordReq;
 import com.xupt.read.controller.resp.BrowseRecordResp;
 import com.xupt.read.model.Book;
 import com.xupt.read.model.BrowseRecord;
-import com.xupt.read.model.User;
 import com.xupt.read.service.BookService;
 import com.xupt.read.service.BrowseRecordService;
-import com.xupt.read.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +16,9 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * 用户浏览记录相关接口
+ */
 @RestController
 @RequestMapping(value = "/browse_records")
 @Slf4j
@@ -25,9 +26,6 @@ public class BrowseRecordController {
 
     @Autowired
     private BrowseRecordService browseRecordService;
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private BookService bookService;

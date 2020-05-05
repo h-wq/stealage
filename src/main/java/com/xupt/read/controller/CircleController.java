@@ -28,6 +28,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * 朋友圈相关接口
+ */
 @RestController
 @RequestMapping(value = "/circles")
 @Slf4j
