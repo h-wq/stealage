@@ -21,7 +21,7 @@ public class CircleServiceImpl implements CircleService {
     @Override
     public PageResult<Circle> getCircles(List<Integer> userIds, int offset, int size) {
         CircleExample example = new CircleExample();
-        example.createCriteria().andUserIdIn(userIds);
+        example.createCriteria().andUserIdIn(userIds).andIsDeleteEqualTo(false);
         example.setOrderByClause("created_at desc");
 
         PageHelper.offsetPage(offset, size, true);
@@ -34,5 +34,13 @@ public class CircleServiceImpl implements CircleService {
     @Override
     public Integer addCircle(Circle circle) {
         return circleMapper.insertSelective(circle);
+    }
+
+    @Override
+    public Integer deleteCircle(Integer id) {
+        Circle circle = new Circle();
+        circle.setId(id);
+        circle.setIsDelete(true);
+        return circleMapper.updateByPrimaryKeySelective(circle);
     }
 }

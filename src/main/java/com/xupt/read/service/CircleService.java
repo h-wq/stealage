@@ -10,4 +10,6 @@ public interface CircleService {
     PageResult<Circle> getCircles(List<Integer> userIds, int offset, int size);
 
     Integer addCircle(Circle circle);
+
+    Integer deleteCircle(Integer id);
 }

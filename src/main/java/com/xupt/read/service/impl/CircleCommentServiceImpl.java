@@ -18,7 +18,7 @@ public class CircleCommentServiceImpl implements CircleCommentService {
     @Override
     public List<CircleComment> getCircleComments(List<Integer> circleIds) {
         CircleCommentExample example = new CircleCommentExample();
-        example.createCriteria().andCircleIdIn(circleIds);
+        example.createCriteria().andCircleIdIn(circleIds).andIsDeleteEqualTo(false);
         example.setOrderByClause("created_at desc");
 
         return circleCommentMapper.selectByExample(example);
@@ -27,5 +27,13 @@ public class CircleCommentServiceImpl implements CircleCommentService {
     @Override
     public Integer addCircleComment(CircleComment circleComment) {
         return circleCommentMapper.insertSelective(circleComment);
+    }
+
+    @Override
+    public Integer deleteCircleComment(Integer id) {
+        CircleComment circleComment = new CircleComment();
+        circleComment.setId(id);
+        circleComment.setIsDelete(true);
+        return circleCommentMapper.updateByPrimaryKeySelective(circleComment);
     }
 }

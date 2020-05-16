@@ -69,8 +69,7 @@ public class UserController {
         if (user == null || friendUser == null) {
             return JsonResult.fail(-1, "添加好友失败，无此用户或无此好友！");
         }
-        List<Integer> friendIds = StringUtils.isEmpty(user.getFriendIds()) ? new ArrayList<>() : JSONObject.parseArray(user.getFriendIds(), Integer.class);
-        Integer result = userService.addFriend(id, JSONObject.toJSONString(friendIds.add(friendId)));
+        Integer result = userService.addFriend(id, friendId);
         return result == 1 ? JsonResult.success() : JsonResult.fail(-1, "添加好友失败！");
     }
 }

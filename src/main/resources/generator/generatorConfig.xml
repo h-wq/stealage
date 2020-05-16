@@ -69,5 +69,8 @@
         <table tableName="opinion" domainObjectName="Opinion">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
+        <table tableName="likes" domainObjectName="Likes">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
     </context>
 </generatorConfiguration>

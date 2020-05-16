@@ -14,5 +14,5 @@ public interface UserService {
 
     Integer addUser(User user);
 
-    Integer addFriend(Integer id, String friendIds);
+    Integer addFriend(Integer id, Integer friendId);
 }

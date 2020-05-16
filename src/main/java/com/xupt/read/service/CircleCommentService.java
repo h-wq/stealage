@@ -9,4 +9,6 @@ public interface CircleCommentService {
     List<CircleComment> getCircleComments(List<Integer> circleIds);
 
     Integer addCircleComment(CircleComment circleComment);
+
+    Integer deleteCircleComment(Integer id);
 }

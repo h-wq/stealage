@@ -1,9 +1,6 @@
 package com.xupt.read.controller.resp;
 
-import com.xupt.read.model.Book;
-import com.xupt.read.model.Circle;
-import com.xupt.read.model.CircleComment;
-import com.xupt.read.model.User;
+import com.xupt.read.model.*;
 import lombok.Data;
 
 import java.util.List;
@@ -42,15 +39,27 @@ public class CircleResp {
 
     private List<CircleCommentResp> circleCommentRespList;
 
+    private List<CircleLikeResp> circleLikeRespList;
+
     @Data
     private static class CircleCommentResp {
+
+        private Integer id;
 
         private String userName;
 
         private String comment;
     }
 
-    public static CircleResp convert(Circle circle, List<CircleComment> circleComments, List<User> users, List<Book> books) {
+    @Data
+    private static class CircleLikeResp {
+
+        private Integer id;
+
+        private String userName;
+    }
+
+    public static CircleResp convert(Circle circle, List<CircleComment> circleComments, List<Likes> circleLikes, List<User> users, List<Book> books) {
 
         CircleResp circleResp = new CircleResp();
         User circleUser = users.stream().filter(user -> user.getId().equals(circle.getUserId())).findFirst().get();
@@ -66,12 +75,22 @@ public class CircleResp {
         circleComments = circleComments.stream().filter(circleComment -> circleComment.getCircleId().equals(circle.getId())).collect(Collectors.toList());
         List<CircleCommentResp> circleCommentRespList = circleComments.stream().map(circleComment -> {
             CircleCommentResp circleCommentResp = new CircleCommentResp();
+            circleCommentResp.setId(circleComment.getId());
             User circleCommentUser = users.stream().filter(user -> user.getId().equals(circleComment.getUserId())).findFirst().get();
             circleCommentResp.setUserName(circleCommentUser.getName());
             circleCommentResp.setComment(circleComment.getComment());
             return circleCommentResp;
         }).collect(Collectors.toList());
         circleResp.setCircleCommentRespList(circleCommentRespList);
+
+        List<CircleLikeResp> circleLikeRespList = circleLikes.stream().map(circleLike -> {
+            CircleLikeResp circleLikeResp = new CircleLikeResp();
+            circleLikeResp.setId(circleLike.getId());
+            User circleLikeUser = users.stream().filter(user -> user.getId().equals(circleLike.getUserId())).findFirst().get();
+            circleLikeResp.setUserName(circleLikeUser.getName());
+            return circleLikeResp;
+        }).collect(Collectors.toList());
+        circleResp.setCircleLikeRespList(circleLikeRespList);
 
         return circleResp;
     }

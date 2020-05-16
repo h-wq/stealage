@@ -5,10 +5,7 @@ import com.xupt.read.controller.req.CircleCommentReq;
 import com.xupt.read.service.CircleCommentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -31,5 +28,15 @@ public class CircleCommentController {
 
         Integer result = circleCommentService.addCircleComment(CircleCommentReq.convert(circleCommentReq));
         return result == 1 ? JsonResult.success() : JsonResult.fail(-1, "发表评论失败！");
+    }
+
+    /**
+     * 删除评论
+     */
+    @RequestMapping(value = "/{id}/delete", method = RequestMethod.POST)
+    public JsonResult deleteCircleComment(@PathVariable Integer id) {
+
+        Integer result = circleCommentService.deleteCircleComment(id);
+        return result == 1 ? JsonResult.success() : JsonResult.fail(-1, "删除评论失败！");
     }
 }
