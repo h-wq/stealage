@@ -77,6 +77,7 @@ public class SearchServiceImpl implements SearchService {
                 //插入图书信息
                 Book book = new Book();
                 book.setName(bookInfo.getBookName());
+
                 //todo?????图片信息
                 book.setPicture(bookInfo.getImgName());
                 book.setAuthor(bookInfo.getAuthorName());
