@@ -24,7 +24,7 @@ public class FileUtils {
                 tempFile.mkdirs();
             }
             is = file.getInputStream();
-            path = tempFile.getPath() + fileName;
+            path = tempFile.getPath() + "/" + fileName;
             os = new FileOutputStream(path);
             // 开始读取
             while ((len = is.read(bs)) != -1) {
