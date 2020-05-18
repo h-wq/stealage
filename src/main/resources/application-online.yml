@@ -29,4 +29,4 @@ spring:
       connection-init-sqls: set names utf8mb4
 file:
   upload:
-    path: /project/file/upload/read
+    path: /project/file/upload/read/img/

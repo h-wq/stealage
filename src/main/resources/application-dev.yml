@@ -31,4 +31,4 @@ spring:
 
 file:
   upload:
-    path: /project/file/upload/read/
+    path: /project/file/upload/read/img/
