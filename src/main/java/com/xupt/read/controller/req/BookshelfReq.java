@@ -17,12 +17,12 @@ public class BookshelfReq {
     @NotNull
     @Min(value = 1)
     @JsonProperty(value = "user_id", access = JsonProperty.Access.WRITE_ONLY)
-    private Integer user_id;
+    private Integer userId;
 
     @NotNull
     @Min(value = 1)
     @JsonProperty(value = "book_id", access = JsonProperty.Access.WRITE_ONLY)
-    private Integer book_id;
+    private Integer bookId;
 
     public static Bookshelf convert(BookshelfReq req) {
         Bookshelf bookshelf = new Bookshelf();

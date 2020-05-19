@@ -1,6 +1,5 @@
 package com.xupt.read.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.xupt.read.common.result.JsonResult;
 import com.xupt.read.controller.req.UserReq;
 import com.xupt.read.controller.resp.UserResp;
@@ -10,12 +9,10 @@ import com.xupt.read.util.FileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

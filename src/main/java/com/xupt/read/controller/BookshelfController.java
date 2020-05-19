@@ -11,6 +11,7 @@ import com.xupt.read.service.BookService;
 import com.xupt.read.service.BookshelfService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -57,6 +58,9 @@ public class BookshelfController {
 
         PageResult<Bookshelf> pageResult = bookshelfService.getByUserId(userId, (pageNum - 1) * pageSize, pageSize);
         List<Integer> bookIds = pageResult.getItems().stream().map(Bookshelf::getBookId).collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(bookIds)) {
+            return JsonResult.success(new PageResult<>());
+        }
         List<Book> books = bookService.getByIds(bookIds);
         List<BookResp> bookResps = pageResult.getItems().stream().map(bookshelf -> BookResp.convert(books, bookshelf)).collect(Collectors.toList());
         PageResult<BookResp> respPageResult = PageResult.fromPageResult(bookResps, pageResult);
