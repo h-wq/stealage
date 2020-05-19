@@ -28,7 +28,7 @@ public class BookResp {
     /**
      * 评分
      */
-    private Integer score;
+    private Double score;
 
     /**
      * 链接
@@ -64,6 +64,12 @@ public class BookResp {
      */
     private long addTime;
 
+    private String authorInfo;
+
+    private String bookPublish;
+
+    private String publishYear;
+
     public static BookResp convert(Book book) {
 
         return BookResp.builder()
@@ -78,6 +84,9 @@ public class BookResp {
                 .popularity(book.getPopularity())
                 .isNewest(book.getIsNewest())
                 .isEnd(book.getIsEnd())
+                .authorInfo(book.getAuthorInfo())
+                .bookPublish(book.getBookPublish())
+                .publishYear(book.getPublishYear())
                 .build();
     }
 
@@ -96,6 +105,9 @@ public class BookResp {
                 .popularity(book.getPopularity())
                 .isNewest(book.getIsNewest())
                 .isEnd(book.getIsEnd())
+                .authorInfo(book.getAuthorInfo())
+                .bookPublish(book.getBookPublish())
+                .publishYear(book.getPublishYear())
                 .bookshelfId(bookshelf.getId())
                 .addTime(bookshelf.getCreatedAt().getTime())
                 .build();

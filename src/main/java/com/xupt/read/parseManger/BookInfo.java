@@ -1,10 +1,13 @@
 package com.xupt.read.parseManger;
 
+import lombok.Data;
+
 import java.util.List;
 
 /**
  * @description： 书籍的信息
  */
+@Data
 public class BookInfo {
     /**
      * 书籍名字
@@ -14,6 +17,10 @@ public class BookInfo {
      * 图片名字
      */
     String imgName;
+    /**
+     * 图片地址
+     */
+    String imgPath;
     /**
      * 书籍简介
      */
@@ -35,6 +42,14 @@ public class BookInfo {
      */
     String bookLink;
     /**
+     * 评分
+     */
+    private Double score;
+    /**
+     * 人气
+     */
+    Integer Popularity;
+    /**
      * 出版社
      */
     String bookPublish;
@@ -48,90 +63,11 @@ public class BookInfo {
      */
     String bookUrl;
 
-    public String getBookName() {
-        return bookName;
-    }
-
-    public void setBookName(String bookName) {
-        this.bookName = bookName;
-    }
-
-    public String getImgName() {
-        return imgName;
-    }
-
-    public void setImgName(String imgName) {
-        this.imgName = imgName;
-    }
-
-    public String getBookInfo() {
-        return bookInfo;
-    }
-
-    public void setBookInfo(String bookInfo) {
-        this.bookInfo = bookInfo;
-    }
-
-    public List<String> getBookComment() {
-        return bookComment;
-    }
-
-    public void setBookComment(List<String> bookComment) {
-        this.bookComment = bookComment;
-    }
-
-    public String getAuthorName() {
-        return authorName;
-    }
-
-    public void setAuthorName(String authorName) {
-        this.authorName = authorName;
-    }
-
-    public String getAuthorInfo() {
-        return authorInfo;
-    }
-
-    public void setAuthorInfo(String authorInfo) {
-        this.authorInfo = authorInfo;
-    }
-
-    public String getBookLink() {
-        return bookLink;
-    }
-
-    public void setBookLink(String bookLink) {
-        this.bookLink = bookLink;
-    }
-
-    public String getBookPublish() {
-        return bookPublish;
-    }
-
-    public void setBookPublish(String bookPublish) {
-        this.bookPublish = bookPublish;
-    }
-
-    public String getPublishYear() {
-        return publishYear;
-    }
-
-    public void setPublishYear(String publishYear) {
-        this.publishYear = publishYear;
-    }
-
-    public String getBookUrl() {
-        return bookUrl;
-    }
-
-    public void setBookUrl(String bookUrl) {
-        this.bookUrl = bookUrl;
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("imgName: ").append(imgName).append("\n");
+        sb.append("imgPath: ").append(imgPath).append("\n");
         sb.append("bookName: ").append(bookName).append("\n");
         sb.append("authorName: ").append(authorName).append("\n");
         sb.append("bookPublish: ").append(bookPublish).append("\n");

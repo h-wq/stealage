@@ -14,19 +14,8 @@ import java.util.List;
  * @description：  解析书籍的数据
  */
 public class PageParse {
-    /**测试短评*/
-    public static void main(String[] args) {
-        String url = "https://book.douban.com/subject/1056295/";
-        PageParse.getBookComments(CapturePage.getHtml(url), new BookInfo(),4);
-    }
 
-
-    public static void getBookAndAuthorInfo(String html, BookInfo bookInfo){
-        if(html == null){
-            return;
-        }
-
-        Document document = Jsoup.parse(html);
+    public static void getBookAndAuthorInfo(Document document, BookInfo bookInfo){
         Elements elements = document.getElementsByClass("intro");
 
         for(int i = elements.size()-1, j = 0; i >= 0 && j <= 1; i --, j ++ ){
@@ -49,12 +38,7 @@ public class PageParse {
         return sb.toString();
     }
 
-    public static void getBookImg(String html, BookInfo bookInfo){
-        if(html == null){
-            return;
-        }
-
-        Document document = Jsoup.parse(html);
+    public static void getBookImg(Document document, BookInfo bookInfo){
         Elements elements = document.getElementsByClass("nbg");
         Element e = elements.first();
         String img = e.select("img").attr("src");
@@ -63,17 +47,16 @@ public class PageParse {
 
     /**
      *
-     * @param html
+     * @param document
      * @param bookInfo   获取书籍的短评
      *                   只爬取了书籍短评的第一页数据，需要很多短评数据获取下一页接着爬取
      */
-    public static void getBookComments(String html, BookInfo bookInfo){
-        getBookComments(html, bookInfo, 1);
+    public static void getBookComments(Document document, BookInfo bookInfo){
+        getBookComments(document, bookInfo, 1);
     }
 
-    public static void getBookComments(String html, BookInfo bookInfo, int number){
+    public static void getBookComments(Document document, BookInfo bookInfo, int number){
         //comment-content
-        Document document = Jsoup.parse(html);
         Elements elements = document.getElementsByClass("mod-hd");
         Element commentsUrl = elements.first();
         commentsUrl.select("a[href]");
@@ -103,11 +86,7 @@ public class PageParse {
         bookInfo.setBookComment(comments);
     }
 
-    public static void getBookName(String html, BookInfo bookInfo){
-        if(html == null){
-            return;
-        }
-        Document document = Jsoup.parse(html);
+    public static void getBookName(Document document, BookInfo bookInfo){
         Elements elements = document.select("div[id=wrapper]");
         Element element = elements.first();
         Elements eles = element.select("span[property=v:itemreviewed]");
@@ -115,13 +94,22 @@ public class PageParse {
         bookInfo.setBookName(e.html().trim());
     }
 
+    public static void getScore(Document document, BookInfo bookInfo){
+        Element element = document.getElementsByClass("ll rating_num ").get(0);
+        bookInfo.setScore(Double.parseDouble(element.html().trim()));
+    }
+
+    public static void getPopularity(Document document, BookInfo bookInfo){
+        Element element = document.select("span[property=v:votes]").get(0);
+        bookInfo.setPopularity(Integer.parseInt(element.html().trim()));
+    }
+
     /**
      *
-     * @param html
+     * @param document
      * @param bookInfo   获取出版社 作者 出版年
      */
-    public static void getBookInfo(String html, BookInfo bookInfo){
-        Document document = Jsoup.parse(html);
+    public static void getBookInfo(Document document, BookInfo bookInfo){
         Elements elements = document.select("div[id=wrapper]");
         Element element = elements.first();
         Elements elem = element.select("div[id=info]");
@@ -144,5 +132,9 @@ public class PageParse {
                 bookInfo.setPublishYear(publishAge);
             }
         }
+    }
+
+    public static Document getDocument(String html) {
+        return Jsoup.parse(html);
     }
 }

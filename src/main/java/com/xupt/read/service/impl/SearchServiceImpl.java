@@ -1,8 +1,9 @@
 package com.xupt.read.service.impl;
 
-import com.xupt.read.dataOut.DataOutput;
 import com.xupt.read.mapper.BookMapper;
+import com.xupt.read.mapper.EvaluateMapper;
 import com.xupt.read.model.Book;
+import com.xupt.read.model.Evaluate;
 import com.xupt.read.pageCapture.CapturePage;
 import com.xupt.read.parseManger.BookInfo;
 import com.xupt.read.parseManger.PageParseManger;
@@ -26,6 +27,9 @@ public class SearchServiceImpl implements SearchService {
 
     @Autowired
     private BookMapper bookMapper;
+
+    @Autowired
+    private EvaluateMapper evaluateMapper;
 
     @Override
     public List<String> parseUrlBookName(String html) {
@@ -52,7 +56,7 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public BookInfo getBookInfo(String url) {
-        BookInfo bookInfo = new BookInfo();
+        BookInfo bookInfo = null;
         try {
             String ebookUrl = "https://read.douban.com/ebook";
             UrlManger.addUrl(url);
@@ -71,7 +75,7 @@ public class SearchServiceImpl implements SearchService {
             /**爬取书籍信息  不保证所有的url都能正常的解析*/
             if (!UrlSave.isEmpty()) {
                 /**目前没有ip代理爬慢一点，快了要封ip*/
-                Thread.sleep(3000);
+//                Thread.sleep(3000);
                 String urlA = UrlManger.getUrl();
                 System.out.println("正在爬取的url：" + urlA);
                 bookInfo = spiderBook(urlA);
@@ -80,13 +84,25 @@ public class SearchServiceImpl implements SearchService {
                 Book book = new Book();
                 book.setName(bookInfo.getBookName());
 
-                //todo?????图片信息
-                book.setPicture(bookInfo.getImgName());
+                book.setPicture(bookInfo.getImgPath());
                 book.setAuthor(bookInfo.getAuthorName());
                 book.setLink(bookInfo.getBookLink());
+                book.setSynopsis(bookInfo.getBookInfo());
+                book.setScore(bookInfo.getScore());
+                book.setPopularity(bookInfo.getPopularity());
+                book.setAuthorInfo(bookInfo.getAuthorInfo());
+                book.setBookPublish(bookInfo.getBookPublish());
+                book.setPublishYear(bookInfo.getPublishYear());
+                int bookId = bookMapper.insertSelective(book);
 
-                bookMapper.insertSelective(book);
-
+                List<String> comments = bookInfo.getBookComment();
+                comments.forEach(comment -> {
+                    Evaluate evaluate = new Evaluate();
+                    evaluate.setBookId(bookId);
+                    evaluate.setUserId(0);
+                    evaluate.setRemarks(comment);
+                    evaluateMapper.insertSelective(evaluate);
+                });
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -105,7 +121,7 @@ public class SearchServiceImpl implements SearchService {
         BookInfo bookInfo = PageParseManger.parseBookInfo(html, url, 3);
 
         /**数据输出*/
-        DataOutput.output(bookInfo);
+//        DataOutput.output(bookInfo);
 
         return bookInfo;
     }

@@ -14,6 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 /**
  * 搜索相关接口
@@ -25,6 +30,8 @@ public class SearchController {
 
     @Autowired
     private SearchService searchService;
+
+    private ExecutorService executorService = Executors.newFixedThreadPool(4);
 
     /**
      * 根据书名或者作者名搜索图书
@@ -40,11 +47,29 @@ public class SearchController {
             /**根据按book name搜索获取的html解析书籍url和picture*/
             List<String> urls = searchService.parseUrlBookName(html);
 
-            List<BookInfo> list = new ArrayList<>();
-            for (String bookUrl:urls) {
-                BookInfo bookInfo = searchService.getBookInfo(bookUrl);
-                list.add(bookInfo);
-            }
+            List<Future<BookInfo>> futures = urls.stream()
+                    .map(bookUrl -> executorService.submit(() -> searchService.getBookInfo(bookUrl)))
+                    .collect(Collectors.toList());
+            List<BookInfo> list = futures.stream().map(future -> {
+                try {
+                    return future.get();
+                } catch (Exception e) {
+                    log.error("getBookInfo error is ", e);
+                }
+                return null;
+            }).collect(Collectors.toList());
+            List<BookInfo> bookInfos = list.stream().map(bookInfo -> {
+                BookInfo book = new BookInfo();
+                book.setBookName(bookInfo.getBookName());
+                book.setImgPath(bookInfo.getImgPath());
+                book.setScore(bookInfo.getScore());
+                book.setPopularity(bookInfo.getPopularity());
+                book.setAuthorName(bookInfo.getAuthorName());
+                book.setBookPublish(bookInfo.getBookPublish());
+                book.setPublishYear(bookInfo.getPublishYear());
+                return book;
+            }).collect(Collectors.toList());
+            pageResult.setItems(bookInfos);
         }catch (Exception e) {
             e.printStackTrace();
         }
@@ -56,8 +81,7 @@ public class SearchController {
      */
     @RequestMapping(value = "getBookInfo",method = RequestMethod.GET)
     public JsonResult getBookInfo(@RequestParam(name = "bookUrl") String bookUrl) {
-        BookInfo bookInfo = new BookInfo();
-        bookInfo = searchService.getBookInfo(bookUrl);
+        BookInfo bookInfo = searchService.getBookInfo(bookUrl);
         return JsonResult.success(bookInfo);
     }
 

@@ -1,6 +1,7 @@
 package com.xupt.read.parseManger;
 
 import com.xupt.read.util.Md5Utils;
+import org.jsoup.nodes.Document;
 
 /**
  * @description：  网页解析管理器
@@ -22,26 +23,35 @@ public class PageParseManger {
         BookInfo bookInfo = new BookInfo();
         bookInfo.setBookUrl(bookUrl);
 
+        Document document =PageParse.getDocument(html);
+
         /**解析img地址*/
-        PageParse.getBookImg(html, bookInfo);
+        PageParse.getBookImg(document, bookInfo);
         String imgName = Md5Utils.encrypt(bookInfo.getImgName())+".jpg";
 
         /**下载图片*/
-        PictureDownload.download(bookInfo.getImgName(),imgName);
+        String path = PictureDownload.download(bookInfo.getImgName(),imgName);
         bookInfo.setImgName(imgName);
+        bookInfo.setImgPath(path);
         bookInfo.setBookLink(bookUrl);
 
         /**书评*/
-        PageParse.getBookComments(html, bookInfo, commentNum);
+        PageParse.getBookComments(document, bookInfo, commentNum);
 
         /**书籍和作者的简介*/
-        PageParse.getBookAndAuthorInfo(html, bookInfo);
+        PageParse.getBookAndAuthorInfo(document, bookInfo);
 
         /**书籍的名字*/
-        PageParse.getBookName(html, bookInfo);
+        PageParse.getBookName(document, bookInfo);
+
+        /**评分*/
+        PageParse.getScore(document, bookInfo);
+
+        /**人气*/
+        PageParse.getPopularity(document, bookInfo);
 
         /**获取出版社 作者 出版年*/
-        PageParse.getBookInfo(html, bookInfo);
+        PageParse.getBookInfo(document, bookInfo);
         return bookInfo;
     }
 }
