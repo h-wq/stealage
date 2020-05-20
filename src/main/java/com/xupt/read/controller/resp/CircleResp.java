@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 @Data
 public class CircleResp {
 
+    private Integer id;
+
     /**
      * 用户信息
      */
@@ -62,6 +64,8 @@ public class CircleResp {
     public static CircleResp convert(Circle circle, List<CircleComment> circleComments, List<Likes> circleLikes, List<User> users, List<Book> books) {
 
         CircleResp circleResp = new CircleResp();
+        circleResp.setId(circle.getId());
+
         User circleUser = users.stream().filter(user -> user.getId().equals(circle.getUserId())).findFirst().get();
         circleResp.setUserName(circleUser.getName());
         circleResp.setUserPicture(circleUser.getPicture());
