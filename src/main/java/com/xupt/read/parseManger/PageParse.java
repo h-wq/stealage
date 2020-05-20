@@ -96,12 +96,24 @@ public class PageParse {
 
     public static void getScore(Document document, BookInfo bookInfo){
         Element element = document.getElementsByClass("ll rating_num ").get(0);
-        bookInfo.setScore(Double.parseDouble(element.html().trim()));
+        double score;
+        try {
+            score = Double.parseDouble(element.html().trim());
+        } catch (Exception e) {
+            score = 0;
+        }
+        bookInfo.setScore(score);
     }
 
     public static void getPopularity(Document document, BookInfo bookInfo){
         Element element = document.select("span[property=v:votes]").get(0);
-        bookInfo.setPopularity(Integer.parseInt(element.html().trim()));
+        int popularity;
+        try {
+            popularity = Integer.parseInt(element.html().trim());
+        } catch (Exception e) {
+            popularity = 0;
+        }
+        bookInfo.setPopularity(popularity);
     }
 
     /**

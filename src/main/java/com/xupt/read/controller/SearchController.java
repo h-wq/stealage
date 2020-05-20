@@ -51,15 +51,7 @@ public class SearchController {
                 try{
                     BookInfo bookInfo = completionService.take().get();
 
-                    BookInfo book = new BookInfo();
-                    book.setBookName(bookInfo.getBookName());
-                    book.setImgPath(bookInfo.getImgPath());
-                    book.setScore(bookInfo.getScore());
-                    book.setPopularity(bookInfo.getPopularity());
-                    book.setAuthorName(bookInfo.getAuthorName());
-                    book.setBookPublish(bookInfo.getBookPublish());
-                    book.setPublishYear(bookInfo.getPublishYear());
-                    bookInfos.add(book);
+                    bookInfos.add(bookInfo);
                 } catch (Exception e) {
                     log.error("getBookInfo error is ", e);
                 }
