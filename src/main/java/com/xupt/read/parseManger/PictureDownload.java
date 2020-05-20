@@ -1,7 +1,5 @@
 package com.xupt.read.parseManger;
 
-import org.springframework.beans.factory.annotation.Value;
-
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -11,8 +9,7 @@ import java.net.URL;
 
 public class PictureDownload {
 
-    @Value("${file.upload.path}")
-    private static String fileUploadPath;
+    private static String fileUploadPath = "/project/file/upload/read/img/";
 
     public static String download(String img, String name){
         FileOutputStream fos = null;
