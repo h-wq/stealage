@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SearchServiceImpl implements SearchService {
@@ -96,13 +97,14 @@ public class SearchServiceImpl implements SearchService {
                 int bookId = bookMapper.insertSelective(book);
 
                 List<String> comments = bookInfo.getBookComment();
-                comments.forEach(comment -> {
+                List<Evaluate> evaluates = comments.stream().map(comment -> {
                     Evaluate evaluate = new Evaluate();
                     evaluate.setBookId(bookId);
                     evaluate.setUserId(0);
                     evaluate.setRemarks(comment);
-                    evaluateMapper.insertSelective(evaluate);
-                });
+                    return evaluate;
+                }).collect(Collectors.toList());
+                evaluateMapper.insertBatch(evaluates);
             }
         } catch (Exception e) {
             e.printStackTrace();

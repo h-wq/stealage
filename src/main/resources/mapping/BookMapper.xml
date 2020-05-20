@@ -272,6 +272,15 @@
       </if>
     </trim>
   </insert>
+  <insert id="insertBatch" parameterType="com.xupt.read.model.Book">
+    insert into book (name, author, synopsis, score, link, picture, popularity, author_info, book_publish, publish_year)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.name,jdbcType=VARCHAR}, #{item.author,jdbcType=VARCHAR}, #{item.synopsis,jdbcType=VARCHAR}, #{item.score,jdbcType=DOUBLE},
+      #{item.link,jdbcType=VARCHAR}, #{item.picture,jdbcType=VARCHAR}, #{item.popularity,jdbcType=INTEGER}, #{item.authorInfo,jdbcType=VARCHAR},
+      #{item.bookPublish,jdbcType=VARCHAR}, #{item.publishYear,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
   <select id="countByExample" parameterType="com.xupt.read.model.BookExample" resultType="java.lang.Long">
     <!--
       WARNING - @mbg.generated
