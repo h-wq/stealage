@@ -9,4 +9,8 @@ public interface BookTypeService {
     Integer addBookType(String name);
 
     List<BookType> getBookTypes();
+
+    BookType getById(Integer id);
+
+    List<BookType> getByIds(List<Integer> ids);
 }

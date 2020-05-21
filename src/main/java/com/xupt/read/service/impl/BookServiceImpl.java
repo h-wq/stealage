@@ -24,6 +24,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public Book getById(Integer id) {
+        return bookMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
     public List<Book> getByIds(List<Integer> ids) {
         BookExample example = new BookExample();
         example.createCriteria().andIdIn(ids);
@@ -42,6 +47,17 @@ public class BookServiceImpl implements BookService {
         example.setOrderByClause("score desc");
 
         return getByPage(example, offset,size);
+    }
+
+    @Override
+    public PageResult<Book> getByName(String name, int offset, int size) {
+        BookExample example = new BookExample();
+        BookExample.Criteria nameCriteria = example.createCriteria();
+        nameCriteria.andNameLike(name);
+        BookExample.Criteria authorCriteria = example.createCriteria();
+        authorCriteria.andAuthorLike(name);
+        example.or(authorCriteria);
+        return getByPage(example, offset, size);
     }
 
     @Override

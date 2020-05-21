@@ -3,11 +3,13 @@ package com.xupt.read.controller;
 import com.xupt.read.common.result.JsonResult;
 import com.xupt.read.common.result.PageResult;
 import com.xupt.read.controller.req.BookReq;
+import com.xupt.read.controller.resp.BookInfoResp;
 import com.xupt.read.controller.resp.BookResp;
 import com.xupt.read.model.Book;
 import com.xupt.read.model.BookType;
 import com.xupt.read.service.BookService;
 import com.xupt.read.service.BookTypeService;
+import com.xupt.read.service.EvaluateService;
 import com.xupt.read.util.FileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +53,21 @@ public class BookController {
     }
 
     /**
+     * 根据书名和作者搜索
+     * @param pageNum pageNum
+     * @param pageSize pageSize
+     * @return
+     */
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
+    public JsonResult query(@RequestParam(name = "name") String name,
+                            @RequestParam(name = "page_num", defaultValue = "1") int pageNum,
+                            @RequestParam(name = "page_size", defaultValue = "20") int pageSize) {
+
+        PageResult<Book> pageResult = bookService.getByName(name, (pageNum - 1) * pageSize, pageSize);
+        return query(pageResult);
+    }
+
+    /**
      * 全部
      * @param pageNum pageNum
      * @param pageSize pageSize
@@ -61,9 +78,7 @@ public class BookController {
                             @RequestParam(name = "page_size", defaultValue = "20") int pageSize) {
 
         PageResult<Book> pageResult = bookService.getBooks((pageNum - 1) * pageSize, pageSize);
-        List<BookResp> bookResps = pageResult.getItems().stream().map(BookResp::convert).collect(Collectors.toList());
-        PageResult<BookResp> respPageResult = PageResult.fromPageResult(bookResps, pageResult);
-        return JsonResult.success(respPageResult);
+        return query(pageResult);
     }
 
     /**
@@ -98,9 +113,7 @@ public class BookController {
                                         @RequestParam(name = "page_size", defaultValue = "20") int pageSize) {
 
         PageResult<Book> pageResult = bookService.getByBookTypeId(bookTypeId, (pageNum - 1) * pageSize, pageSize);
-        List<BookResp> bookResps = pageResult.getItems().stream().map(BookResp::convert).collect(Collectors.toList());
-        PageResult<BookResp> respPageResult = PageResult.fromPageResult(bookResps, pageResult);
-        return JsonResult.success(respPageResult);
+        return query(pageResult);
     }
 
     /**
@@ -114,9 +127,7 @@ public class BookController {
                                         @RequestParam(name = "page_size", defaultValue = "20") int pageSize) {
 
         PageResult<Book> pageResult = bookService.getByPopularity((pageNum - 1) * pageSize, pageSize);
-        List<BookResp> bookResps = pageResult.getItems().stream().map(BookResp::convert).collect(Collectors.toList());
-        PageResult<BookResp> respPageResult = PageResult.fromPageResult(bookResps, pageResult);
-        return JsonResult.success(respPageResult);
+        return query(pageResult);
     }
 
     /**
@@ -130,9 +141,7 @@ public class BookController {
                                     @RequestParam(name = "page_size", defaultValue = "20") int pageSize) {
 
         PageResult<Book> pageResult = bookService.getByNewest((pageNum - 1) * pageSize, pageSize);
-        List<BookResp> bookResps = pageResult.getItems().stream().map(BookResp::convert).collect(Collectors.toList());
-        PageResult<BookResp> respPageResult = PageResult.fromPageResult(bookResps, pageResult);
-        return JsonResult.success(respPageResult);
+        return query(pageResult);
     }
 
     /**
@@ -146,7 +155,29 @@ public class BookController {
                                  @RequestParam(name = "page_size", defaultValue = "20") int pageSize) {
 
         PageResult<Book> pageResult = bookService.getByEnd((pageNum - 1) * pageSize, pageSize);
-        List<BookResp> bookResps = pageResult.getItems().stream().map(BookResp::convert).collect(Collectors.toList());
+        return query(pageResult);
+    }
+
+    /**
+     * 详情
+     * @return
+     */
+    @RequestMapping(value = "/{id}/get_info", method = RequestMethod.GET)
+    public JsonResult getBookInfo(@PathVariable Integer id) {
+
+        Book book = bookService.getById(id);
+        if (book == null) {
+            return JsonResult.fail(-1, "获取书详情失败，无对应" + id + "的书");
+        }
+        BookType bookType = bookTypeService.getById(id);
+        return JsonResult.success(BookInfoResp.convert(book, bookType));
+    }
+
+    private JsonResult query(PageResult<Book> pageResult) {
+        List<Integer> bookTypeIds = pageResult.getItems().stream().map(Book::getTypeId).distinct().collect(Collectors.toList());
+        List<BookType> bookTypes = bookTypeService.getByIds(bookTypeIds);
+
+        List<BookResp> bookResps = pageResult.getItems().stream().map(book -> BookResp.convert(book, bookTypes)).collect(Collectors.toList());
         PageResult<BookResp> respPageResult = PageResult.fromPageResult(bookResps, pageResult);
         return JsonResult.success(respPageResult);
     }

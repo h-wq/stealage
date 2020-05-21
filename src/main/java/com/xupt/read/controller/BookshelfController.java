@@ -5,9 +5,11 @@ import com.xupt.read.common.result.PageResult;
 import com.xupt.read.controller.req.BookshelfReq;
 import com.xupt.read.controller.resp.BookResp;
 import com.xupt.read.model.Book;
+import com.xupt.read.model.BookType;
 import com.xupt.read.model.Bookshelf;
 import com.xupt.read.model.Note;
 import com.xupt.read.service.BookService;
+import com.xupt.read.service.BookTypeService;
 import com.xupt.read.service.BookshelfService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,9 @@ public class BookshelfController {
 
     @Autowired
     private BookService bookService;
+
+    @Autowired
+    private BookTypeService bookTypeService;
 
     /**
      * 加入书架
@@ -62,7 +67,10 @@ public class BookshelfController {
             return JsonResult.success(new PageResult<>());
         }
         List<Book> books = bookService.getByIds(bookIds);
-        List<BookResp> bookResps = pageResult.getItems().stream().map(bookshelf -> BookResp.convert(books, bookshelf)).collect(Collectors.toList());
+        List<Integer> bookTypeIds = books.stream().map(Book::getTypeId).distinct().collect(Collectors.toList());
+        List<BookType> bookTypes = bookTypeService.getByIds(bookTypeIds);
+
+        List<BookResp> bookResps = pageResult.getItems().stream().map(bookshelf -> BookResp.convert(books, bookshelf, bookTypes)).collect(Collectors.toList());
         PageResult<BookResp> respPageResult = PageResult.fromPageResult(bookResps, pageResult);
         return JsonResult.success(respPageResult);
     }
