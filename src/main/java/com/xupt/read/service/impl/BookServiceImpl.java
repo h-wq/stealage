@@ -44,7 +44,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public PageResult<Book> getBooks(int offset, int size) {
         BookExample example = new BookExample();
-        example.setOrderByClause("score desc");
+        example.setOrderByClause("score desc, popularity desc");
 
         return getByPage(example, offset,size);
     }
@@ -52,10 +52,11 @@ public class BookServiceImpl implements BookService {
     @Override
     public PageResult<Book> getByName(String name, int offset, int size) {
         BookExample example = new BookExample();
+        example.setOrderByClause("score desc, popularity desc");
         BookExample.Criteria nameCriteria = example.createCriteria();
-        nameCriteria.andNameLike(name);
+        nameCriteria.andNameLike("%" + name + "%");
         BookExample.Criteria authorCriteria = example.createCriteria();
-        authorCriteria.andAuthorLike(name);
+        authorCriteria.andAuthorLike("%" + name + "%");
         example.or(authorCriteria);
         return getByPage(example, offset, size);
     }
@@ -64,7 +65,7 @@ public class BookServiceImpl implements BookService {
     public PageResult<Book> getByBookTypeId(Integer bookTypeId, int offset, int size) {
         BookExample example = new BookExample();
         example.createCriteria().andTypeIdEqualTo(bookTypeId);
-        example.setOrderByClause("score desc");
+        example.setOrderByClause("score desc, popularity desc");
 
         return getByPage(example, offset,size);
     }
@@ -81,7 +82,7 @@ public class BookServiceImpl implements BookService {
     public PageResult<Book> getByNewest(int offset, int size) {
         BookExample example = new BookExample();
         example.createCriteria().andIsNewestEqualTo(true);
-        example.setOrderByClause("score desc");
+        example.setOrderByClause("score desc, popularity desc");
 
         return getByPage(example, offset,size);
     }
@@ -90,7 +91,7 @@ public class BookServiceImpl implements BookService {
     public PageResult<Book> getByEnd(int offset, int size) {
         BookExample example = new BookExample();
         example.createCriteria().andIsEndEqualTo(true);
-        example.setOrderByClause("score desc");
+        example.setOrderByClause("score desc, popularity desc");
 
         return getByPage(example, offset,size);
     }
