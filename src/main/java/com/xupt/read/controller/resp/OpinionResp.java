@@ -1,10 +1,12 @@
 package com.xupt.read.controller.resp;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.xupt.read.model.Opinion;
 import com.xupt.read.model.User;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,7 +22,8 @@ public class OpinionResp {
 
     private Boolean isSolve;
 
-    private long time;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date time;
 
     public static OpinionResp convert(List<User> users, Opinion opinion) {
 
@@ -30,7 +33,7 @@ public class OpinionResp {
                 .userResp(userResp)
                 .content(opinion.getContent())
                 .isSolve(opinion.getIsSolve())
-                .time(opinion.getCreatedAt().getTime())
+                .time(opinion.getCreatedAt())
                 .build();
     }
 }

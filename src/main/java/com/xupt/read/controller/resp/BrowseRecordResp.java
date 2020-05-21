@@ -1,10 +1,12 @@
 package com.xupt.read.controller.resp;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.xupt.read.model.Book;
 import com.xupt.read.model.BrowseRecord;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -16,7 +18,8 @@ public class BrowseRecordResp {
 
     private BookResp bookResp;
 
-    private long time;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date time;
 
     public static BrowseRecordResp convert(List<Book> books, BrowseRecord browseRecord) {
 
@@ -24,7 +27,7 @@ public class BrowseRecordResp {
         BookResp bookResp = BookResp.convert(book);
         return BrowseRecordResp.builder()
                 .bookResp(bookResp)
-                .time(browseRecord.getCreatedAt().getTime())
+                .time(browseRecord.getCreatedAt())
                 .build();
     }
 }

@@ -1,8 +1,10 @@
 package com.xupt.read.controller.resp;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.xupt.read.model.*;
 import lombok.Data;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,7 +39,8 @@ public class CircleResp {
 
     private String location;
 
-    private long time;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date time;
 
     private List<CircleCommentResp> circleCommentRespList;
 
@@ -75,7 +78,7 @@ public class CircleResp {
         circleResp.setComment(circle.getComment());
         circleResp.setCoefficient(circle.getCoefficient());
         circleResp.setLocation(circle.getLocation());
-        circleResp.setTime(circle.getCreatedAt().getTime());
+        circleResp.setTime(circle.getCreatedAt());
         circleComments = circleComments.stream().filter(circleComment -> circleComment.getCircleId().equals(circle.getId())).collect(Collectors.toList());
         List<CircleCommentResp> circleCommentRespList = circleComments.stream().map(circleComment -> {
             CircleCommentResp circleCommentResp = new CircleCommentResp();

@@ -9,6 +9,8 @@ import java.util.List;
  */
 @Data
 public class BookInfo {
+
+    private Integer id;
     /**
      * 书籍名字
      */

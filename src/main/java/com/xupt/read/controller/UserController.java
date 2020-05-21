@@ -48,8 +48,9 @@ public class UserController {
 
         // 图片上传处理
         String path = FileUtils.uploadFile(fileUploadPath, file);
-        Integer result = userService.addUser(UserReq.convert(userReq, path));
-        return result == 1 ? JsonResult.success() : JsonResult.fail(-1, "添加用户失败！");
+        User user = UserReq.convert(userReq, path);
+        Integer result = userService.addUser(user);
+        return result == 1 ? JsonResult.success(user.getId()) : JsonResult.fail(-1, "添加用户失败！");
     }
 
     /**

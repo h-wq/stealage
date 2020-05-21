@@ -94,7 +94,8 @@ public class SearchServiceImpl implements SearchService {
                 book.setAuthorInfo(bookInfo.getAuthorInfo());
                 book.setBookPublish(bookInfo.getBookPublish());
                 book.setPublishYear(bookInfo.getPublishYear());
-                int bookId = bookMapper.insertSelective(book);
+                bookMapper.insertSelective(book);
+                int bookId = book.getId();
 
                 List<String> comments = bookInfo.getBookComment();
                 List<Evaluate> evaluates = comments.stream().map(comment -> {
@@ -105,6 +106,8 @@ public class SearchServiceImpl implements SearchService {
                     return evaluate;
                 }).collect(Collectors.toList());
                 evaluateMapper.insertBatch(evaluates);
+
+                bookInfo.setId(bookId);
             }
         } catch (Exception e) {
             e.printStackTrace();
