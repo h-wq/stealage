@@ -195,6 +195,13 @@
       </if>
     </trim>
   </insert>
+  <insert id="insertBatch" parameterType="com.xupt.read.model.Evaluate">
+    insert into evaluate (book_id, user_id, remarks)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.bookId,jdbcType=INTEGER}, #{item.userId,jdbcType=INTEGER}, #{item.remarks,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
   <select id="countByExample" parameterType="com.xupt.read.model.EvaluateExample" resultType="java.lang.Long">
     <!--
       WARNING - @mbg.generated

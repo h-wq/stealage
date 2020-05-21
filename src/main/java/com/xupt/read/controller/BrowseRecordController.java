@@ -5,8 +5,10 @@ import com.xupt.read.common.result.PageResult;
 import com.xupt.read.controller.req.BrowseRecordReq;
 import com.xupt.read.controller.resp.BrowseRecordResp;
 import com.xupt.read.model.Book;
+import com.xupt.read.model.BookType;
 import com.xupt.read.model.BrowseRecord;
 import com.xupt.read.service.BookService;
+import com.xupt.read.service.BookTypeService;
 import com.xupt.read.service.BrowseRecordService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,9 @@ public class BrowseRecordController {
 
     @Autowired
     private BookService bookService;
+
+    @Autowired
+    private BookTypeService bookTypeService;
 
     /**
      * 添加浏览记录
@@ -53,7 +58,9 @@ public class BrowseRecordController {
 
         List<Integer> bookIds = pageResult.getItems().stream().map(BrowseRecord::getBookId).collect(Collectors.toList());
         List<Book> books = bookService.getByIds(bookIds);
-        List<BrowseRecordResp> browseRecordResps = pageResult.getItems().stream().map(browseRecord -> BrowseRecordResp.convert(books, browseRecord)).collect(Collectors.toList());
+        List<Integer> bookTypeIds = books.stream().map(Book::getTypeId).distinct().collect(Collectors.toList());
+        List<BookType> bookTypes = bookTypeService.getByIds(bookTypeIds);
+        List<BrowseRecordResp> browseRecordResps = pageResult.getItems().stream().map(browseRecord -> BrowseRecordResp.convert(books, browseRecord, bookTypes)).collect(Collectors.toList());
         PageResult<BrowseRecordResp> respPageResult = PageResult.fromPageResult(browseRecordResps, pageResult);
         return JsonResult.success(respPageResult);
     }
