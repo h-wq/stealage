@@ -96,6 +96,11 @@ public class BookServiceImpl implements BookService {
         return getByPage(example, offset,size);
     }
 
+    @Override
+    public Integer updateBookById(Book book) {
+        return bookMapper.updateByPrimaryKeySelective(book);
+    }
+
     private PageResult<Book> getByPage(BookExample example, int offset, int size) {
         PageHelper.offsetPage(offset, size, true);
         List<Book> bookList = bookMapper.selectByExample(example);

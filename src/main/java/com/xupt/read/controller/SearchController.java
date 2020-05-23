@@ -44,16 +44,16 @@ public class SearchController {
             String html = CapturePage.getHtml(url);
 
             /**根据按book name搜索获取的html解析书籍url和picture*/
-            List<String> urls = searchService.parseUrlBookName(html);
-            System.out.println(urls.size());
+            List<String> urls = searchService.parseUrlBookName(html, name);
 
-            urls.forEach(bookUrl -> completionService.submit(() -> searchService.getBookInfo(bookUrl)));
+            urls.forEach(bookUrl -> completionService.submit(() -> searchService.getBookInfo(bookUrl, name)));
             List<BookResp> bookResps = new ArrayList<>(urls.size());
             for (int i = 0; i < urls.size(); i++) {
                 try{
                     BookInfo bookInfo = completionService.take().get();
-
-                    bookResps.add(BookResp.convert(bookInfo));
+                    if (bookInfo != null) {
+                        bookResps.add(BookResp.convert(bookInfo));
+                    }
                 } catch (Exception e) {
                     log.error("getBookInfo error is ", e);
                 }
@@ -70,7 +70,7 @@ public class SearchController {
      */
     @RequestMapping(value = "getBookInfo",method = RequestMethod.GET)
     public JsonResult getBookInfo(@RequestParam(name = "bookUrl") String bookUrl) {
-        BookInfo bookInfo = searchService.getBookInfo(bookUrl);
+        BookInfo bookInfo = searchService.getBookInfo(bookUrl, null);
         return JsonResult.success(bookInfo);
     }
 

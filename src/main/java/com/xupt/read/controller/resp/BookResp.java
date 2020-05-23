@@ -99,7 +99,7 @@ public class BookResp {
                 .synopsis(bookInfo.getBookInfo())
                 .score(bookInfo.getScore())
                 .link(bookInfo.getBookLink())
-//                .typeName(type == null ? "" : type.getName())
+                .typeName(bookInfo.getBookType())
                 .picture(bookInfo.getImgPath())
                 .popularity(bookInfo.getPopularity())
                 .isNewest(false)

@@ -1,13 +1,15 @@
 package com.xupt.read.service.impl;
 
-import com.xupt.read.mapper.BookMapper;
 import com.xupt.read.mapper.EvaluateMapper;
 import com.xupt.read.model.Book;
+import com.xupt.read.model.BookType;
 import com.xupt.read.model.Evaluate;
 import com.xupt.read.pageCapture.CapturePage;
 import com.xupt.read.parseManger.BookInfo;
 import com.xupt.read.parseManger.PageParseManger;
 import com.xupt.read.parseManger.UrlParse;
+import com.xupt.read.service.BookService;
+import com.xupt.read.service.BookTypeService;
 import com.xupt.read.service.SearchService;
 import com.xupt.read.urlManger.UrlManger;
 import com.xupt.read.urlManger.UrlSave;
@@ -17,29 +19,47 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
 public class SearchServiceImpl implements SearchService {
 
     @Autowired
-    private BookMapper bookMapper;
+    private BookService bookService;
+
+    @Autowired
+    private BookTypeService bookTypeService;
 
     @Autowired
     private EvaluateMapper evaluateMapper;
 
     @Override
-    public List<String> parseUrlBookName(String html) {
+    public List<String> parseUrlBookName(String html, String name) {
         List<String> urls = new ArrayList<>();
         try {
             Document document = Jsoup.parse(html);
             Elements elements = document.getElementsByClass("result");
 
             for (Element element : elements) {
+
+                Element titleElement = element.getElementsByClass("title").get(0);
+                Element h3Element = titleElement.child(0);
+                String bookName = h3Element.selectFirst("a[target=_blank]").html();
+                Elements spanElements = element.getElementsByClass("subject-cast");
+                if (spanElements == null || spanElements.isEmpty()) {
+                    continue;
+                }
+                String authorName = spanElements.get(0).html();
+                if (!bookName.contains(name) && !authorName.contains(name)) {
+                    continue;
+                }
 
                 Element ele = element.getElementsByClass("nbg").get(0);
                 String url = ele.attr("href");
@@ -56,7 +76,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public BookInfo getBookInfo(String url) {
+    public BookInfo getBookInfo(String url, String name) {
         BookInfo bookInfo = null;
         try {
             String ebookUrl = "https://read.douban.com/ebook";
@@ -79,35 +99,53 @@ public class SearchServiceImpl implements SearchService {
 //                Thread.sleep(3000);
                 String urlA = UrlManger.getUrl();
                 System.out.println("正在爬取的url：" + urlA);
-                bookInfo = spiderBook(urlA);
+                bookInfo = spiderBook(urlA, name);
 
-                //插入图书信息
-                Book book = new Book();
-                book.setName(bookInfo.getBookName());
+                if (bookInfo != null) {
+                    //插入图书信息
+                    Book book = new Book();
+                    book.setName(bookInfo.getBookName());
+                    book.setPicture(bookInfo.getImgPath());
+                    book.setAuthor(bookInfo.getAuthorName());
+                    book.setLink(bookInfo.getBookLink());
+                    book.setSynopsis(bookInfo.getBookInfo());
+                    book.setScore(bookInfo.getScore());
+                    book.setPopularity(bookInfo.getPopularity());
+                    book.setAuthorInfo(bookInfo.getAuthorInfo());
+                    book.setBookPublish(bookInfo.getBookPublish());
+                    book.setPublishYear(bookInfo.getPublishYear());
+                    bookService.addBook(book);
+                    int bookId = book.getId();
 
-                book.setPicture(bookInfo.getImgPath());
-                book.setAuthor(bookInfo.getAuthorName());
-                book.setLink(bookInfo.getBookLink());
-                book.setSynopsis(bookInfo.getBookInfo());
-                book.setScore(bookInfo.getScore());
-                book.setPopularity(bookInfo.getPopularity());
-                book.setAuthorInfo(bookInfo.getAuthorInfo());
-                book.setBookPublish(bookInfo.getBookPublish());
-                book.setPublishYear(bookInfo.getPublishYear());
-                bookMapper.insertSelective(book);
-                int bookId = book.getId();
+                    Integer typeId = bookTypeService.isHasBookType(bookInfo.getBookType());
+                    if (typeId == null) {
+                        BookType bookType = new BookType();
+                        bookType.setName(bookInfo.getBookType());
+                        bookTypeService.addBookType(bookType);
+                        typeId = bookType.getId();
+                    }
+                    Book updateBook = new Book();
+                    updateBook.setId(bookId);
+                    updateBook.setTypeId(typeId);
+                    bookService.updateBookById(updateBook);
 
-                List<String> comments = bookInfo.getBookComment();
-                List<Evaluate> evaluates = comments.stream().map(comment -> {
-                    Evaluate evaluate = new Evaluate();
-                    evaluate.setBookId(bookId);
-                    evaluate.setUserId(0);
-                    evaluate.setRemarks(comment);
-                    return evaluate;
-                }).collect(Collectors.toList());
-                evaluateMapper.insertBatch(evaluates);
+                    List<String> comments = bookInfo.getBookComment();
+                    List<Evaluate> evaluates = comments.stream().map(comment -> {
+                        if (!StringUtils.isEmpty(comment)) {
+                            Evaluate evaluate = new Evaluate();
+                            evaluate.setBookId(bookId);
+                            evaluate.setUserId(0);
+                            evaluate.setRemarks(comment);
+                            return evaluate;
+                        }
+                        return null;
+                    }).filter(Objects::nonNull).collect(Collectors.toList());
+                    if (!CollectionUtils.isEmpty(evaluates)) {
+                        evaluateMapper.insertBatch(evaluates);
+                    }
 
-                bookInfo.setId(bookId);
+                    bookInfo.setId(bookId);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -115,7 +153,7 @@ public class SearchServiceImpl implements SearchService {
         return bookInfo;
     }
 
-    private BookInfo spiderBook(String url) {
+    private BookInfo spiderBook(String url, String name) {
         /**获取页面*/
         String html = CapturePage.getHtml(url);
 
@@ -123,7 +161,7 @@ public class SearchServiceImpl implements SearchService {
         UrlParse.parseUrlSub(html);
 
         /**解析书籍  默认爬取3页的短评*/
-        BookInfo bookInfo = PageParseManger.parseBookInfo(html, url, 3);
+        BookInfo bookInfo = PageParseManger.parseBookInfo(html, url, name, 3);
 
         /**数据输出*/
 //        DataOutput.output(bookInfo);

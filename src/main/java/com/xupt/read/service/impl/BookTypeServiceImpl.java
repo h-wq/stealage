@@ -25,6 +25,11 @@ public class BookTypeServiceImpl implements BookTypeService {
     }
 
     @Override
+    public Integer addBookType(BookType bookType) {
+        return bookTypeMapper.insertSelective(bookType);
+    }
+
+    @Override
     public List<BookType> getBookTypes() {
         BookTypeExample example = new BookTypeExample();
         return bookTypeMapper.selectByExample(example);
@@ -43,5 +48,13 @@ public class BookTypeServiceImpl implements BookTypeService {
         BookTypeExample example = new BookTypeExample();
         example.createCriteria().andIdIn(ids);
         return bookTypeMapper.selectByExample(example);
+    }
+
+    @Override
+    public Integer isHasBookType(String name) {
+        BookTypeExample example = new BookTypeExample();
+        example.createCriteria().andNameEqualTo(name);
+        BookType bookType = bookTypeMapper.selectByExample(example).stream().findFirst().orElse(null);
+        return bookType == null ? null : bookType.getId();
     }
 }

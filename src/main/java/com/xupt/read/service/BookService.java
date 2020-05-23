@@ -26,4 +26,6 @@ public interface BookService {
     PageResult<Book> getByNewest(int offset, int size);
 
     PageResult<Book> getByEnd(int offset, int size);
+
+    Integer updateBookById(Book book);
 }

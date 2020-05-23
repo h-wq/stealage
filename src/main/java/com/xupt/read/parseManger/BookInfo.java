@@ -52,6 +52,10 @@ public class BookInfo {
      */
     Integer Popularity;
     /**
+     * 书类型
+     */
+    String bookType;
+    /**
      * 出版社
      */
     String bookPublish;

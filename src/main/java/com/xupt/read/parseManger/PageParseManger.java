@@ -15,7 +15,7 @@ public class PageParseManger {
      * @param commentNum  爬取书籍的前number页短评
      * @return   解析书籍的信息
      */
-    public static BookInfo parseBookInfo(String html, String bookUrl, int commentNum){
+    public static BookInfo parseBookInfo(String html, String bookUrl, String name, int commentNum){
         if(html == null){
             return null;
         }
@@ -24,6 +24,16 @@ public class PageParseManger {
         bookInfo.setBookUrl(bookUrl);
 
         Document document =PageParse.getDocument(html);
+
+        /**书籍的名字*/
+        PageParse.getBookName(document, bookInfo);
+
+        /**获取出版社 作者 出版年*/
+        PageParse.getBookInfo(document, bookInfo);
+
+        if (name != null && !bookInfo.getBookName().contains(name) && !bookInfo.getAuthorName().contains(name)) {
+            return null;
+        }
 
         /**解析img地址*/
         PageParse.getBookImg(document, bookInfo);
@@ -41,17 +51,15 @@ public class PageParseManger {
         /**书籍和作者的简介*/
         PageParse.getBookAndAuthorInfo(document, bookInfo);
 
-        /**书籍的名字*/
-        PageParse.getBookName(document, bookInfo);
-
         /**评分*/
         PageParse.getScore(document, bookInfo);
 
         /**人气*/
         PageParse.getPopularity(document, bookInfo);
 
-        /**获取出版社 作者 出版年*/
-        PageParse.getBookInfo(document, bookInfo);
+        /**类型*/
+        PageParse.getBookType(document, bookInfo);
+
         return bookInfo;
     }
 }
