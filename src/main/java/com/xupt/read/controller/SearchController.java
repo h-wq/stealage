@@ -2,6 +2,7 @@ package com.xupt.read.controller;
 
 import com.xupt.read.common.result.JsonResult;
 import com.xupt.read.common.result.PageResult;
+import com.xupt.read.controller.resp.BookResp;
 import com.xupt.read.pageCapture.CapturePage;
 import com.xupt.read.parseManger.BookInfo;
 import com.xupt.read.service.SearchService;
@@ -36,7 +37,7 @@ public class SearchController {
      */
     @RequestMapping(value = "getBooks",method = RequestMethod.GET)
     public JsonResult getBooks(@RequestParam(name = "name") String name) {
-        PageResult<BookInfo> pageResult = new PageResult<>();
+        PageResult<BookResp> pageResult = new PageResult<>();
         try {
             String url = "https://www.douban.com/search?cat=1001&q=" + URLEncoder.encode(name, "utf-8");
             /**获取页面*/
@@ -44,19 +45,20 @@ public class SearchController {
 
             /**根据按book name搜索获取的html解析书籍url和picture*/
             List<String> urls = searchService.parseUrlBookName(html);
+            System.out.println(urls.size());
 
             urls.forEach(bookUrl -> completionService.submit(() -> searchService.getBookInfo(bookUrl)));
-            List<BookInfo> bookInfos = new ArrayList<>(urls.size());
+            List<BookResp> bookResps = new ArrayList<>(urls.size());
             for (int i = 0; i < urls.size(); i++) {
                 try{
                     BookInfo bookInfo = completionService.take().get();
 
-                    bookInfos.add(bookInfo);
+                    bookResps.add(BookResp.convert(bookInfo));
                 } catch (Exception e) {
                     log.error("getBookInfo error is ", e);
                 }
             }
-            pageResult.setItems(bookInfos);
+            pageResult.setItems(bookResps);
         }catch (Exception e) {
             e.printStackTrace();
         }

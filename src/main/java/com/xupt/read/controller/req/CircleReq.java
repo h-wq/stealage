@@ -29,6 +29,9 @@ public class CircleReq {
     private Integer bookId;
 
     @NotBlank
+    private String pictures;
+
+    @NotBlank
     private String comment;
 
     /**
@@ -39,10 +42,9 @@ public class CircleReq {
     @NotEmpty
     private String location;
 
-    public static Circle convert(CircleReq req, List<String> paths) {
+    public static Circle convert(CircleReq req) {
         Circle circle = new Circle();
         BeanUtils.copyProperties(req, circle);
-        circle.setPictures(paths.stream().map(String::valueOf).collect(Collectors.joining(",")));
         return circle;
     }
 }

@@ -75,6 +75,9 @@ public class PageParse {
             /**解析分页的短评*/
             Elements elements1 = doc.select("ul[class=comment-paginator]");
             Element element = elements1.select("li[class=p]").last();
+            if (element == null) {
+                break;
+            }
             String href = element.getElementsByClass("page-btn").attr("href");
             if(Strings.isEmptyOrNull(href)){
                 break;
@@ -106,9 +109,9 @@ public class PageParse {
     }
 
     public static void getPopularity(Document document, BookInfo bookInfo){
-        Element element = document.select("span[property=v:votes]").get(0);
         int popularity;
         try {
+            Element element = document.select("span[property=v:votes]").get(0);
             popularity = Integer.parseInt(element.html().trim());
         } catch (Exception e) {
             popularity = 0;

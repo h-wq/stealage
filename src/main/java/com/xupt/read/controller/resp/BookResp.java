@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.xupt.read.model.Book;
 import com.xupt.read.model.BookType;
 import com.xupt.read.model.Bookshelf;
+import com.xupt.read.parseManger.BookInfo;
 import lombok.Builder;
 import lombok.Data;
 
@@ -87,6 +88,25 @@ public class BookResp {
         bookResp.setBookshelfId(bookshelf.getId());
         bookResp.setAddTime(bookshelf.getCreatedAt());
         return bookResp;
+    }
+
+    public static BookResp convert(BookInfo bookInfo) {
+
+        return BookResp.builder()
+                .id(bookInfo.getId())
+                .name(bookInfo.getBookName())
+                .author(bookInfo.getAuthorName())
+                .synopsis(bookInfo.getBookInfo())
+                .score(bookInfo.getScore())
+                .link(bookInfo.getBookLink())
+//                .typeName(type == null ? "" : type.getName())
+                .picture(bookInfo.getImgPath())
+                .popularity(bookInfo.getPopularity())
+                .isNewest(false)
+                .isEnd(true)
+                .bookPublish(bookInfo.getBookPublish())
+                .publishYear(bookInfo.getPublishYear())
+                .build();
     }
 
     private static BookResp buildBookResp(Book book, BookType type) {

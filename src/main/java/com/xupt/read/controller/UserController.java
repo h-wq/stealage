@@ -5,12 +5,10 @@ import com.xupt.read.controller.req.UserReq;
 import com.xupt.read.controller.resp.UserResp;
 import com.xupt.read.model.User;
 import com.xupt.read.service.UserService;
-import com.xupt.read.util.FileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -43,12 +41,12 @@ public class UserController {
     /**
      * 添加用户
      */
-    @RequestMapping(method = RequestMethod.POST, consumes = "multipart/form-data")
-    public JsonResult addUser(@Valid UserReq userReq, @RequestParam("file") MultipartFile file) {
+    @RequestMapping(method = RequestMethod.POST)
+    public JsonResult addUser(@RequestBody @Valid UserReq userReq) {
 
         // 图片上传处理
-        String path = FileUtils.uploadFile(fileUploadPath, file);
-        User user = UserReq.convert(userReq, path);
+//        String path = FileUtils.uploadFile(fileUploadPath, file);
+        User user = UserReq.convert(userReq);
         Integer result = userService.addUser(user);
         return result == 1 ? JsonResult.success(user.getId()) : JsonResult.fail(-1, "添加用户失败！");
     }

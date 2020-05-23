@@ -9,7 +9,7 @@ import java.net.URL;
 
 public class PictureDownload {
 
-    private static String fileUploadPath = "/project/file/upload/read/img/";
+    private static String fileUploadPath = "/project/file/upload/read/img";
 
     public static String download(String img, String name){
         FileOutputStream fos = null;
