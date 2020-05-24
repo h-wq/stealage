@@ -13,8 +13,6 @@ public interface BookService {
 
     List<Book> getByIds(List<Integer> ids);
 
-    List<Book> getBooks();
-
     PageResult<Book> getBooks(int offset, int size);
 
     PageResult<Book> getByName(String name, int offset, int size);

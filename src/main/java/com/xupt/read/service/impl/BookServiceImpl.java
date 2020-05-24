@@ -36,12 +36,6 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> getBooks() {
-        BookExample example = new BookExample();
-        return bookMapper.selectByExample(example);
-    }
-
-    @Override
     public PageResult<Book> getBooks(int offset, int size) {
         BookExample example = new BookExample();
         example.setOrderByClause("score desc, popularity desc");

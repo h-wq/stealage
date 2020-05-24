@@ -92,13 +92,12 @@ public class BookController {
     @RequestMapping(value = "/type_books", method = RequestMethod.GET)
     public JsonResult query() {
 
-        List<Book> books = bookService.getBooks();
         List<BookType> bookTypes = bookTypeService.getBookTypes();
         List<Map<String, Object>> bookMaps = bookTypes.stream().map(bookType -> {
             Map<String, Object> bookMap = new HashMap<>();
             bookMap.put("typeId", bookType.getId());
             bookMap.put("typeName", bookType.getName());
-            List<Book> list = books.stream().filter(book -> bookType.getId().equals(book.getTypeId())).collect(Collectors.toList());
+            List<Book> list = bookService.getByBookTypeId(bookType.getId(), 0, 20).getItems();
             bookMap.put("list", list);
             return bookMap;
         }).collect(Collectors.toList());
