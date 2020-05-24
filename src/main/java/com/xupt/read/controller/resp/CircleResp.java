@@ -53,6 +53,8 @@ public class CircleResp {
 
         private String userName;
 
+        private String userPicture;
+
         private String comment;
     }
 
@@ -85,6 +87,7 @@ public class CircleResp {
             circleCommentResp.setId(circleComment.getId());
             User circleCommentUser = users.stream().filter(user -> user.getId().equals(circleComment.getUserId())).findFirst().get();
             circleCommentResp.setUserName(circleCommentUser.getName());
+            circleCommentResp.setUserPicture(circleCommentUser.getPicture());
             circleCommentResp.setComment(circleComment.getComment());
             return circleCommentResp;
         }).collect(Collectors.toList());

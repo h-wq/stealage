@@ -71,9 +71,9 @@ public class CircleController {
             return JsonResult.success();
         }
         List<CircleComment> circleCommentList = circleCommentService.getCircleComments(circleList.stream().map(Circle::getId).collect(Collectors.toList()));
-        List<CircleComment> friendCircleCommentList = circleCommentList.stream().filter(circleComment -> friendIds.contains(circleComment.getUserId()) || userId.equals(circleComment.getUserId())).collect(Collectors.toList());
+        List<CircleComment> friendCircleCommentList = circleCommentList.stream().filter(circleComment -> friendIds.contains(circleComment.getUserId())).collect(Collectors.toList());
         List<Likes> circleLikeList = likesService.getCircleLikes(circleList.stream().map(Circle::getId).collect(Collectors.toList()));
-        List<Likes> friendCircleLikeList = circleLikeList.stream().filter(circleLike -> friendIds.contains(circleLike.getUserId()) || userId.equals(circleLike.getUserId())).collect(Collectors.toList());
+        List<Likes> friendCircleLikeList = circleLikeList.stream().filter(circleLike -> friendIds.contains(circleLike.getUserId())).collect(Collectors.toList());
 
         List<User> userList = userService.getByIds(Stream.concat(Stream.concat(circleList.stream().map(Circle::getUserId), friendCircleCommentList.stream().map(CircleComment::getUserId)), friendCircleLikeList.stream().map(Likes::getUserId)).distinct().collect(Collectors.toList()));
         List<Book> bookList = bookService.getByIds(circleList.stream().map(Circle::getBookId).collect(Collectors.toList()));
