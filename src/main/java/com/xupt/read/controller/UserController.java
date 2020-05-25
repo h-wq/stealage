@@ -1,5 +1,6 @@
 package com.xupt.read.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.xupt.read.common.result.JsonResult;
 import com.xupt.read.controller.req.UserReq;
 import com.xupt.read.controller.resp.UserResp;
@@ -8,6 +9,7 @@ import com.xupt.read.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -54,8 +56,8 @@ public class UserController {
     /**
      * 添加好友
      */
-    @RequestMapping(value = "/{id}/add_friend", method = RequestMethod.POST)
-    public JsonResult addFriend(@PathVariable Integer id, @RequestParam(name = "friend_id") Integer friendId) {
+    @RequestMapping(value = "/add_friend", method = RequestMethod.GET)
+    public JsonResult addFriend(@RequestParam(name = "id") Integer id, @RequestParam(name = "friend_id") Integer friendId) {
 
         if (id < 1 || friendId < 1) {
             return JsonResult.fail(-1, "参数异常！");
@@ -64,6 +66,9 @@ public class UserController {
         User friendUser = userService.getById(friendId);
         if (user == null || friendUser == null) {
             return JsonResult.fail(-1, "添加好友失败，无此用户或无此好友！");
+        }
+        if (!StringUtils.isEmpty(user.getFriendIds()) && JSONObject.parseArray(user.getFriendIds(), Integer.class).contains(friendId)) {
+            return JsonResult.fail(-1, "添加好友失败，此用户已经是好友，无需添加！");
         }
         Integer result = userService.addFriend(id, friendId);
         return result == 1 ? JsonResult.success() : JsonResult.fail(-1, "添加好友失败！");
