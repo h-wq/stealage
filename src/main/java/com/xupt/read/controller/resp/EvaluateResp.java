@@ -35,6 +35,7 @@ public class EvaluateResp {
         UserResp userResp = UserResp.convert(user);
         return EvaluateResp.builder()
                 .userResp(userResp)
+                .remarks(evaluate.getRemarks())
                 .time(evaluate.getCreatedAt())
                 .build();
     }
