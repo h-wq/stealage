@@ -106,6 +106,9 @@ public class CircleController {
     public JsonResult uploadPictures(@RequestParam(name = "id") Integer id, HttpServletRequest request) {
 
         List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
+        if (CollectionUtils.isEmpty(files)) {
+            return JsonResult.fail(-1, "朋友圈上传图片失败，无图片上传！");
+        }
         List<String> paths = FileUtils.uploadFile(fileUploadPath, files);
         Integer result = circleService.uploadPictures(id, paths);
         return result == 1 ? JsonResult.success() : JsonResult.fail(-1, "朋友圈上传图片失败！");
