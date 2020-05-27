@@ -102,7 +102,7 @@ public class CircleController {
     /**
      * 朋友圈上传图片
      */
-    @RequestMapping(value = "upload_pictures", method = RequestMethod.POST, consumes = "multipart/form-data")
+    @RequestMapping(value = "/upload_pictures", method = RequestMethod.POST, consumes = "multipart/form-data")
     public JsonResult uploadPictures(@RequestParam(name = "id") Integer id, HttpServletRequest request) {
 
         List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
