@@ -26,6 +26,7 @@ public class EvaluateServiceImpl implements EvaluateService {
     @Override
     public PageResult<Evaluate> getByBookId(Integer bookId, int offset, int size) {
         EvaluateExample example = new EvaluateExample();
+        example.createCriteria().andBookIdEqualTo(bookId);
         example.setOrderByClause("created_at desc");
 
         PageHelper.offsetPage(offset, size, true);
