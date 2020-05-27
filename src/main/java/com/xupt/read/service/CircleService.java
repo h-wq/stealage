@@ -11,5 +11,7 @@ public interface CircleService {
 
     Integer addCircle(Circle circle);
 
+    Integer uploadPictures(Integer id, List<String> paths);
+
     Integer deleteCircle(Integer id);
 }

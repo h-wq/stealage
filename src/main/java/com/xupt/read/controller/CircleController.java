@@ -7,13 +7,17 @@ import com.xupt.read.controller.req.CircleReq;
 import com.xupt.read.controller.resp.CircleResp;
 import com.xupt.read.model.*;
 import com.xupt.read.service.*;
+import com.xupt.read.util.FileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -93,6 +97,18 @@ public class CircleController {
 //        List<String> paths = FileUtils.uploadFile(fileUploadPath, files);
         Integer result = circleService.addCircle(CircleReq.convert(circleReq));
         return result == 1 ? JsonResult.success() : JsonResult.fail(-1, "发表朋友圈失败！");
+    }
+
+    /**
+     * 朋友圈上传图片
+     */
+    @RequestMapping(method = RequestMethod.POST, consumes = "multipart/form-data")
+    public JsonResult uploadFile(@RequestParam(name = "id") Integer id, HttpServletRequest request) {
+
+        List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
+        List<String> paths = FileUtils.uploadFile(fileUploadPath, files);
+        Integer result = circleService.uploadPictures(id, paths);
+        return result == 1 ? JsonResult.success() : JsonResult.fail(-1, "朋友圈上传图片失败！");
     }
 
     /**

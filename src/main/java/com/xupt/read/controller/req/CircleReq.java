@@ -27,9 +27,6 @@ public class CircleReq {
     @JsonProperty(value = "book_id", access = JsonProperty.Access.WRITE_ONLY)
     private Integer bookId;
 
-    @NotEmpty
-    private List<String> pictures;
-
     @NotBlank
     private String comment;
 
@@ -45,7 +42,6 @@ public class CircleReq {
         Circle circle = new Circle();
         circle.setUserId(req.getUserId());
         circle.setBookId(req.getBookId());
-        circle.setPictures(JSONObject.toJSONString(req.getPictures()));
         circle.setComment(req.getComment());
         circle.setCoefficient(req.getCoefficient());
         circle.setLocation(req.getLocation());
