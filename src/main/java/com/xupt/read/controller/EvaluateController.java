@@ -10,6 +10,7 @@ import com.xupt.read.service.EvaluateService;
 import com.xupt.read.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -49,6 +50,9 @@ public class EvaluateController {
                                     @RequestParam(name = "page_size", defaultValue = "20") int pageSize) {
 
         PageResult<Evaluate> pageResult = evaluateService.getByBookId(bookId, (pageNum - 1) * pageSize, pageSize);
+        if (CollectionUtils.isEmpty(pageResult.getItems())) {
+            return JsonResult.success();
+        }
         List<Integer> userIds = pageResult.getItems().stream().map(Evaluate::getUserId).collect(Collectors.toList());
         List<User> users = userService.getByIds(userIds);
         List<EvaluateResp> evaluateResps = pageResult.getItems().stream().map(evaluate -> EvaluateResp.convert(users, evaluate)).collect(Collectors.toList());
