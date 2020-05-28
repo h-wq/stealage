@@ -76,6 +76,16 @@ public class BookshelfController {
     }
 
     /**
+     * 删除书架
+     */
+    @RequestMapping(value = "/{id}/delete", method = RequestMethod.POST)
+    public JsonResult deleteBookshelf(@PathVariable Integer id) {
+
+        Integer result = bookshelfService.deleteBookshelf(id);
+        return result == 1 ? JsonResult.success() : JsonResult.fail(-1, "删除书架失败！");
+    }
+
+    /**
      * 获取笔记
      * @param bookshelf_id bookshelf_id
      * @return

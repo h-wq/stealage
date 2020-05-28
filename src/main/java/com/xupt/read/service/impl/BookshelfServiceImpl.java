@@ -49,4 +49,9 @@ public class BookshelfServiceImpl implements BookshelfService {
         example.setOrderByClause("created_at desc");
         return noteMapper.selectByExample(example);
     }
+
+    @Override
+    public Integer deleteBookshelf(Integer id) {
+        return bookshelfMapper.deleteByPrimaryKey(id);
+    }
 }

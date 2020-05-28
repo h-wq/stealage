@@ -13,4 +13,6 @@ public interface BookshelfService {
     PageResult<Bookshelf> getByUserId(Integer userId, int offset, int size);
 
     List<Note> getNotes(Integer id);
+
+    Integer deleteBookshelf(Integer id);
 }

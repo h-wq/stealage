@@ -31,7 +31,7 @@ public class EvaluateResp {
 
     public static EvaluateResp convert(List<User> users, Evaluate evaluate) {
 
-        User user = users.stream().filter(u -> evaluate.getUserId().equals(u.getId())).findFirst().get();
+        User user = users.stream().filter(u -> evaluate.getUserId().equals(u.getId())).findFirst().orElse(new User());
         UserResp userResp = UserResp.convert(user);
         return EvaluateResp.builder()
                 .userResp(userResp)
