@@ -20,13 +20,11 @@ public class CircleReq {
 
     @NotNull
     @Min(value = 1)
-    @JsonProperty(value = "user_id", access = JsonProperty.Access.WRITE_ONLY)
-    private Integer userId;
+    private Integer user_id;
 
     @NotNull
     @Min(value = 1)
-    @JsonProperty(value = "book_id", access = JsonProperty.Access.WRITE_ONLY)
-    private Integer bookId;
+    private Integer book_id;
 
     @NotBlank
     private String comment;
