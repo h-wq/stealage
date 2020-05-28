@@ -1,15 +1,16 @@
 package com.xupt.read.controller.req;
 
-import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.xupt.read.model.Circle;
 import lombok.Data;
+import org.springframework.beans.BeanUtils;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 朋友圈请求实体类
@@ -38,13 +39,10 @@ public class CircleReq {
     @NotEmpty
     private String location;
 
-    public static Circle convert(CircleReq req) {
+    public static Circle convert(CircleReq req, List<String> paths) {
         Circle circle = new Circle();
-        circle.setUserId(req.getUserId());
-        circle.setBookId(req.getBookId());
-        circle.setComment(req.getComment());
-        circle.setCoefficient(req.getCoefficient());
-        circle.setLocation(req.getLocation());
+        BeanUtils.copyProperties(req, circle);
+        circle.setPictures(paths.stream().map(String::valueOf).collect(Collectors.joining(",")));
         return circle;
     }
 }

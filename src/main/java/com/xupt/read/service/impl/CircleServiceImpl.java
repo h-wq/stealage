@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CircleServiceImpl implements CircleService {
@@ -35,14 +34,6 @@ public class CircleServiceImpl implements CircleService {
     @Override
     public Integer addCircle(Circle circle) {
         return circleMapper.insertSelective(circle);
-    }
-
-    @Override
-    public Integer uploadPictures(Integer id, List<String> paths) {
-        Circle circle = new Circle();
-        circle.setId(id);
-        circle.setPictures(paths.stream().map(String::valueOf).collect(Collectors.joining(",")));
-        return circleMapper.updateByPrimaryKeySelective(circle);
     }
 
     @Override
