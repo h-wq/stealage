@@ -3,14 +3,11 @@ package com.xupt.read.controller.req;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.xupt.read.model.Circle;
 import lombok.Data;
-import org.springframework.beans.BeanUtils;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 朋友圈请求实体类
@@ -20,11 +17,16 @@ public class CircleReq {
 
     @NotNull
     @Min(value = 1)
-    private Integer user_id;
+    @JsonProperty(value = "user_id", access = JsonProperty.Access.WRITE_ONLY)
+    private Integer userId;
 
     @NotNull
     @Min(value = 1)
-    private Integer book_id;
+    @JsonProperty(value = "book_id", access = JsonProperty.Access.WRITE_ONLY)
+    private Integer bookId;
+
+    @NotBlank
+    private String pictures;
 
     @NotBlank
     private String comment;
@@ -37,14 +39,14 @@ public class CircleReq {
     @NotEmpty
     private String location;
 
-    public static Circle convert(CircleReq req, List<String> paths) {
+    public static Circle convert(CircleReq req) {
         Circle circle = new Circle();
-        circle.setUserId(req.getUser_id());
-        circle.setBookId(req.getBook_id());
+        circle.setUserId(req.getUserId());
+        circle.setBookId(req.getBookId());
+        circle.setPictures(req.getPictures());
         circle.setComment(req.getComment());
         circle.setCoefficient(req.getCoefficient());
         circle.setLocation(req.getLocation());
-        circle.setPictures(paths.stream().map(String::valueOf).collect(Collectors.joining(",")));
         return circle;
     }
 }

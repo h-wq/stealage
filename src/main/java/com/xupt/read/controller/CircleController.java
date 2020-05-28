@@ -90,16 +90,21 @@ public class CircleController {
     /**
      * 发送朋友圈
      */
-    @RequestMapping(method = RequestMethod.POST, consumes = "multipart/form-data")
-    public JsonResult addCircle(@Valid CircleReq circleReq, HttpServletRequest request) {
+    @RequestMapping(method = RequestMethod.POST)
+    public JsonResult addCircle(@RequestBody @Valid CircleReq circleReq) {
 
-        List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
-        if (CollectionUtils.isEmpty(files)) {
-            return JsonResult.fail(-1, "朋友圈上传图片失败，无图片上传！");
-        }
-        List<String> paths = FileUtils.uploadFile(fileUploadPath, files);
-        Integer result = circleService.addCircle(CircleReq.convert(circleReq, paths));
+        Integer result = circleService.addCircle(CircleReq.convert(circleReq));
         return result == 1 ? JsonResult.success() : JsonResult.fail(-1, "发表朋友圈失败！");
+    }
+
+    /**
+     * 朋友圈上传图片
+     */
+    @RequestMapping(value = "/upload_pictures", method = RequestMethod.POST, consumes = "multipart/form-data")
+    public JsonResult uploadPictures(@RequestParam(name = "file") MultipartFile file) {
+
+        String path = FileUtils.uploadFile(fileUploadPath, file);
+        return !StringUtils.isEmpty(path) ? JsonResult.success(path) : JsonResult.fail(-1, "朋友圈上传图片失败！");
     }
 
     /**
