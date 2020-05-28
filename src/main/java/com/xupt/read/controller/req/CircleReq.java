@@ -39,7 +39,11 @@ public class CircleReq {
 
     public static Circle convert(CircleReq req, List<String> paths) {
         Circle circle = new Circle();
-        BeanUtils.copyProperties(req, circle);
+        circle.setUserId(req.getUser_id());
+        circle.setBookId(req.getBook_id());
+        circle.setComment(req.getComment());
+        circle.setCoefficient(req.getCoefficient());
+        circle.setLocation(req.getLocation());
         circle.setPictures(paths.stream().map(String::valueOf).collect(Collectors.joining(",")));
         return circle;
     }
