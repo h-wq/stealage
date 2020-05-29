@@ -80,7 +80,7 @@ public class CircleController {
         List<User> userList = userService.getByIds(Stream.concat(Stream.concat(circleList.stream().map(Circle::getUserId), friendCircleCommentList.stream().map(CircleComment::getUserId)), friendCircleLikeList.stream().map(Likes::getUserId)).distinct().collect(Collectors.toList()));
         List<Book> bookList = bookService.getByIds(circleList.stream().map(Circle::getBookId).collect(Collectors.toList()));
 
-        List<CircleResp> circleRespList = circleList.stream().map(circle -> CircleResp.convert(circle, friendCircleCommentList, friendCircleLikeList, userList, bookList)).collect(Collectors.toList());
+        List<CircleResp> circleRespList = circleList.stream().map(circle -> CircleResp.convert(circle, friendCircleCommentList, friendCircleLikeList, userList, bookList, userId)).collect(Collectors.toList());
         PageResult<CircleResp> respPageResult = PageResult.fromPageResult(circleRespList, pageResult);
         return JsonResult.success(respPageResult);
     }

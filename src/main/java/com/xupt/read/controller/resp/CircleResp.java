@@ -19,6 +19,10 @@ public class CircleResp {
     /**
      * 用户信息
      */
+    private Integer userId;
+
+    private Boolean isSelf;
+
     private String userName;
 
     private String userPicture;
@@ -51,6 +55,10 @@ public class CircleResp {
 
         private Integer id;
 
+        private Integer userId;
+
+        private Boolean isSelf;
+
         private String userName;
 
         private String userPicture;
@@ -63,15 +71,21 @@ public class CircleResp {
 
         private Integer id;
 
+        private Integer userId;
+
+        private Boolean isSelf;
+
         private String userName;
     }
 
-    public static CircleResp convert(Circle circle, List<CircleComment> circleComments, List<Likes> circleLikes, List<User> users, List<Book> books) {
+    public static CircleResp convert(Circle circle, List<CircleComment> circleComments, List<Likes> circleLikes, List<User> users, List<Book> books, Integer userId) {
 
         CircleResp circleResp = new CircleResp();
         circleResp.setId(circle.getId());
 
         User circleUser = users.stream().filter(user -> user.getId().equals(circle.getUserId())).findFirst().get();
+        circleResp.setUserId(circleUser.getId());
+        circleResp.setIsSelf(userId.equals(circleUser.getId()));
         circleResp.setUserName(circleUser.getName());
         circleResp.setUserPicture(circleUser.getPicture());
         Book circleBook = books.stream().filter(book -> book.getId().equals(circle.getBookId())).findFirst().get();
@@ -86,6 +100,8 @@ public class CircleResp {
             CircleCommentResp circleCommentResp = new CircleCommentResp();
             circleCommentResp.setId(circleComment.getId());
             User circleCommentUser = users.stream().filter(user -> user.getId().equals(circleComment.getUserId())).findFirst().get();
+            circleCommentResp.setUserId(circleCommentUser.getId());
+            circleCommentResp.setIsSelf(userId.equals(circleCommentUser.getId()));
             circleCommentResp.setUserName(circleCommentUser.getName());
             circleCommentResp.setUserPicture(circleCommentUser.getPicture());
             circleCommentResp.setComment(circleComment.getComment());
@@ -97,6 +113,8 @@ public class CircleResp {
             CircleLikeResp circleLikeResp = new CircleLikeResp();
             circleLikeResp.setId(circleLike.getId());
             User circleLikeUser = users.stream().filter(user -> user.getId().equals(circleLike.getUserId())).findFirst().get();
+            circleLikeResp.setUserId(circleLikeUser.getId());
+            circleLikeResp.setIsSelf(userId.equals(circleLikeResp.getId()));
             circleLikeResp.setUserName(circleLikeUser.getName());
             return circleLikeResp;
         }).collect(Collectors.toList());
