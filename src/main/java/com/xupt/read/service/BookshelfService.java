@@ -15,4 +15,6 @@ public interface BookshelfService {
     List<Note> getNotes(Integer id);
 
     Integer deleteBookshelf(Integer id);
+
+    Boolean isHave(Integer bookId, Integer userId);
 }

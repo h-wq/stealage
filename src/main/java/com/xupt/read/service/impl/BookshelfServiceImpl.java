@@ -54,4 +54,11 @@ public class BookshelfServiceImpl implements BookshelfService {
     public Integer deleteBookshelf(Integer id) {
         return bookshelfMapper.deleteByPrimaryKey(id);
     }
+
+    @Override
+    public Boolean isHave(Integer bookId, Integer userId) {
+        BookshelfExample example = new BookshelfExample();
+        example.createCriteria().andBookIdEqualTo(bookId).andUserIdEqualTo(userId);
+        return bookshelfMapper.selectByExample(example).size() > 0;
+    }
 }

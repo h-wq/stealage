@@ -86,6 +86,16 @@ public class BookshelfController {
     }
 
     /**
+     * 是否加入书架
+     */
+    @RequestMapping(value = "/{book_id}/is_have", method = RequestMethod.GET)
+    public JsonResult deleteBookshelf(@PathVariable Integer book_id, @RequestParam(name = "user_id") Integer userId) {
+
+        Boolean isHave = bookshelfService.isHave(book_id, userId);
+        return JsonResult.success(isHave);
+    }
+
+    /**
      * 获取笔记
      * @param bookshelf_id bookshelf_id
      * @return
