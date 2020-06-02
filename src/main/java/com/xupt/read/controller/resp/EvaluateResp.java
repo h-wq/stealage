@@ -26,7 +26,7 @@ public class EvaluateResp {
      */
     private String remarks;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date time;
 
     public static EvaluateResp convert(List<User> users, Evaluate evaluate) {

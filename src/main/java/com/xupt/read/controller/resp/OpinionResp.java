@@ -22,7 +22,7 @@ public class OpinionResp {
 
     private Boolean isSolve;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date time;
 
     public static OpinionResp convert(List<User> users, Opinion opinion) {

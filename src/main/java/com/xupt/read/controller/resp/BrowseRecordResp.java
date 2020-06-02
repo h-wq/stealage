@@ -19,7 +19,7 @@ public class BrowseRecordResp {
 
     private BookResp bookResp;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date time;
 
     public static BrowseRecordResp convert(List<Book> books, BrowseRecord browseRecord, List<BookType> bookTypes) {

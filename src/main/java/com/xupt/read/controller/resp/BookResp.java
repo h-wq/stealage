@@ -70,7 +70,7 @@ public class BookResp {
     /**
      * 书架添加时间
      */
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date addTime;
 
     public static BookResp convert(Book book, List<BookType> bookTypes) {
