@@ -38,6 +38,7 @@ public class BookTypeController {
      */
     @RequestMapping(method = RequestMethod.GET)
     public JsonResult query() {
+        log.info("BookTypeController query");
         List<BookTypeResp> bookTypeResps = bookTypeService.getBookTypes().stream().map(BookTypeResp::convert).collect(Collectors.toList());
         return JsonResult.success(bookTypeResps);
     }
