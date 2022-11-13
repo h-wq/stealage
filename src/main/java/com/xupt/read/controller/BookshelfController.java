@@ -90,7 +90,7 @@ public class BookshelfController {
      */
     @RequestMapping(value = "/{book_id}/is_have", method = RequestMethod.GET)
     public JsonResult deleteBookshelf(@PathVariable Integer book_id, @RequestParam(name = "user_id") Integer userId) {
-
+        userId = 1;
         Boolean isHave = bookshelfService.isHave(book_id, userId);
         return JsonResult.success(isHave);
     }

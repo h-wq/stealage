@@ -1,5 +1,6 @@
 package com.xupt.read.controller;
 
+import com.google.common.collect.Lists;
 import com.xupt.read.common.result.JsonResult;
 import com.xupt.read.common.result.PageResult;
 import com.xupt.read.controller.req.BookReq;
@@ -19,9 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -66,10 +65,26 @@ public class BookController {
     public JsonResult query(@RequestParam(name = "name") String name,
                             @RequestParam(name = "page_num", defaultValue = "1") int pageNum,
                             @RequestParam(name = "page_size", defaultValue = "20") int pageSize) {
-
         PageResult<Book> pageResult = bookService.getByName(name, (pageNum - 1) * pageSize, pageSize);
         JsonResult<PageResult<BookResp>> jsonResult = query(pageResult);
         return CollectionUtils.isEmpty(jsonResult.getData().getItems()) ? searchController.getBooks(name) : jsonResult;
+    }
+
+    /**
+     * 根据书名批量搜索
+     * @return
+     */
+    @RequestMapping(value = "/search/batch", method = RequestMethod.GET)
+    public JsonResult<List<List<BookResp>>> query(@RequestParam(name = "names") String names,
+                                            @RequestParam(name = "split") int split) {
+        List<String> queryNames = Arrays.asList(names.split(","));
+        List<Book> books = bookService.getByNames(queryNames);
+        List<Integer> bookTypeIds = books.stream().map(Book::getTypeId).distinct().collect(Collectors.toList());
+        List<BookType> bookTypes = bookTypeService.getByIds(bookTypeIds);
+        List<BookResp> bookRespList = books.stream()
+                .map(book -> BookResp.convert(book, bookTypes))
+                .collect(Collectors.toList());
+        return JsonResult.success(Lists.partition(bookRespList, split));
     }
 
     /**
@@ -91,7 +106,6 @@ public class BookController {
      */
     @RequestMapping(value = "/type_books", method = RequestMethod.GET)
     public JsonResult query() {
-
         List<BookType> bookTypes = bookTypeService.getBookTypes();
         List<Map<String, Object>> bookMaps = bookTypes.stream().map(bookType -> {
             Map<String, Object> bookMap = new HashMap<>();
@@ -173,7 +187,7 @@ public class BookController {
         if (book == null) {
             return JsonResult.fail(-1, "获取书详情失败，无对应" + id + "的书");
         }
-        BookType bookType = bookTypeService.getById(id);
+        BookType bookType = bookTypeService.getById(book.getTypeId());
         return JsonResult.success(BookInfoResp.convert(book, bookType));
     }
 

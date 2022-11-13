@@ -1,7 +1,7 @@
 package com.xupt.read.controller.req;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.xupt.read.model.Likes;
+import com.xupt.read.model.CircleLike;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
@@ -24,9 +24,9 @@ public class CircleLikeReq {
     @JsonProperty(value = "user_id", access = JsonProperty.Access.WRITE_ONLY)
     private Integer userId;
 
-    public static Likes convert(CircleLikeReq req) {
-        Likes like = new Likes();
-        BeanUtils.copyProperties(req, like);
-        return like;
+    public static CircleLike convert(CircleLikeReq req) {
+        CircleLike circleLike = new CircleLike();
+        BeanUtils.copyProperties(req, circleLike);
+        return circleLike;
     }
 }

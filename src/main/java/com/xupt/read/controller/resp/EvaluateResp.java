@@ -36,7 +36,7 @@ public class EvaluateResp {
         return EvaluateResp.builder()
                 .userResp(userResp)
                 .remarks(evaluate.getRemarks())
-                .time(evaluate.getCreatedAt())
+                .time(evaluate.getCreateTime())
                 .build();
     }
 }

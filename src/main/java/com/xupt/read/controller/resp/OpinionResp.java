@@ -33,7 +33,7 @@ public class OpinionResp {
                 .userResp(userResp)
                 .content(opinion.getContent())
                 .isSolve(opinion.getIsSolve())
-                .time(opinion.getCreatedAt())
+                .time(opinion.getCreateTime())
                 .build();
     }
 }

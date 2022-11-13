@@ -43,7 +43,7 @@ public class CircleController {
     private CircleCommentService circleCommentService;
 
     @Autowired
-    private LikesService likesService;
+    private CircleLikeService circleLikeService;
 
     @Autowired
     private BookService bookService;
@@ -74,10 +74,10 @@ public class CircleController {
         }
         List<CircleComment> circleCommentList = circleCommentService.getCircleComments(circleList.stream().map(Circle::getId).collect(Collectors.toList()));
         List<CircleComment> friendCircleCommentList = circleCommentList.stream().filter(circleComment -> friendIds.contains(circleComment.getUserId())).collect(Collectors.toList());
-        List<Likes> circleLikeList = likesService.getCircleLikes(circleList.stream().map(Circle::getId).collect(Collectors.toList()));
-        List<Likes> friendCircleLikeList = circleLikeList.stream().filter(circleLike -> friendIds.contains(circleLike.getUserId())).collect(Collectors.toList());
+        List<CircleLike> circleLikeList = circleLikeService.getCircleLikes(circleList.stream().map(Circle::getId).collect(Collectors.toList()));
+        List<CircleLike> friendCircleLikeList = circleLikeList.stream().filter(circleLike -> friendIds.contains(circleLike.getUserId())).collect(Collectors.toList());
 
-        List<User> userList = userService.getByIds(Stream.concat(Stream.concat(circleList.stream().map(Circle::getUserId), friendCircleCommentList.stream().map(CircleComment::getUserId)), friendCircleLikeList.stream().map(Likes::getUserId)).distinct().collect(Collectors.toList()));
+        List<User> userList = userService.getByIds(Stream.concat(Stream.concat(circleList.stream().map(Circle::getUserId), friendCircleCommentList.stream().map(CircleComment::getUserId)), friendCircleLikeList.stream().map(CircleLike::getUserId)).distinct().collect(Collectors.toList()));
         List<Book> bookList = bookService.getByIds(circleList.stream().map(Circle::getBookId).collect(Collectors.toList()));
 
         List<CircleResp> circleRespList = circleList.stream().map(circle -> CircleResp.convert(circle, friendCircleCommentList, friendCircleLikeList, userList, bookList, userId)).collect(Collectors.toList());

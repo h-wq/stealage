@@ -86,7 +86,7 @@ public class BookResp {
 
         BookResp bookResp = buildBookResp(book, type);
         bookResp.setBookshelfId(bookshelf.getId());
-        bookResp.setAddTime(bookshelf.getCreatedAt());
+        bookResp.setAddTime(bookshelf.getCreateTime());
         return bookResp;
     }
 

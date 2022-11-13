@@ -17,6 +17,8 @@ public interface BookService {
 
     PageResult<Book> getByName(String name, int offset, int size);
 
+    List<Book> getByNames(List<String> names);
+
     PageResult<Book> getByBookTypeId(Integer bookTypeId, int offset, int size);
 
     PageResult<Book> getByPopularity(int offset, int size);

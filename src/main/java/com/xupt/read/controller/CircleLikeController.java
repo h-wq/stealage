@@ -2,7 +2,7 @@ package com.xupt.read.controller;
 
 import com.xupt.read.common.result.JsonResult;
 import com.xupt.read.controller.req.CircleLikeReq;
-import com.xupt.read.service.LikesService;
+import com.xupt.read.service.CircleLikeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,10 +15,10 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping(value = "/circle_likes")
 @Slf4j
-public class LikesController {
+public class CircleLikeController {
 
     @Autowired
-    private LikesService likesService;
+    private CircleLikeService circleLikeService;
 
     /**
      * 点赞
@@ -26,7 +26,7 @@ public class LikesController {
     @RequestMapping(method = RequestMethod.POST)
     public JsonResult addCircleLike(@RequestBody @Valid CircleLikeReq circleLikeReq) {
 
-        Integer result = likesService.addCircleLike(CircleLikeReq.convert(circleLikeReq));
+        Integer result = circleLikeService.addCircleLike(CircleLikeReq.convert(circleLikeReq));
         return result == 1 ? JsonResult.success() : JsonResult.fail(-1, "点赞失败！");
     }
 
@@ -36,7 +36,7 @@ public class LikesController {
     @RequestMapping(value = "/{id}/delete", method = RequestMethod.POST)
     public JsonResult deleteCircleLike(@PathVariable Integer id) {
 
-        Integer result = likesService.deleteCircleLike(id);
+        Integer result = circleLikeService.deleteCircleLike(id);
         return result == 1 ? JsonResult.success() : JsonResult.fail(-1, "删除点赞失败！");
     }
 }

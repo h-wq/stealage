@@ -18,8 +18,8 @@
         <plugin type="com.xupt.read.configuration.plugins.MybatisCommentGenerator"/>
 
         <!--数据库链接URL，用户名、密码 -->
-        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://39.97.96.131:3306/read"
-                        userId="root">
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://47.94.241.172:3306/read?serverTimezone=UTC"
+                        userId="root" password="root">
             <property name="nullCatalogMeansCurrent" value="true"/>
         </jdbcConnection>
         <javaTypeResolver>
@@ -39,37 +39,37 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <table tableName="book" domainObjectName="Book">
+        <table tableName="books" domainObjectName="Book">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="book_type" domainObjectName="BookType">
+        <table tableName="book_types" domainObjectName="BookType">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="bookshelf" domainObjectName="Bookshelf">
+        <table tableName="bookshelves" domainObjectName="Bookshelf">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="browse_record" domainObjectName="BrowseRecord">
+        <table tableName="browse_records" domainObjectName="BrowseRecord">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="circle" domainObjectName="Circle">
+        <table tableName="circles" domainObjectName="Circle">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="circle_comment" domainObjectName="CircleComment">
+        <table tableName="circle_comments" domainObjectName="CircleComment">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="evaluate" domainObjectName="Evaluate">
+        <table tableName="evaluates" domainObjectName="Evaluate">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="note" domainObjectName="Note">
+        <table tableName="notes" domainObjectName="Note">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table schema="read" tableName="user" domainObjectName="User">
+        <table schema="read" tableName="users" domainObjectName="User">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="opinion" domainObjectName="Opinion">
+        <table tableName="opinions" domainObjectName="Opinion">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="likes" domainObjectName="Likes">
+        <table tableName="circle_likes" domainObjectName="CircleLike">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>

@@ -78,7 +78,7 @@ public class CircleResp {
         private String userName;
     }
 
-    public static CircleResp convert(Circle circle, List<CircleComment> circleComments, List<Likes> circleLikes, List<User> users, List<Book> books, Integer userId) {
+    public static CircleResp convert(Circle circle, List<CircleComment> circleComments, List<CircleLike> circleLikes, List<User> users, List<Book> books, Integer userId) {
 
         CircleResp circleResp = new CircleResp();
         circleResp.setId(circle.getId());
@@ -94,7 +94,7 @@ public class CircleResp {
         circleResp.setComment(circle.getComment());
         circleResp.setCoefficient(circle.getCoefficient());
         circleResp.setLocation(circle.getLocation());
-        circleResp.setTime(circle.getCreatedAt());
+        circleResp.setTime(circle.getCreateTime());
         circleComments = circleComments.stream().filter(circleComment -> circleComment.getCircleId().equals(circle.getId())).collect(Collectors.toList());
         List<CircleCommentResp> circleCommentRespList = circleComments.stream().map(circleComment -> {
             CircleCommentResp circleCommentResp = new CircleCommentResp();

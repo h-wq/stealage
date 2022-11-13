@@ -28,7 +28,7 @@ public class BrowseRecordResp {
         BookResp bookResp = BookResp.convert(book, bookTypes);
         return BrowseRecordResp.builder()
                 .bookResp(bookResp)
-                .time(browseRecord.getCreatedAt())
+                .time(browseRecord.getCreateTime())
                 .build();
     }
 }

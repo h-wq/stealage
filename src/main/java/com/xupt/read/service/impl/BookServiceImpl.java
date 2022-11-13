@@ -56,6 +56,14 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public List<Book> getByNames(List<String> names) {
+        BookExample example = new BookExample();
+        example.setOrderByClause("score desc, popularity desc");
+        example.createCriteria().andNameIn(names);
+        return bookMapper.selectByExample(example);
+    }
+
+    @Override
     public PageResult<Book> getByBookTypeId(Integer bookTypeId, int offset, int size) {
         BookExample example = new BookExample();
         example.createCriteria().andTypeIdEqualTo(bookTypeId);

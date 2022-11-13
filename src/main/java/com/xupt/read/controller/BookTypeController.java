@@ -28,7 +28,6 @@ public class BookTypeController {
      */
     @RequestMapping(method = RequestMethod.POST)
     public JsonResult addBookType(@RequestParam(name = "name") String name) {
-
         Integer result = bookTypeService.addBookType(name);
         return result == 1 ? JsonResult.success() : JsonResult.fail(-1, "添加类型失败！");
     }
@@ -39,7 +38,6 @@ public class BookTypeController {
      */
     @RequestMapping(method = RequestMethod.GET)
     public JsonResult query() {
-
         List<BookTypeResp> bookTypeResps = bookTypeService.getBookTypes().stream().map(BookTypeResp::convert).collect(Collectors.toList());
         return JsonResult.success(bookTypeResps);
     }
