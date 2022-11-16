@@ -1,5 +1,6 @@
 package com.xupt.read.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.xupt.read.mapper.EvaluateMapper;
 import com.xupt.read.model.Book;
 import com.xupt.read.model.BookType;
@@ -24,6 +25,7 @@ import org.springframework.util.StringUtils;
 
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -114,6 +116,8 @@ public class SearchServiceImpl implements SearchService {
                     book.setAuthorInfo(bookInfo.getAuthorInfo());
                     book.setBookPublish(bookInfo.getBookPublish());
                     book.setPublishYear(bookInfo.getPublishYear());
+                    book.setCreateTime(new Date());
+                    book.setUpdateTime(new Date());
                     bookService.addBook(book);
                     int bookId = book.getId();
 
@@ -121,6 +125,8 @@ public class SearchServiceImpl implements SearchService {
                     if (typeId == null) {
                         BookType bookType = new BookType();
                         bookType.setName(bookInfo.getBookType());
+                        bookType.setCreateTime(new Date());
+                        bookType.setUpdateTime(new Date());
                         bookTypeService.addBookType(bookType);
                         typeId = bookType.getId();
                     }
@@ -136,6 +142,8 @@ public class SearchServiceImpl implements SearchService {
                             evaluate.setBookId(bookId);
                             evaluate.setUserId(0);
                             evaluate.setRemarks(comment);
+                            evaluate.setCreateTime(new Date());
+                            evaluate.setUpdateTime(new Date());
                             return evaluate;
                         }
                         return null;

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.*;
 
@@ -40,11 +41,12 @@ public class SearchController {
         PageResult<BookResp> pageResult = new PageResult<>();
         try {
             String url = "https://www.douban.com/search?cat=1001&q=" + URLEncoder.encode(name, "utf-8");
-            /**获取页面*/
+            //获取页面
             String html = CapturePage.getHtml(url);
 
-            /**根据按book name搜索获取的html解析书籍url和picture*/
-            List<String> urls = searchService.parseUrlBookName(html, name);
+            //根据按book name搜索获取的html解析书籍url和picture
+            //只获取第一个书, 默认是最好的一个
+            List<String> urls = Collections.singletonList(searchService.parseUrlBookName(html, name).get(0));
 
             urls.forEach(bookUrl -> completionService.submit(() -> searchService.getBookInfo(bookUrl, name)));
             List<BookResp> bookResps = new ArrayList<>(urls.size());

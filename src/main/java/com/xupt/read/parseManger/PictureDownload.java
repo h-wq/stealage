@@ -9,17 +9,17 @@ import java.net.URL;
 
 public class PictureDownload {
 
-    private static String fileUploadPath = "/project/file/upload/read/img";
+    private static final String FILE_UPLOAD_PATH = "/work/project/file/upload/read/img";
 
     public static String download(String img, String name){
         FileOutputStream fos = null;
         BufferedInputStream bis = null;
         HttpURLConnection httpUrl = null;
-        String path = fileUploadPath;
+        String path = FILE_UPLOAD_PATH;
         URL url;
         int BUFFER_SIZE = 1024;
         byte[] buf = new byte[BUFFER_SIZE];
-        int size = 0;
+        int size;
         try {
             url = new URL(img);
             httpUrl = (HttpURLConnection) url.openConnection();
