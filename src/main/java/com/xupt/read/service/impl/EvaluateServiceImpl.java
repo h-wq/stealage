@@ -27,7 +27,7 @@ public class EvaluateServiceImpl implements EvaluateService {
     public PageResult<Evaluate> getByBookId(Integer bookId, int offset, int size) {
         EvaluateExample example = new EvaluateExample();
         example.createCriteria().andBookIdEqualTo(bookId);
-        example.setOrderByClause("created_time desc");
+        example.setOrderByClause("create_time desc");
 
         PageHelper.offsetPage(offset, size, true);
         List<Evaluate> evaluateList = evaluateMapper.selectByExample(example);

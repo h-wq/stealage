@@ -19,7 +19,7 @@ public class CircleLikeServiceImpl implements CircleLikeService {
     public List<CircleLike> getCircleLikes(List<Integer> circleIds) {
         CircleLikeExample example = new CircleLikeExample();
         example.createCriteria().andCircleIdIn(circleIds).andIsDeleteEqualTo(false);
-        example.setOrderByClause("created_time desc");
+        example.setOrderByClause("create_time desc");
 
         return circleLikeMapper.selectByExample(example);
     }

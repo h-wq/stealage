@@ -26,7 +26,7 @@ public class OpinionServiceImpl implements OpinionService {
     @Override
     public PageResult<Opinion> getOpinions(int offset, int size) {
         OpinionExample example = new OpinionExample();
-        example.setOrderByClause("created_time desc");
+        example.setOrderByClause("create_time desc");
 
         PageHelper.offsetPage(offset, size, true);
         List<Opinion> opinionList = opinionMapper.selectByExample(example);

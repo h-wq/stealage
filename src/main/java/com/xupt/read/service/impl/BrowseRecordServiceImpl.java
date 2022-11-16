@@ -26,7 +26,7 @@ public class BrowseRecordServiceImpl implements BrowseRecordService {
     @Override
     public PageResult<BrowseRecord> getByUserId(Integer userId, int offset, int size) {
         BrowseRecordExample example = new BrowseRecordExample();
-        example.setOrderByClause("created_time desc");
+        example.setOrderByClause("create_time desc");
 
         PageHelper.offsetPage(offset, size, true);
         List<BrowseRecord> browseRecordList = browseRecordMapper.selectByExample(example);
