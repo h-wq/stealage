@@ -1,9 +1,7 @@
 package com.xupt.read.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.xupt.read.mapper.EvaluateMapper;
 import com.xupt.read.model.Book;
-import com.xupt.read.model.BookType;
 import com.xupt.read.model.Evaluate;
 import com.xupt.read.pageCapture.CapturePage;
 import com.xupt.read.parseManger.BookInfo;
@@ -78,7 +76,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public BookInfo getBookInfo(String url, String name) {
+    public BookInfo getBookInfo(String url, String name, String bookType) {
         BookInfo bookInfo = null;
         try {
             String ebookUrl = "https://read.douban.com/ebook";
@@ -101,7 +99,7 @@ public class SearchServiceImpl implements SearchService {
 //                Thread.sleep(3000);
                 String urlA = UrlManger.getUrl();
                 System.out.println("正在爬取的url：" + urlA);
-                bookInfo = spiderBook(urlA, name);
+                bookInfo = spiderBook(urlA, name,bookType);
 
                 if (bookInfo != null) {
                     //插入图书信息
@@ -122,14 +120,6 @@ public class SearchServiceImpl implements SearchService {
                     int bookId = book.getId();
 
                     Integer typeId = bookTypeService.isHasBookType(bookInfo.getBookType());
-                    if (typeId == null) {
-                        BookType bookType = new BookType();
-                        bookType.setName(bookInfo.getBookType());
-                        bookType.setCreateTime(new Date());
-                        bookType.setUpdateTime(new Date());
-                        bookTypeService.addBookType(bookType);
-                        typeId = bookType.getId();
-                    }
                     Book updateBook = new Book();
                     updateBook.setId(bookId);
                     updateBook.setTypeId(typeId);
@@ -161,7 +151,7 @@ public class SearchServiceImpl implements SearchService {
         return bookInfo;
     }
 
-    private BookInfo spiderBook(String url, String name) {
+    private BookInfo spiderBook(String url, String name, String bookType) {
         /**获取页面*/
         String html = CapturePage.getHtml(url);
 
@@ -170,6 +160,7 @@ public class SearchServiceImpl implements SearchService {
 
         /**解析书籍  默认爬取3页的短评*/
         BookInfo bookInfo = PageParseManger.parseBookInfo(html, url, name, 3);
+        bookInfo.setBookType(bookType);
 
         /**数据输出*/
 //        DataOutput.output(bookInfo);

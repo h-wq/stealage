@@ -8,5 +8,5 @@ public interface SearchService {
 
     List<String> parseUrlBookName(String html, String name);
 
-    BookInfo getBookInfo(String url, String name);
+    BookInfo getBookInfo(String url, String name, String bookType);
 }

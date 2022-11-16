@@ -119,17 +119,6 @@ public class PageParse {
         bookInfo.setPopularity(popularity);
     }
 
-    public static void getBookType(Document document, BookInfo bookInfo){
-        String bookType;
-        try {
-            Element element = document.getElementsByClass("  tag").get(0);
-            bookType = element.html().trim();
-        } catch (Exception e) {
-            bookType = "";
-        }
-        bookInfo.setBookType(bookType);
-    }
-
     /**
      *
      * @param document
@@ -149,7 +138,7 @@ public class PageParse {
             }
 
             if(str.contains("出版社")){
-                String publishName = str.split(">")[2].trim();
+                String publishName = str.split(">")[3].trim();
                 bookInfo.setBookPublish(publishName);
             }
 

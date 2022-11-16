@@ -10,12 +10,10 @@ import com.xupt.read.model.Book;
 import com.xupt.read.model.BookType;
 import com.xupt.read.service.BookService;
 import com.xupt.read.service.BookTypeService;
-import com.xupt.read.service.EvaluateService;
 import com.xupt.read.util.FileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -67,7 +65,7 @@ public class BookController {
                             @RequestParam(name = "page_size", defaultValue = "20") int pageSize) {
         PageResult<Book> pageResult = bookService.getByName(name, (pageNum - 1) * pageSize, pageSize);
         JsonResult<PageResult<BookResp>> jsonResult = query(pageResult);
-        return CollectionUtils.isEmpty(jsonResult.getData().getItems()) ? searchController.getBooks(name) : jsonResult;
+        return jsonResult;
     }
 
     /**

@@ -57,9 +57,6 @@ public class PageParseManger {
         /**人气*/
         PageParse.getPopularity(document, bookInfo);
 
-        /**类型*/
-        PageParse.getBookType(document, bookInfo);
-
         return bookInfo;
     }
 }
