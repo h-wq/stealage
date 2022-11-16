@@ -30,7 +30,7 @@ public class EvaluateServiceImpl implements EvaluateService {
         example.setOrderByClause("create_time desc");
 
         PageHelper.offsetPage(offset, size, true);
-        List<Evaluate> evaluateList = evaluateMapper.selectByExample(example);
+        List<Evaluate> evaluateList = evaluateMapper.selectByExampleWithBLOBs(example);
         PageInfo<Evaluate> pageInfo = new PageInfo<>(evaluateList);
         evaluateList = pageInfo.getList();
         return PageResult.create(pageInfo, evaluateList);
