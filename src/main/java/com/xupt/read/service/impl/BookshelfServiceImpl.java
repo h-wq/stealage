@@ -33,7 +33,7 @@ public class BookshelfServiceImpl implements BookshelfService {
     public PageResult<Bookshelf> getByUserId(Integer userId, int offset, int size) {
         BookshelfExample example = new BookshelfExample();
         example.createCriteria().andUserIdEqualTo(userId);
-        example.setOrderByClause("created_at desc");
+        example.setOrderByClause("created_time desc");
 
         PageHelper.offsetPage(offset, size, true);
         List<Bookshelf> bookshelfList = bookshelfMapper.selectByExample(example);
@@ -46,7 +46,7 @@ public class BookshelfServiceImpl implements BookshelfService {
     public List<Note> getNotes(Integer id) {
         NoteExample example = new NoteExample();
         example.createCriteria().andBookshelfIdEqualTo(id);
-        example.setOrderByClause("created_at desc");
+        example.setOrderByClause("created_time desc");
         return noteMapper.selectByExample(example);
     }
 
