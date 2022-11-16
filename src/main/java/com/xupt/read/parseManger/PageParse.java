@@ -139,6 +139,7 @@ public class PageParse {
 
             if(str.contains("出版社")){
                 String publishName = str.split(">")[3].trim();
+                publishName = publishName.substring(0, publishName.indexOf("<"));
                 bookInfo.setBookPublish(publishName);
             }
 
