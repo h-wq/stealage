@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.*;
 
@@ -56,18 +55,33 @@ public class SearchController {
 
             //根据按book name搜索获取的html解析书籍url和picture
             //只获取第一个书, 默认是最好的一个
-            List<String> urls = Collections.singletonList(searchService.parseUrlBookName(html, name).get(0));
+            List<String> urls = searchService.parseUrlBookName(html, name);
 
-            urls.forEach(bookUrl -> completionService.submit(() -> searchService.getBookInfo(bookUrl, name, bookType)));
-            List<BookResp> bookResps = new ArrayList<>(urls.size());
-            for (int i = 0; i < urls.size(); i++) {
-                try{
-                    BookInfo bookInfo = completionService.take().get();
-                    if (bookInfo != null) {
-                        bookResps.add(BookResp.convert(bookInfo));
-                    }
+//            urls.forEach(bookUrl -> completionService.submit(() -> searchService.getBookInfo(bookUrl, name, bookType)));
+//            List<BookResp> bookResps = new ArrayList<>(urls.size());
+//            for (int i = 0; i < urls.size(); i++) {
+//                try{
+//                    BookInfo bookInfo = completionService.take().get();
+//                    if (bookInfo != null) {
+//                        bookResps.add(BookResp.convert(bookInfo));
+//                    }
+//                } catch (Exception e) {
+//                    log.error("getBookInfo error is ", e);
+//                }
+//            }
+            List<BookResp> bookResps = new ArrayList<>(1);
+            for (String bookUrl : urls) {
+                BookInfo bookInfo;
+                try {
+                    bookInfo = searchService.getBookInfo(bookUrl, name, bookType);
                 } catch (Exception e) {
                     log.error("getBookInfo error is ", e);
+                    bookInfo = null;
+                }
+
+                if (bookInfo != null) {
+                    bookResps.add(BookResp.convert(bookInfo));
+                    break;
                 }
             }
             pageResult.setItems(bookResps);
