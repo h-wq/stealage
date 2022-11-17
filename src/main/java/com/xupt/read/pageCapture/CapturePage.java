@@ -41,7 +41,7 @@ public class CapturePage {
                 System.out.println(EntityUtils.toString(response.getEntity(), "utf-8"));
             }
         } catch (Exception e) {
-            e.fillInStackTrace();
+            throw new RuntimeException(e);
         } finally {
             //6.关闭
             HttpClientUtils.closeQuietly(response);

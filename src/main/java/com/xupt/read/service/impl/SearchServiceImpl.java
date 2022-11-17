@@ -69,8 +69,8 @@ public class SearchServiceImpl implements SearchService {
                 url = url.substring(url.indexOf("=") + 1, url.indexOf("&"));
                 urls.add(url);
             }
-        }catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
         return urls;
     }

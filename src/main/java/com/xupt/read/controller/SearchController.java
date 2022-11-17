@@ -48,14 +48,18 @@ public class SearchController {
         }
 
         PageResult<BookResp> pageResult = new PageResult<>();
+        String url;
         try {
-            String url = "https://www.douban.com/search?cat=1001&q=" + URLEncoder.encode(name, "utf-8");
-            //获取页面
-            String html = CapturePage.getHtml(url);
+            url = "https://www.douban.com/search?cat=1001&q=" + URLEncoder.encode(name, "utf-8");
+        } catch (Exception e) {
+            return JsonResult.fail(400, "获取书籍失败");
+        }
+        //获取页面
+        String html = CapturePage.getHtml(url);
 
-            //根据按book name搜索获取的html解析书籍url和picture
-            //只获取第一个书, 默认是最好的一个
-            List<String> urls = searchService.parseUrlBookName(html, name);
+        //根据按book name搜索获取的html解析书籍url和picture
+        //只获取第一个书, 默认是最好的一个
+        List<String> urls = searchService.parseUrlBookName(html, name);
 
 //            urls.forEach(bookUrl -> completionService.submit(() -> searchService.getBookInfo(bookUrl, name, bookType)));
 //            List<BookResp> bookResps = new ArrayList<>(urls.size());
@@ -69,25 +73,22 @@ public class SearchController {
 //                    log.error("getBookInfo error is ", e);
 //                }
 //            }
-            List<BookResp> bookResps = new ArrayList<>(1);
-            for (String bookUrl : urls) {
-                BookInfo bookInfo;
-                try {
-                    bookInfo = searchService.getBookInfo(bookUrl, name, bookType);
-                } catch (Exception e) {
-                    log.error("getBookInfo error is ", e);
-                    bookInfo = null;
-                }
-
-                if (bookInfo != null) {
-                    bookResps.add(BookResp.convert(bookInfo));
-                    break;
-                }
+        List<BookResp> bookResps = new ArrayList<>(1);
+        for (String bookUrl : urls) {
+            BookInfo bookInfo;
+            try {
+                bookInfo = searchService.getBookInfo(bookUrl, name, bookType);
+            } catch (Exception e) {
+                log.error("getBookInfo error is ", e);
+                bookInfo = null;
             }
-            pageResult.setItems(bookResps);
-        }catch (Exception e) {
-            e.printStackTrace();
+
+            if (bookInfo != null) {
+                bookResps.add(BookResp.convert(bookInfo));
+                break;
+            }
         }
+        pageResult.setItems(bookResps);
         return JsonResult.success(pageResult);
     }
 }
