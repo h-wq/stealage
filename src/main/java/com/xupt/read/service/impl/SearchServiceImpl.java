@@ -99,7 +99,7 @@ public class SearchServiceImpl implements SearchService {
 //                Thread.sleep(3000);
                 String urlA = UrlManger.getUrl();
                 System.out.println("正在爬取的url：" + urlA);
-                bookInfo = spiderBook(urlA, name,bookType);
+                bookInfo = spiderBook(urlA, name, bookType);
 
                 if (bookInfo != null) {
                     //插入图书信息
@@ -160,7 +160,9 @@ public class SearchServiceImpl implements SearchService {
 
         /**解析书籍  默认爬取3页的短评*/
         BookInfo bookInfo = PageParseManger.parseBookInfo(html, url, name, 3);
-        bookInfo.setBookType(bookType);
+        if (bookInfo != null) {
+            bookInfo.setBookType(bookType);
+        }
 
         /**数据输出*/
 //        DataOutput.output(bookInfo);
