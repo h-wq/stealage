@@ -78,75 +78,71 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public BookInfo getBookInfo(String url, String name, String bookType) {
         BookInfo bookInfo = null;
-        try {
-            String ebookUrl = "https://read.douban.com/ebook";
-            UrlManger.addUrl(url);
-            /**获取页面*/
-            String html = CapturePage.getHtml(url);
+        String ebookUrl = "https://read.douban.com/ebook";
+        UrlManger.addUrl(url);
+        /**获取页面*/
+        String html = CapturePage.getHtml(url);
 
-            /**主页获取完书籍的连接后禁掉*/
-            UrlManger.addFilterUrl(url);
+        /**主页获取完书籍的连接后禁掉*/
+        UrlManger.addFilterUrl(url);
 
-            /**没有对电子书籍的页面解析，加入黑名单*/
-            UrlManger.addFilterPrefix(ebookUrl);
+        /**没有对电子书籍的页面解析，加入黑名单*/
+        UrlManger.addFilterPrefix(ebookUrl);
 
-            /**获取主页的书籍url*/
-            UrlParse.parseUrlMain(html);
+        /**获取主页的书籍url*/
+        UrlParse.parseUrlMain(html);
 
-            /**爬取书籍信息  不保证所有的url都能正常的解析*/
-            if (!UrlSave.isEmpty()) {
-                /**目前没有ip代理爬慢一点，快了要封ip*/
-//                Thread.sleep(3000);
-                String urlA = UrlManger.getUrl();
-                System.out.println("正在爬取的url：" + urlA);
-                bookInfo = spiderBook(urlA, name, bookType);
+        /**爬取书籍信息  不保证所有的url都能正常的解析*/
+        if (!UrlSave.isEmpty()) {
+            /**目前没有ip代理爬慢一点，快了要封ip*/
+//            Thread.sleep(3000);
+            String urlA = UrlManger.getUrl();
+            System.out.println("正在爬取的url：" + urlA);
+            bookInfo = spiderBook(urlA, name, bookType);
 
-                if (bookInfo != null) {
-                    //插入图书信息
-                    Book book = new Book();
-                    book.setName(bookInfo.getBookName());
-                    book.setPicture(bookInfo.getImgPath());
-                    book.setAuthor(bookInfo.getAuthorName());
-                    book.setLink(bookInfo.getBookLink());
-                    book.setSynopsis(bookInfo.getBookInfo());
-                    book.setScore(bookInfo.getScore());
-                    book.setPopularity(bookInfo.getPopularity());
-                    book.setAuthorInfo(bookInfo.getAuthorInfo());
-                    book.setBookPublish(bookInfo.getBookPublish());
-                    book.setPublishYear(bookInfo.getPublishYear());
-                    book.setCreateTime(new Date());
-                    book.setUpdateTime(new Date());
-                    bookService.addBook(book);
-                    int bookId = book.getId();
+            if (bookInfo != null) {
+                //插入图书信息
+                Book book = new Book();
+                book.setName(bookInfo.getBookName());
+                book.setPicture(bookInfo.getImgPath());
+                book.setAuthor(bookInfo.getAuthorName());
+                book.setLink(bookInfo.getBookLink());
+                book.setSynopsis(bookInfo.getBookInfo());
+                book.setScore(bookInfo.getScore());
+                book.setPopularity(bookInfo.getPopularity());
+                book.setAuthorInfo(bookInfo.getAuthorInfo());
+                book.setBookPublish(bookInfo.getBookPublish());
+                book.setPublishYear(bookInfo.getPublishYear());
+                book.setCreateTime(new Date());
+                book.setUpdateTime(new Date());
+                bookService.addBook(book);
+                int bookId = book.getId();
 
-                    Integer typeId = bookTypeService.isHasBookType(bookInfo.getBookType());
-                    Book updateBook = new Book();
-                    updateBook.setId(bookId);
-                    updateBook.setTypeId(typeId);
-                    bookService.updateBookById(updateBook);
+                Integer typeId = bookTypeService.isHasBookType(bookInfo.getBookType());
+                Book updateBook = new Book();
+                updateBook.setId(bookId);
+                updateBook.setTypeId(typeId);
+                bookService.updateBookById(updateBook);
 
-                    List<String> comments = bookInfo.getBookComment();
-                    List<Evaluate> evaluates = comments.stream().map(comment -> {
-                        if (!StringUtils.isEmpty(comment)) {
-                            Evaluate evaluate = new Evaluate();
-                            evaluate.setBookId(bookId);
-                            evaluate.setUserId(0);
-                            evaluate.setRemarks(comment);
-                            evaluate.setCreateTime(new Date());
-                            evaluate.setUpdateTime(new Date());
-                            return evaluate;
-                        }
-                        return null;
-                    }).filter(Objects::nonNull).collect(Collectors.toList());
-                    if (!CollectionUtils.isEmpty(evaluates)) {
-                        evaluateMapper.insertBatch(evaluates);
+                List<String> comments = bookInfo.getBookComment();
+                List<Evaluate> evaluates = comments.stream().map(comment -> {
+                    if (!StringUtils.isEmpty(comment)) {
+                        Evaluate evaluate = new Evaluate();
+                        evaluate.setBookId(bookId);
+                        evaluate.setUserId(0);
+                        evaluate.setRemarks(comment);
+                        evaluate.setCreateTime(new Date());
+                        evaluate.setUpdateTime(new Date());
+                        return evaluate;
                     }
-
-                    bookInfo.setId(bookId);
+                    return null;
+                }).filter(Objects::nonNull).collect(Collectors.toList());
+                if (!CollectionUtils.isEmpty(evaluates)) {
+                    evaluateMapper.insertBatch(evaluates);
                 }
+
+                bookInfo.setId(bookId);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         return bookInfo;
     }
