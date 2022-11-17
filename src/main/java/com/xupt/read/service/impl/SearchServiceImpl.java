@@ -51,7 +51,8 @@ public class SearchServiceImpl implements SearchService {
 
                 Element titleElement = element.getElementsByClass("title").get(0);
                 Element h3Element = titleElement.child(0);
-                String bookName = h3Element.selectFirst("a[target=_blank]").html();
+                Element aElement = h3Element.selectFirst("a[target=_blank]");
+                String bookName = aElement.html();
                 Elements spanElements = element.getElementsByClass("subject-cast");
                 if (spanElements == null || spanElements.isEmpty()) {
                     continue;
@@ -86,8 +87,8 @@ public class SearchServiceImpl implements SearchService {
         /**主页获取完书籍的连接后禁掉*/
         UrlManger.addFilterUrl(url);
 
-        /**没有对电子书籍的页面解析，加入黑名单*/
-        UrlManger.addFilterPrefix(ebookUrl);
+//        /**没有对电子书籍的页面解析，加入黑名单*/
+//        UrlManger.addFilterPrefix(ebookUrl);
 
         /**获取主页的书籍url*/
         UrlParse.parseUrlMain(html);
@@ -96,7 +97,8 @@ public class SearchServiceImpl implements SearchService {
         if (!UrlSave.isEmpty()) {
             /**目前没有ip代理爬慢一点，快了要封ip*/
 //            Thread.sleep(3000);
-            String urlA = UrlManger.getUrl();
+//            String urlA = UrlManger.getUrl();
+            String urlA = url;
             System.out.println("正在爬取的url：" + urlA);
             bookInfo = spiderBook(urlA, name, bookType);
 
