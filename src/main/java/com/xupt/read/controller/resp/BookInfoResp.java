@@ -1,9 +1,15 @@
 package com.xupt.read.controller.resp;
 
+import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Lists;
 import com.xupt.read.model.Book;
 import com.xupt.read.model.BookType;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.util.StringUtils;
+
+import java.util.List;
 
 /**
  * 图书详情返回实体类
@@ -33,6 +39,8 @@ public class BookInfoResp {
      */
     private String link;
 
+    private Integer chapterNum;
+
     private String bookPath;
 
     private String typeName;
@@ -60,9 +68,19 @@ public class BookInfoResp {
 
     private String publishYear;
 
-    public static BookInfoResp convert(Book book, BookType bookType) {
+    private List<BookChapterResp> bookChapters;
 
-        return BookInfoResp.builder()
+    @Data
+    @AllArgsConstructor
+    private static class BookChapterResp {
+
+        private int id;
+
+        private String title;
+    }
+
+    public static BookInfoResp convert(Book book, BookType bookType) {
+        BookInfoResp bookInfoResp = BookInfoResp.builder()
                 .id(book.getId())
                 .name(book.getName())
                 .author(book.getAuthor())
@@ -79,5 +97,17 @@ public class BookInfoResp {
                 .bookPublish(book.getBookPublish())
                 .publishYear(book.getPublishYear())
                 .build();
+
+        if (!StringUtils.isEmpty(book.getChapterTitles())) {
+            List<BookChapterResp> bookChapters = Lists.newArrayList();
+            List<String> titles = JSONObject.parseArray(book.getChapterTitles(), String.class);
+            for (int i = 0; i < titles.size(); i++) {
+                BookChapterResp bookChapter = new BookChapterResp(i + 1, titles.get(i));
+                bookChapters.add(bookChapter);
+            }
+            bookInfoResp.setChapterNum(book.getChapterNum());
+            bookInfoResp.setBookChapters(bookChapters);
+        }
+        return bookInfoResp;
     }
 }
