@@ -8,14 +8,14 @@ public class TxtDownload {
 
     public static String download(String txt, String name, int chapterNum){
         FileOutputStream fos = null;
-        String path = FILE_UPLOAD_PATH;
+        String path = FILE_UPLOAD_PATH + "/" + name + "/" + chapterNum;
         try {
             File dir = new File(path);
             if (!dir.exists()) {
                 dir.mkdirs();
             }
 
-            path += "/" + name + "/" + chapterNum + "/" + name + chapterNum + ".txt";
+            path += "/" + name + chapterNum + ".txt";
             File file = new File(path);
             fos = new FileOutputStream(file);
             fos.write(txt.getBytes());
