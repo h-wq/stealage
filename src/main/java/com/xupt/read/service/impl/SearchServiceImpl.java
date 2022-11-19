@@ -1,17 +1,21 @@
 package com.xupt.read.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Lists;
 import com.xupt.read.mapper.EvaluateMapper;
 import com.xupt.read.model.Book;
 import com.xupt.read.model.Evaluate;
 import com.xupt.read.pageCapture.CapturePage;
 import com.xupt.read.parseManger.BookInfo;
 import com.xupt.read.parseManger.PageParseManger;
+import com.xupt.read.parseManger.TxtDownload;
 import com.xupt.read.parseManger.UrlParse;
 import com.xupt.read.service.BookService;
 import com.xupt.read.service.BookTypeService;
 import com.xupt.read.service.SearchService;
 import com.xupt.read.urlManger.UrlManger;
 import com.xupt.read.urlManger.UrlSave;
+import lombok.Data;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -103,47 +107,68 @@ public class SearchServiceImpl implements SearchService {
             bookInfo = spiderBook(urlA, name, bookType);
 
             if (bookInfo != null) {
-                //插入图书信息
-                Book book = new Book();
-                book.setName(bookInfo.getBookName());
-                book.setPicture(bookInfo.getImgPath());
-                book.setAuthor(bookInfo.getAuthorName());
-                book.setLink(bookInfo.getBookLink());
-                book.setSynopsis(bookInfo.getBookInfo());
-                book.setScore(bookInfo.getScore());
-                book.setPopularity(bookInfo.getPopularity());
-                book.setAuthorInfo(bookInfo.getAuthorInfo());
-                book.setBookPublish(bookInfo.getBookPublish());
-                book.setPublishYear(bookInfo.getPublishYear());
-                book.setCreateTime(new Date());
-                book.setUpdateTime(new Date());
-                bookService.addBook(book);
-                int bookId = book.getId();
-
-                Integer typeId = bookTypeService.isHasBookType(bookInfo.getBookType());
-                Book updateBook = new Book();
-                updateBook.setId(bookId);
-                updateBook.setTypeId(typeId);
-                bookService.updateBookById(updateBook);
-
-                List<String> comments = bookInfo.getBookComment();
-                List<Evaluate> evaluates = comments.stream().map(comment -> {
-                    if (!StringUtils.isEmpty(comment)) {
-                        Evaluate evaluate = new Evaluate();
-                        evaluate.setBookId(bookId);
-                        evaluate.setUserId(0);
-                        evaluate.setRemarks(comment);
-                        evaluate.setCreateTime(new Date());
-                        evaluate.setUpdateTime(new Date());
-                        return evaluate;
-                    }
-                    return null;
-                }).filter(Objects::nonNull).collect(Collectors.toList());
-                if (!CollectionUtils.isEmpty(evaluates)) {
-                    evaluateMapper.insertBatch(evaluates);
+                //获取书籍文本相关内容
+                BookContent bookContent = spiderBookContent(name, bookType);
+                List<String> chapterPaths = Lists.newArrayList();
+                for (int i = 0; i < bookContent.getChapterTxtList().size(); i++) {
+                    String chapterTxt = bookContent.getChapterTxtList().get(i);
+                    String chapterPath = TxtDownload.download(chapterTxt, name, i + 1);
+                    chapterPaths.add(chapterPath);
                 }
+//                //插入图书信息
+//                Book book = new Book();
+//                book.setName(bookInfo.getBookName());
+//                book.setPicture(bookInfo.getImgPath());
+//                book.setAuthor(bookInfo.getAuthorName());
+//                book.setLink(bookInfo.getBookLink());
+//                book.setChapterNum(bookContent.getChapterNum());
+//                book.setChapterTitles(JSONObject.toJSONString(bookContent.getChapterTitles()));
+//                book.setBookPath(JSONObject.toJSONString(chapterPaths));
+//                book.setSynopsis(bookInfo.getBookInfo());
+//                book.setScore(bookInfo.getScore());
+//                book.setPopularity(bookInfo.getPopularity());
+//                book.setAuthorInfo(bookInfo.getAuthorInfo());
+//                book.setBookPublish(bookInfo.getBookPublish());
+//                book.setPublishYear(bookInfo.getPublishYear());
+//                book.setCreateTime(new Date());
+//                book.setUpdateTime(new Date());
+//                bookService.addBook(book);
+//                int bookId = book.getId();
+//
+//                Integer typeId = bookTypeService.isHasBookType(bookInfo.getBookType());
+//                Book updateBook = new Book();
+//                updateBook.setId(bookId);
+//                updateBook.setTypeId(typeId);
+//                bookService.updateBookById(updateBook);
+//
+//                List<String> comments = bookInfo.getBookComment();
+//                List<Evaluate> evaluates = comments.stream().map(comment -> {
+//                    if (!StringUtils.isEmpty(comment)) {
+//                        Evaluate evaluate = new Evaluate();
+//                        evaluate.setBookId(bookId);
+//                        evaluate.setUserId(0);
+//                        evaluate.setRemarks(comment);
+//                        evaluate.setCreateTime(new Date());
+//                        evaluate.setUpdateTime(new Date());
+//                        return evaluate;
+//                    }
+//                    return null;
+//                }).filter(Objects::nonNull).collect(Collectors.toList());
+//                if (!CollectionUtils.isEmpty(evaluates)) {
+//                    evaluateMapper.insertBatch(evaluates);
+//                }
+//
+//                bookInfo.setId(bookId);
 
-                bookInfo.setId(bookId);
+                List<Book> books = bookService.getByNames(Lists.newArrayList(bookInfo.getBookName()));
+                books.forEach(book -> {
+                    Book updateBook = new Book();
+                    updateBook.setId(book.getId());
+                    updateBook.setChapterNum(bookContent.getChapterNum());
+                    updateBook.setChapterTitles(JSONObject.toJSONString(bookContent.getChapterTitles()));
+                    book.setBookPath(JSONObject.toJSONString(chapterPaths));
+                    bookService.updateBookById(updateBook);
+                });
             }
         }
         return bookInfo;
@@ -166,5 +191,53 @@ public class SearchServiceImpl implements SearchService {
 //        DataOutput.output(bookInfo);
 
         return bookInfo;
+    }
+
+    private BookContent spiderBookContent(String name, String bookType) {
+        String queryUrl = "https://5000yan.com/plus/search.php?q=" + name;
+        //获取搜索页面
+        String queryHtml = CapturePage.getHtml(queryUrl);
+        Document queryDocument = Jsoup.parse(queryHtml);
+        Element queryElement = queryDocument.getElementsByClass("block-title post-featured").first();
+        String url = queryElement.select("a[href]").first().attr("href");
+
+        //获取书籍目录页面
+        String html = CapturePage.getHtml(url);
+        Document document = Jsoup.parse(html);
+        Elements elements = document.getElementsByClass("paiban").first().select("li");
+        int chapterNum = elements.size();
+        List<String> chapterTitles = new ArrayList<>(chapterNum);
+        List<String> chapterTxtList = new ArrayList<>(chapterNum);
+        for (Element element : elements) {
+            Element chapterElement = element.select("a[href]").first();
+            String chapterTitle = chapterElement.html();
+            String chapterUrl = chapterElement.attr("href");
+            String chapterTxtHtml = CapturePage.getHtml(chapterUrl);
+            Document chapterTxtDocument = Jsoup.parse(chapterTxtHtml);
+            Elements chapterTxtElements = chapterTxtDocument.getElementsByClass("section-body");
+            if (chapterTxtElements == null) {
+                chapterTxtElements = chapterTxtDocument.getElementsByClass("main-content container");
+            }
+            String chapterTxt = chapterTxtElements.html();
+
+            chapterTitles.add(chapterTitle);
+            chapterTxtList.add(chapterTxt);
+        }
+
+        BookContent bookContent = new BookContent();
+        bookContent.setChapterNum(chapterNum);
+        bookContent.setChapterTitles(chapterTitles);
+        bookContent.setChapterTxtList(chapterTxtList);
+        return bookContent;
+    }
+
+    @Data
+    private class BookContent {
+
+        private int chapterNum;
+
+        private List<String> chapterTitles;
+
+        private List<String> chapterTxtList;
     }
 }

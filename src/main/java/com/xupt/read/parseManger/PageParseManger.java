@@ -40,9 +40,9 @@ public class PageParseManger {
         String imgName = Md5Utils.encrypt(bookInfo.getImgName()) + ".jpg";
 
         /**下载图片*/
-        String path = PictureDownload.download(bookInfo.getImgName(), imgName);
+//        String path = PictureDownload.download(bookInfo.getImgName(), imgName);
         bookInfo.setImgName(imgName);
-        bookInfo.setImgPath(path);
+//        bookInfo.setImgPath(path);
         bookInfo.setBookLink(bookUrl);
 
         /**书评*/
