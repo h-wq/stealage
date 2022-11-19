@@ -77,6 +77,8 @@ public class BookInfoResp {
         private int id;
 
         private String title;
+
+        private String txtPath;
     }
 
     public static BookInfoResp convert(Book book, BookType bookType) {
@@ -102,8 +104,9 @@ public class BookInfoResp {
         if (!StringUtils.isEmpty(book.getChapterTitles())) {
             List<BookChapterResp> bookChapters = Lists.newArrayList();
             List<String> titles = JSONObject.parseArray(book.getChapterTitles(), String.class);
-            for (int i = 0; i < titles.size(); i++) {
-                BookChapterResp bookChapter = new BookChapterResp(i + 1, titles.get(i));
+            List<String> txtPaths = JSONObject.parseArray(book.getBookPath(), String.class);
+            for (int i = 0; i < book.getChapterNum(); i++) {
+                BookChapterResp bookChapter = new BookChapterResp(i + 1, titles.get(i), txtPaths.get(i));
                 bookChapters.add(bookChapter);
             }
             bookInfoResp.setBookChapters(bookChapters);

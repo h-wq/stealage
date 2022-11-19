@@ -166,7 +166,7 @@ public class SearchServiceImpl implements SearchService {
                     updateBook.setId(book.getId());
                     updateBook.setChapterNum(bookContent.getChapterNum());
                     updateBook.setChapterTitles(JSONObject.toJSONString(bookContent.getChapterTitles()));
-                    book.setBookPath(JSONObject.toJSONString(chapterPaths));
+                    updateBook.setBookPath(JSONObject.toJSONString(chapterPaths));
                     bookService.updateBookById(updateBook);
                 });
             }

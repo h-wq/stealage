@@ -32,7 +32,7 @@ public class BookServiceImpl implements BookService {
     public List<Book> getByIds(List<Integer> ids) {
         BookExample example = new BookExample();
         example.createCriteria().andIdIn(ids);
-        return bookMapper.selectByExample(example);
+        return bookMapper.selectByExampleWithBLOBs(example);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class BookServiceImpl implements BookService {
         BookExample example = new BookExample();
         example.setOrderByClause("score desc, popularity desc");
         example.createCriteria().andNameIn(names);
-        return bookMapper.selectByExample(example);
+        return bookMapper.selectByExampleWithBLOBs(example);
     }
 
     @Override
@@ -105,7 +105,7 @@ public class BookServiceImpl implements BookService {
 
     private PageResult<Book> getByPage(BookExample example, int offset, int size) {
         PageHelper.offsetPage(offset, size, true);
-        List<Book> bookList = bookMapper.selectByExample(example);
+        List<Book> bookList = bookMapper.selectByExampleWithBLOBs(example);
         PageInfo<Book> pageInfo = new PageInfo<>(bookList);
         bookList = pageInfo.getList();
         return PageResult.create(pageInfo, bookList);
