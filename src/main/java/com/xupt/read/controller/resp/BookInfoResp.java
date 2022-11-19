@@ -87,6 +87,7 @@ public class BookInfoResp {
                 .synopsis(book.getSynopsis())
                 .score(book.getScore())
                 .link(book.getLink())
+                .chapterNum(book.getChapterNum() != null ? book.getChapterNum() : 0)
                 .bookPath(book.getBookPath())
                 .typeName(bookType == null ? "" : bookType.getName())
                 .picture(book.getPicture())
@@ -105,7 +106,6 @@ public class BookInfoResp {
                 BookChapterResp bookChapter = new BookChapterResp(i + 1, titles.get(i));
                 bookChapters.add(bookChapter);
             }
-            bookInfoResp.setChapterNum(book.getChapterNum());
             bookInfoResp.setBookChapters(bookChapters);
         }
         return bookInfoResp;
