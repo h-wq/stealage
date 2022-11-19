@@ -41,7 +41,7 @@ public class BookInfoResp {
 
     private Integer chapterNum;
 
-    private String bookPath;
+    private List<String> bookPath;
 
     private String typeName;
 
@@ -77,8 +77,6 @@ public class BookInfoResp {
         private int id;
 
         private String title;
-
-        private String txtPath;
     }
 
     public static BookInfoResp convert(Book book, BookType bookType) {
@@ -90,7 +88,7 @@ public class BookInfoResp {
                 .score(book.getScore())
                 .link(book.getLink())
                 .chapterNum(book.getChapterNum() != null ? book.getChapterNum() : 0)
-                .bookPath(book.getBookPath())
+                .bookPath(JSONObject.parseArray(book.getBookPath(), String.class))
                 .typeName(bookType == null ? "" : bookType.getName())
                 .picture(book.getPicture())
                 .popularity(book.getPopularity())
@@ -104,9 +102,8 @@ public class BookInfoResp {
         if (!StringUtils.isEmpty(book.getChapterTitles())) {
             List<BookChapterResp> bookChapters = Lists.newArrayList();
             List<String> titles = JSONObject.parseArray(book.getChapterTitles(), String.class);
-            List<String> txtPaths = JSONObject.parseArray(book.getBookPath(), String.class);
-            for (int i = 0; i < book.getChapterNum(); i++) {
-                BookChapterResp bookChapter = new BookChapterResp(i + 1, titles.get(i), txtPaths.get(i));
+            for (int i = 0; i < titles.size(); i++) {
+                BookChapterResp bookChapter = new BookChapterResp(i + 1, titles.get(i));
                 bookChapters.add(bookChapter);
             }
             bookInfoResp.setBookChapters(bookChapters);
