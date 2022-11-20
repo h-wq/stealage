@@ -115,60 +115,50 @@ public class SearchServiceImpl implements SearchService {
                     String chapterPath = TxtDownload.download(chapterTxt, name, i + 1);
                     chapterPaths.add(chapterPath);
                 }
-//                //插入图书信息
-//                Book book = new Book();
-//                book.setName(bookInfo.getBookName());
-//                book.setPicture(bookInfo.getImgPath());
-//                book.setAuthor(bookInfo.getAuthorName());
-//                book.setLink(bookInfo.getBookLink());
-//                book.setChapterNum(bookContent.getChapterNum());
-//                book.setChapterTitles(JSONObject.toJSONString(bookContent.getChapterTitles()));
-//                book.setBookPath(JSONObject.toJSONString(chapterPaths));
-//                book.setSynopsis(bookInfo.getBookInfo());
-//                book.setScore(bookInfo.getScore());
-//                book.setPopularity(bookInfo.getPopularity());
-//                book.setAuthorInfo(bookInfo.getAuthorInfo());
-//                book.setBookPublish(bookInfo.getBookPublish());
-//                book.setPublishYear(bookInfo.getPublishYear());
-//                book.setCreateTime(new Date());
-//                book.setUpdateTime(new Date());
-//                bookService.addBook(book);
-//                int bookId = book.getId();
-//
-//                Integer typeId = bookTypeService.isHasBookType(bookInfo.getBookType());
-//                Book updateBook = new Book();
-//                updateBook.setId(bookId);
-//                updateBook.setTypeId(typeId);
-//                bookService.updateBookById(updateBook);
-//
-//                List<String> comments = bookInfo.getBookComment();
-//                List<Evaluate> evaluates = comments.stream().map(comment -> {
-//                    if (!StringUtils.isEmpty(comment)) {
-//                        Evaluate evaluate = new Evaluate();
-//                        evaluate.setBookId(bookId);
-//                        evaluate.setUserId(0);
-//                        evaluate.setRemarks(comment);
-//                        evaluate.setCreateTime(new Date());
-//                        evaluate.setUpdateTime(new Date());
-//                        return evaluate;
-//                    }
-//                    return null;
-//                }).filter(Objects::nonNull).collect(Collectors.toList());
-//                if (!CollectionUtils.isEmpty(evaluates)) {
-//                    evaluateMapper.insertBatch(evaluates);
-//                }
-//
-//                bookInfo.setId(bookId);
+                //插入图书信息
+                Book book = new Book();
+                book.setName(bookInfo.getBookName());
+                book.setPicture(bookInfo.getImgPath());
+                book.setAuthor(bookInfo.getAuthorName());
+                book.setLink(bookInfo.getBookLink());
+                book.setChapterNum(bookContent.getChapterNum());
+                book.setChapterTitles(JSONObject.toJSONString(bookContent.getChapterTitles()));
+                book.setBookPath(JSONObject.toJSONString(chapterPaths));
+                book.setSynopsis(bookInfo.getBookInfo());
+                book.setScore(bookInfo.getScore());
+                book.setPopularity(bookInfo.getPopularity());
+                book.setAuthorInfo(bookInfo.getAuthorInfo());
+                book.setBookPublish(bookInfo.getBookPublish());
+                book.setPublishYear(bookInfo.getPublishYear());
+                book.setCreateTime(new Date());
+                book.setUpdateTime(new Date());
+                bookService.addBook(book);
+                int bookId = book.getId();
 
-                List<Book> books = bookService.getByName(bookInfo.getBookName(), 0, 20).getItems();
-                books.forEach(book -> {
-                    Book updateBook = new Book();
-                    updateBook.setId(book.getId());
-                    updateBook.setChapterNum(bookContent.getChapterNum());
-                    updateBook.setChapterTitles(JSONObject.toJSONString(bookContent.getChapterTitles()));
-                    updateBook.setBookPath(JSONObject.toJSONString(chapterPaths));
-                    bookService.updateBookById(updateBook);
-                });
+                Integer typeId = bookTypeService.isHasBookType(bookInfo.getBookType());
+                Book updateBook = new Book();
+                updateBook.setId(bookId);
+                updateBook.setTypeId(typeId);
+                bookService.updateBookById(updateBook);
+
+                List<String> comments = bookInfo.getBookComment();
+                List<Evaluate> evaluates = comments.stream().map(comment -> {
+                    if (!StringUtils.isEmpty(comment)) {
+                        Evaluate evaluate = new Evaluate();
+                        evaluate.setBookId(bookId);
+                        evaluate.setUserId(0);
+                        evaluate.setRemarks(comment);
+                        evaluate.setCreateTime(new Date());
+                        evaluate.setUpdateTime(new Date());
+                        return evaluate;
+                    }
+                    return null;
+                }).filter(Objects::nonNull).collect(Collectors.toList());
+                if (!CollectionUtils.isEmpty(evaluates)) {
+                    evaluateMapper.insertBatch(evaluates);
+                }
+
+                bookInfo.setId(bookId);
             }
         }
         return bookInfo;
