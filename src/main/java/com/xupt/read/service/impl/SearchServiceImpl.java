@@ -208,6 +208,9 @@ public class SearchServiceImpl implements SearchService {
         List<String> chapterTitles = new ArrayList<>();
         List<String> chapterTxtList = new ArrayList<>();
         Elements contentElements = document.getElementsByClass("main-content container");
+        if (contentElements.isEmpty()) {
+            contentElements = document.getElementsByClass("main-content-shouye container");
+        }
         Elements liElements = contentElements.select("li");
         Elements articleElements = contentElements.select("article");
         if (!liElements.isEmpty() || !articleElements.isEmpty()) {
