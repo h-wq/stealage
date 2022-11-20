@@ -160,7 +160,7 @@ public class SearchServiceImpl implements SearchService {
 //
 //                bookInfo.setId(bookId);
 
-                List<Book> books = bookService.getByNames(Lists.newArrayList(bookInfo.getBookName()));
+                List<Book> books = bookService.getByName(bookInfo.getBookName(), 0, 20).getItems();
                 books.forEach(book -> {
                     Book updateBook = new Book();
                     updateBook.setId(book.getId());
