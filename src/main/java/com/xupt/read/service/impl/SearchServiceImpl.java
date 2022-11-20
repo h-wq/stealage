@@ -205,36 +205,35 @@ public class SearchServiceImpl implements SearchService {
         String html = CapturePage.getHtml(url);
         Document document = Jsoup.parse(html);
         int chapterNum = 0;
-        List<String> chapterTitles = new ArrayList<>(chapterNum);
-        List<String> chapterTxtList = new ArrayList<>(chapterNum);
-        Elements paibanElements = document.getElementsByClass("paiban");
-        if (paibanElements.isEmpty()) {
+        List<String> chapterTitles = new ArrayList<>();
+        List<String> chapterTxtList = new ArrayList<>();
+        Elements contentElements = document.getElementsByClass("main-content container");
+        Elements liElements = contentElements.select("li");
+        Elements articleElements = contentElements.select("article");
+        if (!liElements.isEmpty() || !articleElements.isEmpty()) {
+            Elements elements = !liElements.isEmpty() ? liElements : articleElements;
+            for (Element element : elements) {
+                Elements chapterElements = element.select("a[href]");
+                for (Element chapterElement : chapterElements) {
+                    chapterNum++;
+                    String chapterTitle = chapterElement.html();
+                    String chapterUrl = chapterElement.attr("href");
+                    String chapterTxtHtml = CapturePage.getHtml(chapterUrl);
+                    Document chapterTxtDocument = Jsoup.parse(chapterTxtHtml);
+                    Elements chapterTxtElements = chapterTxtDocument.getElementsByClass("main-content container").first().children();
+                    String chapterTxt = chapterTxtElements.html();
+
+                    chapterTitles.add(chapterTitle);
+                    chapterTxtList.add(chapterTxt);
+                }
+            }
+        } else {
             //没有章节, 只有一章
             chapterNum = 1;
             chapterTitles.add(name);
-            Elements chapterTxtElements = document.getElementsByClass("main-content container").first().children();
+            Elements chapterTxtElements = contentElements.first().children();
             String chapterTxt = chapterTxtElements.html();
             chapterTxtList.add(chapterTxt);
-        } else {
-            Elements elements = paibanElements.select("li");
-            chapterNum = elements.size();
-            chapterTitles = new ArrayList<>(chapterNum);
-            chapterTxtList = new ArrayList<>(chapterNum);
-            for (Element element : elements) {
-                Element chapterElement = element.select("a[href]").first();
-                String chapterTitle = chapterElement.html();
-                String chapterUrl = chapterElement.attr("href");
-                String chapterTxtHtml = CapturePage.getHtml(chapterUrl);
-                Document chapterTxtDocument = Jsoup.parse(chapterTxtHtml);
-                Elements chapterTxtElements = chapterTxtDocument.getElementsByClass("section-body");
-                if (chapterTxtElements.isEmpty()) {
-                    chapterTxtElements = chapterTxtDocument.getElementsByClass("main-content container").first().children();
-                }
-                String chapterTxt = chapterTxtElements.html();
-
-                chapterTitles.add(chapterTitle);
-                chapterTxtList.add(chapterTxt);
-            }
         }
 
         BookContent bookContent = new BookContent();
