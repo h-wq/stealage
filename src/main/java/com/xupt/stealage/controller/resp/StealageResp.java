@@ -26,7 +26,7 @@ public class StealageResp {
 
     private boolean isRecruitment;
 
-    private String describe;
+    private String description;
 
     private String place;
 
@@ -54,7 +54,7 @@ public class StealageResp {
                 .name(stealage.getName())
                 .userResp(UserResp.convert(user))
                 .isRecruitment(stealage.getIsRecruitment())
-                .describe(stealage.getDescribe())
+                .description(stealage.getDescription())
                 .place(stealage.getPlace())
                 .stealageTime(stealage.getStealageTime())
                 .typeName(type == null ? "" : type.getName())

@@ -76,8 +76,8 @@ public class StealageController {
     @RequestMapping(method = RequestMethod.GET)
     public JsonResult<PageResult<StealageResp>> query(@RequestParam(name = "page_num", defaultValue = "1") int pageNum,
                                                       @RequestParam(name = "page_size", defaultValue = "20") int pageSize) {
-        PageResult<Stealage> pageResult = stealageService.getByStatuses
-                (Lists.newArrayList(StealageStatus.PENDING, StealageStatus.PROCESSING), (pageNum - 1) * pageSize, pageSize);
+        PageResult<Stealage> pageResult =
+                stealageService.getByStatuses(Lists.newArrayList(StealageStatus.PENDING, StealageStatus.PROCESSING), (pageNum - 1) * pageSize, pageSize);
         return query(pageResult);
     }
 

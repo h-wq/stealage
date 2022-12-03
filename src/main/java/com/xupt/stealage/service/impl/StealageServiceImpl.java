@@ -43,7 +43,7 @@ public class StealageServiceImpl implements StealageService {
         example.setOrderByClause("create_time desc, stealage_time desc");
         example.createCriteria().andStatusIn(stealageStatuses.stream().map(Enum::name).collect(Collectors.toList()));
 
-        return getByPage(example, offset,size);
+        return getByPage(example, offset, size);
     }
 
     @Override
@@ -52,12 +52,12 @@ public class StealageServiceImpl implements StealageService {
         example.setOrderByClause("create_time desc, stealage_time desc");
         StealageExample.Criteria nameCriteria = example.createCriteria();
         nameCriteria.andNameLike("%" + name + "%");
-        StealageExample.Criteria describeCriteria = example.createCriteria();
-        describeCriteria.andDescribeLike("%" + name + "%");
+        StealageExample.Criteria descriptionCriteria = example.createCriteria();
+        descriptionCriteria.andDescriptionLike("%" + name + "%");
         StealageExample.Criteria placeCriteria = example.createCriteria();
         placeCriteria.andPlaceLike("%" + name + "%");
         example.or(nameCriteria);
-        example.or(describeCriteria);
+        example.or(descriptionCriteria);
         example.or(placeCriteria);
         return getByPage(example, offset, size);
     }
