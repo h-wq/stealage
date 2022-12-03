@@ -1,7 +1,7 @@
 debug: false
 
 server:
-  port: 8081
+  port: 8082
 
 spring:
   resources:
@@ -10,7 +10,7 @@ spring:
   datasource:
     username: root
     password: root
-    url: jdbc:mysql://47.94.241.172:3306/read?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
+    url: jdbc:mysql://47.94.241.172:3306/stealage?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
     driver-class-name: com.mysql.jdbc.Driver
     type: org.springframework.jdbc.datasource.DriverManagerDataSource
     dbcp2:
@@ -37,4 +37,4 @@ pagehelper:
 
 file:
   upload:
-    path: /project/file/upload/read/img/
+    path: /work/project/file/upload/stealage/img/

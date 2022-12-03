@@ -24,7 +24,7 @@ fi
 
 ALL_MODULES=( $(cat $SERVICE_FILE) )
 
-if ! [ -d $MODULE ] && [ "$MODULE" != "read" ]; then
+if ! [ -d $MODULE ] && [ "$MODULE" != "stealage" ]; then
     usage
     exit 1
 fi

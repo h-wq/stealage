@@ -1,11 +1,11 @@
 spring:
   application:
-    name: read
+    name: stealage
   profiles:
     active: dev
 
 server:
-  port: 8081
+  port: 8082
   compression:
     enabled: true
     mime-types: application/json,application/xml,text/html,text/xml,text/plain
@@ -13,4 +13,4 @@ server:
 
 mybatis:
   mapper-locations: classpath:mapping/**/*.xml
-  type-aliases-package: com.xupt.read.model
+  type-aliases-package: com.xupt.stealage.model

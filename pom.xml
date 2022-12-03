@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.xupt</groupId>
-	<artifactId>read</artifactId>
+	<artifactId>stealage</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>read</name>
+	<name>stealage</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
