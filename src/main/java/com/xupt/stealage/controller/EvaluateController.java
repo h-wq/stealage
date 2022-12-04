@@ -46,7 +46,7 @@ public class EvaluateController {
     @RequestMapping(method = RequestMethod.GET)
     public JsonResult queryByStealage(@RequestParam(name = "stealage_id") Integer stealageId,
                                       @RequestParam(name = "page_num", defaultValue = "1") int pageNum,
-                                      @RequestParam(name = "page_size", defaultValue = "20") int pageSize) {
+                                      @RequestParam(name = "page_size", defaultValue = "2147483647") int pageSize) {
 
         PageResult<Evaluate> pageResult = evaluateService.getByStealageId(stealageId, (pageNum - 1) * pageSize, pageSize);
         if (CollectionUtils.isEmpty(pageResult.getItems())) {

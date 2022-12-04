@@ -72,6 +72,15 @@ public class StealageServiceImpl implements StealageService {
     }
 
     @Override
+    public PageResult<Stealage> getByIsRecruitment(boolean isRecruitment, int offset, int size) {
+        StealageExample example = new StealageExample();
+        example.setOrderByClause("create_time desc, stealage_time desc");
+        example.createCriteria().andIsRecruitmentEqualTo(isRecruitment).andStatusIn(StealageStatus.UN_COMPLETED.stream().map(Enum::name).collect(Collectors.toList()));
+
+        return getByPage(example, offset, size);
+    }
+
+    @Override
     public PageResult<Stealage> getByUserId(int userId, int offset, int size) {
         StealageExample example = new StealageExample();
         example.createCriteria().andUserIdEqualTo(userId);

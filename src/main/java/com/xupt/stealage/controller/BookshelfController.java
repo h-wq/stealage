@@ -55,7 +55,7 @@
 //    @RequestMapping(method = RequestMethod.GET)
 //    public JsonResult query(@RequestParam(name = "user_id") Integer userId,
 //                            @RequestParam(name = "page_num", defaultValue = "1") int pageNum,
-//                            @RequestParam(name = "page_size", defaultValue = "20") int pageSize) {
+//                            @RequestParam(name = "page_size", defaultValue = "2147483647") int pageSize) {
 //
 //        PageResult<Bookshelf> pageResult = bookshelfService.getByUserId(userId, (pageNum - 1) * pageSize, pageSize);
 //        List<Integer> bookIds = pageResult.getItems().stream().map(Bookshelf::getBookId).collect(Collectors.toList());

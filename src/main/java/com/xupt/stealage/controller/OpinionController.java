@@ -44,7 +44,7 @@ public class OpinionController {
      */
     @RequestMapping(method = RequestMethod.GET)
     public JsonResult query(@RequestParam(name = "page_num", defaultValue = "1") int pageNum,
-                            @RequestParam(name = "page_size", defaultValue = "20") int pageSize) {
+                            @RequestParam(name = "page_size", defaultValue = "2147483647") int pageSize) {
         PageResult<Opinion> pageResult = opinionService.getOpinions((pageNum - 1) * pageSize, pageSize);
         List<Integer> userIds = pageResult.getItems().stream().map(Opinion::getUserId).collect(Collectors.toList());
         List<User> users = userService.getByIds(userIds);

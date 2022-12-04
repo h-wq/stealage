@@ -1,6 +1,9 @@
 package com.xupt.stealage.data;
 
+import com.google.common.collect.Lists;
 import lombok.Getter;
+
+import java.util.List;
 
 public enum StealageStatus {
 
@@ -17,5 +20,5 @@ public enum StealageStatus {
         this.desc = desc;
     }
 
-
+    public static final List<StealageStatus> UN_COMPLETED = Lists.newArrayList(PENDING, PROCESSING);
 }

@@ -49,7 +49,7 @@
 //    @RequestMapping(method = RequestMethod.GET)
 //    public JsonResult queryByUserId(@RequestParam(name = "user_id") Integer userId,
 //                                    @RequestParam(name = "page_num", defaultValue = "1") int pageNum,
-//                                    @RequestParam(name = "page_size", defaultValue = "20") int pageSize) {
+//                                    @RequestParam(name = "page_size", defaultValue = "2147483647") int pageSize) {
 //
 //        PageResult<BrowseRecord> pageResult = browseRecordService.getByUserId(userId, (pageNum - 1) * pageSize, pageSize);
 //

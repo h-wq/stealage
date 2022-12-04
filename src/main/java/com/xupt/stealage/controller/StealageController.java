@@ -64,7 +64,7 @@ public class StealageController {
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public JsonResult<PageResult<StealageResp>> query(@RequestParam(name = "name") String name,
                                                       @RequestParam(name = "page_num", defaultValue = "1") int pageNum,
-                                                      @RequestParam(name = "page_size", defaultValue = "20") int pageSize) {
+                                                      @RequestParam(name = "page_size", defaultValue = "2147483647") int pageSize) {
         PageResult<Stealage> pageResult = stealageService.getByName(name, (pageNum - 1) * pageSize, pageSize);
         JsonResult<PageResult<StealageResp>> jsonResult = query(pageResult);
         return jsonResult;
@@ -75,7 +75,7 @@ public class StealageController {
      */
     @RequestMapping(method = RequestMethod.GET)
     public JsonResult<PageResult<StealageResp>> query(@RequestParam(name = "page_num", defaultValue = "1") int pageNum,
-                                                      @RequestParam(name = "page_size", defaultValue = "20") int pageSize) {
+                                                      @RequestParam(name = "page_size", defaultValue = "2147483647") int pageSize) {
         PageResult<Stealage> pageResult =
                 stealageService.getByStatuses(Lists.newArrayList(StealageStatus.PENDING, StealageStatus.PROCESSING), (pageNum - 1) * pageSize, pageSize);
         return query(pageResult);
@@ -91,7 +91,7 @@ public class StealageController {
     @RequestMapping(value = "/by/stealage_type", method = RequestMethod.GET)
     public JsonResult<PageResult<StealageResp>> queryByStealageTypeId(@RequestParam(name = "stealage_type_id") Integer stealageTypeId,
                                                                       @RequestParam(name = "page_num", defaultValue = "1") int pageNum,
-                                                                      @RequestParam(name = "page_size", defaultValue = "20") int pageSize) {
+                                                                      @RequestParam(name = "page_size", defaultValue = "2147483647") int pageSize) {
         PageResult<Stealage> pageResult = stealageService.getByStealageTypeId(stealageTypeId, (pageNum - 1) * pageSize, pageSize);
         return query(pageResult);
     }
@@ -105,8 +105,22 @@ public class StealageController {
     @RequestMapping(value = "/by/status", method = RequestMethod.GET)
     public JsonResult<PageResult<StealageResp>> queryByStatus(@RequestParam(name = "status") String status,
                                                               @RequestParam(name = "page_num", defaultValue = "1") int pageNum,
-                                                              @RequestParam(name = "page_size", defaultValue = "20") int pageSize) {
+                                                              @RequestParam(name = "page_size", defaultValue = "2147483647") int pageSize) {
         PageResult<Stealage> pageResult = stealageService.getByStatuses(Lists.newArrayList(StealageStatus.valueOf(status)), (pageNum - 1) * pageSize, pageSize);
+        return query(pageResult);
+    }
+
+    /**
+     * 失物招领列表
+     * @param pageNum pageNum
+     * @param pageSize pageSize
+     * @return
+     */
+    @RequestMapping(value = "/by/is_recruitment", method = RequestMethod.GET)
+    public JsonResult<PageResult<StealageResp>> queryByIsRecruitment(@RequestParam(name = "is_recruitment") boolean isRecruitment,
+                                                                     @RequestParam(name = "page_num", defaultValue = "1") int pageNum,
+                                                                     @RequestParam(name = "page_size", defaultValue = "2147483647") int pageSize) {
+        PageResult<Stealage> pageResult = stealageService.getByIsRecruitment(isRecruitment, (pageNum - 1) * pageSize, pageSize);
         return query(pageResult);
     }
 
