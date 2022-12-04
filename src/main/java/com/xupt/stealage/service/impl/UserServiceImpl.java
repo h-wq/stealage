@@ -1,12 +1,14 @@
 package com.xupt.stealage.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Lists;
 import com.xupt.stealage.mapper.UserMapper;
 import com.xupt.stealage.model.User;
 import com.xupt.stealage.model.UserExample;
 import com.xupt.stealage.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -25,6 +27,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getByIds(List<Integer> ids) {
+        if (CollectionUtils.isEmpty(ids)) {
+            return Lists.newArrayList();
+        }
         UserExample example = new UserExample();
         example.createCriteria().andIdIn(ids);
         return userMapper.selectByExample(example);
