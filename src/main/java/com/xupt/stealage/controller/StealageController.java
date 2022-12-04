@@ -125,6 +125,22 @@ public class StealageController {
     }
 
     /**
+     * 失物招领轮播图
+     * @param pageNum pageNum
+     * @param pageSize pageSize
+     * @return
+     */
+    @RequestMapping(value = "/by/is_recruitment/carousel", method = RequestMethod.GET)
+    public JsonResult<List<List<StealageResp>>> queryByIsRecruitment(@RequestParam(name = "is_recruitment") boolean isRecruitment,
+                                                                     @RequestParam(name = "split") int split,
+                                                                     @RequestParam(name = "page_num", defaultValue = "1") int pageNum,
+                                                                     @RequestParam(name = "page_size", defaultValue = "9") int pageSize) {
+        PageResult<Stealage> pageResult = stealageService.getByIsRecruitment(isRecruitment, (pageNum - 1) * pageSize, pageSize);
+        List<StealageResp> stealageResps = query(pageResult).getData().getItems();
+        return JsonResult.success(Lists.partition(stealageResps, split));
+    }
+
+    /**
      * 失物招领状态列表
      */
     @RequestMapping(value = "/stealage_statues", method = RequestMethod.GET)
