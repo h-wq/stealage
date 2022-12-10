@@ -97,7 +97,7 @@ public class StealageServiceImpl implements StealageService {
 
     @Override
     public List<Integer> getDaysOfThisMonth() {
-        LocalDate now = LocalDate.now();
+        LocalDate now = LocalDate.now(ZoneId.of("GMT+8"));
         LocalDate firstDay = now.with(TemporalAdjusters.firstDayOfMonth());
         Date firstDayDate = Date.from(LocalDateTime.of(firstDay, LocalTime.of(0, 0, 0)).atZone(ZoneId.of("GMT+8")).toInstant());
         LocalDate lastDay = now.with(TemporalAdjusters.lastDayOfMonth());
