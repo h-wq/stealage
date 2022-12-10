@@ -149,6 +149,29 @@ public class StealageController {
         return JsonResult.success(stealageStatusResps);
     }
 
+    /**
+     * 失物招领时间列表
+     */
+    @RequestMapping(value = "/days_of_this_maonth", method = RequestMethod.GET)
+    public JsonResult<List<Integer>> queryDaysOfThisMonth() {
+        List<Integer> days = stealageService.getDaysOfThisMonth();
+        return JsonResult.success(days);
+    }
+
+    /**
+     * 失物招领列表
+     * @param pageNum pageNum
+     * @param pageSize pageSize
+     * @return
+     */
+    @RequestMapping(value = "/by/day", method = RequestMethod.GET)
+    public JsonResult<PageResult<StealageResp>> queryByDay(@RequestParam(name = "day") int day,
+                                                           @RequestParam(name = "page_num", defaultValue = "1") int pageNum,
+                                                           @RequestParam(name = "page_size", defaultValue = "2147483647") int pageSize) {
+        PageResult<Stealage> pageResult = stealageService.getByDayOfThisMonth(day, (pageNum - 1) * pageSize, pageSize);
+        return query(pageResult);
+    }
+
     private JsonResult<PageResult<StealageResp>> query(PageResult<Stealage> pageResult) {
         List<Integer> stealageTypeIds = pageResult.getItems().stream().map(Stealage::getTypeId).distinct().collect(Collectors.toList());
         List<StealageType> stealageTypes = stealageTypeService.getByIds(stealageTypeIds);

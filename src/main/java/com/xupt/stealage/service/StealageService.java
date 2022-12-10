@@ -24,5 +24,9 @@ public interface StealageService {
 
     PageResult<Stealage> getByUserId(int userId, int offset, int size);
 
+    List<Integer> getDaysOfThisMonth();
+
+    PageResult<Stealage> getByDayOfThisMonth(int day, int offset, int size);
+
     Integer updateStealageById(Stealage stealage);
 }

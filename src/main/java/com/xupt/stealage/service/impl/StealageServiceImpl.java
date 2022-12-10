@@ -11,6 +11,12 @@ import com.xupt.stealage.service.StealageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.temporal.TemporalAdjusters;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -86,6 +92,35 @@ public class StealageServiceImpl implements StealageService {
         example.createCriteria().andUserIdEqualTo(userId);
         example.setOrderByClause("create_time desc, stealage_time desc");
 
+        return getByPage(example, offset,size);
+    }
+
+    @Override
+    public List<Integer> getDaysOfThisMonth() {
+        LocalDate now = LocalDate.now();
+        LocalDate firstDay = now.with(TemporalAdjusters.firstDayOfMonth());
+        Date firstDayDate = Date.from(LocalDateTime.of(firstDay, LocalTime.of(0, 0, 0)).atZone(ZoneId.of("+08:00")).toInstant());
+        LocalDate lastDay = now.with(TemporalAdjusters.lastDayOfMonth());
+        Date lastDayDate = Date.from(LocalDateTime.of(lastDay, LocalTime.of(0, 0, 0)).atZone(ZoneId.of("+08:00")).toInstant());
+
+        StealageExample example = new StealageExample();
+        example.createCriteria().andStealageTimeBetween(firstDayDate, lastDayDate);
+        return stealageMapper.selectByExample(example).stream()
+                .map(stealage -> stealage.getStealageTime().getDay())
+                .sorted()
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public PageResult<Stealage> getByDayOfThisMonth(int day, int offset, int size) {
+        LocalDate dayLocalDate = LocalDate.now(ZoneId.of("+08:00")).withDayOfMonth(day);
+        Date startDayDate = Date.from(LocalDateTime.of(dayLocalDate, LocalTime.of(0, 0, 0)).atZone(ZoneId.of("+08:00")).toInstant());
+        Date endDayDate = Date.from(LocalDateTime.of(dayLocalDate, LocalTime.of(23, 59, 59)).atZone(ZoneId.of("+08:00")).toInstant());
+
+        StealageExample example = new StealageExample();
+        example.createCriteria().andStealageTimeBetween(startDayDate, endDayDate);
+        example.setOrderByClause("create_time desc, stealage_time desc");
         return getByPage(example, offset,size);
     }
 
