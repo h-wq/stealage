@@ -99,14 +99,14 @@ public class StealageServiceImpl implements StealageService {
     public List<Integer> getDaysOfThisMonth() {
         LocalDate now = LocalDate.now();
         LocalDate firstDay = now.with(TemporalAdjusters.firstDayOfMonth());
-        Date firstDayDate = Date.from(LocalDateTime.of(firstDay, LocalTime.of(0, 0, 0)).atZone(ZoneId.of("+08:00")).toInstant());
+        Date firstDayDate = Date.from(LocalDateTime.of(firstDay, LocalTime.of(0, 0, 0)).atZone(ZoneId.of("GMT+8")).toInstant());
         LocalDate lastDay = now.with(TemporalAdjusters.lastDayOfMonth());
-        Date lastDayDate = Date.from(LocalDateTime.of(lastDay, LocalTime.of(0, 0, 0)).atZone(ZoneId.of("+08:00")).toInstant());
+        Date lastDayDate = Date.from(LocalDateTime.of(lastDay, LocalTime.of(23, 59, 59)).atZone(ZoneId.of("GMT+8")).toInstant());
 
         StealageExample example = new StealageExample();
         example.createCriteria().andStealageTimeBetween(firstDayDate, lastDayDate);
         return stealageMapper.selectByExample(example).stream()
-                .map(stealage -> stealage.getStealageTime().getDay())
+                .map(stealage -> LocalDateTime.ofInstant(stealage.getStealageTime().toInstant(), ZoneId.of("GMT+8")).getDayOfMonth())
                 .sorted()
                 .distinct()
                 .collect(Collectors.toList());
@@ -114,9 +114,9 @@ public class StealageServiceImpl implements StealageService {
 
     @Override
     public PageResult<Stealage> getByDayOfThisMonth(int day, int offset, int size) {
-        LocalDate dayLocalDate = LocalDate.now(ZoneId.of("+08:00")).withDayOfMonth(day);
-        Date startDayDate = Date.from(LocalDateTime.of(dayLocalDate, LocalTime.of(0, 0, 0)).atZone(ZoneId.of("+08:00")).toInstant());
-        Date endDayDate = Date.from(LocalDateTime.of(dayLocalDate, LocalTime.of(23, 59, 59)).atZone(ZoneId.of("+08:00")).toInstant());
+        LocalDate dayLocalDate = LocalDate.now(ZoneId.of("GMT+8")).withDayOfMonth(day);
+        Date startDayDate = Date.from(LocalDateTime.of(dayLocalDate, LocalTime.of(0, 0, 0)).atZone(ZoneId.of("GMT+8")).toInstant());
+        Date endDayDate = Date.from(LocalDateTime.of(dayLocalDate, LocalTime.of(23, 59, 59)).atZone(ZoneId.of("GMT+8")).toInstant());
 
         StealageExample example = new StealageExample();
         example.createCriteria().andStealageTimeBetween(startDayDate, endDayDate);
