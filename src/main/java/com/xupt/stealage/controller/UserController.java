@@ -34,7 +34,7 @@ public class UserController {
      * 查找好友
      */
     @RequestMapping(method = RequestMethod.GET)
-    public JsonResult query(@RequestParam(name = "name") String name) {
+    public JsonResult<List<UserResp>> query(@RequestParam(name = "name") String name) {
         List<UserResp> users = userService.getByName(name).stream().map(UserResp::convert).collect(Collectors.toList());
         return JsonResult.success(users);
     }
@@ -49,6 +49,15 @@ public class UserController {
         User user = UserReq.convert(userReq);
         Integer result = userService.addUser(user);
         return result == 1 ? JsonResult.success(user.getId()) : JsonResult.fail(-1, "添加用户失败！");
+    }
+
+    /**
+     * 查找好友
+     */
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public JsonResult<UserResp> queryById(@PathVariable(name = "id") int id) {
+        UserResp userResp = UserResp.convert(userService.getById(id));
+        return JsonResult.success(userResp);
     }
 
     /**
