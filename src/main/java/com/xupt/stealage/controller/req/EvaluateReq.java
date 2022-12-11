@@ -8,6 +8,7 @@ import org.springframework.beans.BeanUtils;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 /**
  * 失物招领评论请求实体类
@@ -34,6 +35,8 @@ public class EvaluateReq {
     public static Evaluate convert(EvaluateReq req) {
         Evaluate evaluate = new Evaluate();
         BeanUtils.copyProperties(req, evaluate);
+        evaluate.setCreateTime(new Date());
+        evaluate.setUpdateTime(new Date());
         return evaluate;
     }
 }

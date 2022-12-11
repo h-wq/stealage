@@ -7,6 +7,7 @@ import org.springframework.beans.BeanUtils;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 /**
  * 朋友圈点赞请求实体类
@@ -27,6 +28,8 @@ public class CircleLikeReq {
     public static CircleLike convert(CircleLikeReq req) {
         CircleLike circleLike = new CircleLike();
         BeanUtils.copyProperties(req, circleLike);
+        circleLike.setCreateTime(new Date());
+        circleLike.setUpdateTime(new Date());
         return circleLike;
     }
 }

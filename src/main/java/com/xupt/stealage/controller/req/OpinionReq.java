@@ -8,6 +8,7 @@ import org.springframework.beans.BeanUtils;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 /**
  * 意见反馈请求实体类
@@ -26,6 +27,8 @@ public class OpinionReq {
     public static Opinion convert(OpinionReq req) {
         Opinion opinion = new Opinion();
         BeanUtils.copyProperties(req, opinion);
+        opinion.setCreateTime(new Date());
+        opinion.setUpdateTime(new Date());
         return opinion;
     }
 }

@@ -8,6 +8,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 /**
  * 朋友圈请求实体类
@@ -47,6 +48,8 @@ public class CircleReq {
         circle.setComment(req.getComment());
         circle.setCoefficient(req.getCoefficient());
         circle.setLocation(req.getLocation());
+        circle.setCreateTime(new Date());
+        circle.setUpdateTime(new Date());
         return circle;
     }
 }
