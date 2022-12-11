@@ -6,11 +6,13 @@ import com.xupt.stealage.controller.req.UserReq;
 import com.xupt.stealage.controller.resp.UserResp;
 import com.xupt.stealage.model.User;
 import com.xupt.stealage.service.UserService;
+import com.xupt.stealage.util.FileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -42,10 +44,12 @@ public class UserController {
     /**
      * 添加用户
      */
-    @RequestMapping(method = RequestMethod.POST)
-    public JsonResult addUser(@RequestBody @Valid UserReq userReq) {
+    @RequestMapping(method = RequestMethod.POST, consumes = "multipart/form-data")
+    public JsonResult addUser(@Valid UserReq userReq,
+                              @RequestParam(name = "file") MultipartFile file) {
         // 图片上传处理
-//        String path = FileUtils.uploadFile(fileUploadPath, file);
+        String path = FileUtils.uploadFile(fileUploadPath, file);
+        userReq.setPicture(path);
         User user = UserReq.convert(userReq);
         Integer result = userService.addUser(user);
         return result == 1 ? JsonResult.success(user.getId()) : JsonResult.fail(-1, "添加用户失败！");
