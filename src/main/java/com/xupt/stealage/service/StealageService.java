@@ -20,6 +20,8 @@ public interface StealageService {
 
     PageResult<Stealage> getByStealageTypeId(int stealageTypeId, int offset, int size);
 
+    PageResult<Stealage> getByStealageTypeId(int stealageTypeId, Boolean isRecruitment, int offset, int size);
+
     PageResult<Stealage> getByIsRecruitment(boolean isRecruitment, int offset, int size);
 
     PageResult<Stealage> getByUserId(int userId, int offset, int size);

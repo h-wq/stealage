@@ -90,9 +90,10 @@ public class StealageController {
      */
     @RequestMapping(value = "/by/stealage_type", method = RequestMethod.GET)
     public JsonResult<PageResult<StealageResp>> queryByStealageTypeId(@RequestParam(name = "stealage_type_id") Integer stealageTypeId,
+                                                                      @RequestParam(name = "is_recruitment", required = false) Boolean isRecruitment,
                                                                       @RequestParam(name = "page_num", defaultValue = "1") int pageNum,
                                                                       @RequestParam(name = "page_size", defaultValue = "2147483647") int pageSize) {
-        PageResult<Stealage> pageResult = stealageService.getByStealageTypeId(stealageTypeId, (pageNum - 1) * pageSize, pageSize);
+        PageResult<Stealage> pageResult = stealageService.getByStealageTypeId(stealageTypeId, isRecruitment, (pageNum - 1) * pageSize, pageSize);
         return query(pageResult);
     }
 

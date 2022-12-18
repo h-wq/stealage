@@ -78,6 +78,19 @@ public class StealageServiceImpl implements StealageService {
     }
 
     @Override
+    public PageResult<Stealage> getByStealageTypeId(int stealageTypeId, Boolean isRecruitment, int offset, int size) {
+        StealageExample example = new StealageExample();
+        StealageExample.Criteria criteria = example.createCriteria();
+        criteria.andTypeIdEqualTo(stealageTypeId);
+        if (isRecruitment != null) {
+            criteria.andIsRecruitmentEqualTo(isRecruitment);
+        }
+        example.setOrderByClause("create_time desc, stealage_time desc");
+
+        return getByPage(example, offset,size);
+    }
+
+    @Override
     public PageResult<Stealage> getByIsRecruitment(boolean isRecruitment, int offset, int size) {
         StealageExample example = new StealageExample();
         example.setOrderByClause("create_time desc, stealage_time desc");

@@ -33,7 +33,7 @@ public class StealageResp {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date stealageTime;
 
-    private String typeName;
+    private StealageTypeResp typeResp;
 
     private String picture;
 
@@ -57,7 +57,7 @@ public class StealageResp {
                 .description(stealage.getDescription())
                 .place(stealage.getPlace())
                 .stealageTime(stealage.getStealageTime())
-                .typeName(type == null ? "" : type.getName())
+                .typeResp(StealageTypeResp.convert(type))
                 .picture(stealage.getPicture())
                 .status(StealageStatus.valueOf(stealage.getStatus()).getDesc())
                 .createTime(stealage.getCreateTime())
