@@ -45,10 +45,10 @@ public class StealageResp {
     public static StealageResp convert(Stealage stealage, List<StealageType> stealageTypes, List<User> users) {
         StealageType type = stealageTypes.stream().filter(stealageType -> stealage.getTypeId().equals(stealageType.getId())).findFirst().orElse(null);
         User user = users.stream().filter(u -> stealage.getUserId().equals(u.getId())).findFirst().get();
-        return buildStealageResp(stealage, type, user);
+        return convert(stealage, type, user);
     }
 
-    private static StealageResp buildStealageResp(Stealage stealage, StealageType type, User user) {
+    public static StealageResp convert(Stealage stealage, StealageType type, User user) {
         return StealageResp.builder()
                 .id(stealage.getId())
                 .name(stealage.getName())

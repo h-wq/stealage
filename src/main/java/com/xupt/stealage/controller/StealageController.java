@@ -172,6 +172,21 @@ public class StealageController {
         return query(pageResult);
     }
 
+    /**
+     * 详情
+     * @return
+     */
+    @RequestMapping(value = "/{id}/get_info", method = RequestMethod.GET)
+    public JsonResult<StealageResp> geStealageInfo(@PathVariable Integer id) {
+        Stealage stealage = stealageService.getById(id);
+        if (stealage == null) {
+            return JsonResult.fail(-1, "获取失物招领详情失败，无对应" + id + "的失物招领");
+        }
+        StealageType stealageType = stealageTypeService.getById(stealage.getTypeId());
+        User user = userService.getById(stealage.getUserId());
+        return JsonResult.success(StealageResp.convert(stealage, stealageType, user));
+    }
+
     private JsonResult<PageResult<StealageResp>> query(PageResult<Stealage> pageResult) {
         List<Integer> stealageTypeIds = pageResult.getItems().stream().map(Stealage::getTypeId).distinct().collect(Collectors.toList());
         List<StealageType> stealageTypes = stealageTypeService.getByIds(stealageTypeIds);
