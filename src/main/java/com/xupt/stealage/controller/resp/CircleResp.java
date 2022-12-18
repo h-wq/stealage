@@ -95,8 +95,8 @@ public class CircleResp {
         circleResp.setCoefficient(circle.getCoefficient());
         circleResp.setLocation(circle.getLocation());
         circleResp.setTime(circle.getCreateTime());
-        circleComments = circleComments.stream().filter(circleComment -> circleComment.getCircleId().equals(circle.getId())).collect(Collectors.toList());
-        List<CircleCommentResp> circleCommentRespList = circleComments.stream().map(circleComment -> {
+        List<CircleComment> thisCircleComments = circleComments.stream().filter(circleComment -> circleComment.getCircleId().equals(circle.getId())).collect(Collectors.toList());
+        List<CircleCommentResp> circleCommentRespList = thisCircleComments.stream().map(circleComment -> {
             CircleCommentResp circleCommentResp = new CircleCommentResp();
             circleCommentResp.setId(circleComment.getId());
             User circleCommentUser = users.stream().filter(user -> user.getId().equals(circleComment.getUserId())).findFirst().get();
@@ -109,7 +109,8 @@ public class CircleResp {
         }).collect(Collectors.toList());
         circleResp.setCircleCommentRespList(circleCommentRespList);
 
-        List<CircleLikeResp> circleLikeRespList = circleLikes.stream().map(circleLike -> {
+        List<CircleLike> thisCircleLikes= circleLikes.stream().filter(circleLike -> circleLike.getCircleId().equals(circle.getId())).collect(Collectors.toList());
+        List<CircleLikeResp> circleLikeRespList = thisCircleLikes.stream().map(circleLike -> {
             CircleLikeResp circleLikeResp = new CircleLikeResp();
             circleLikeResp.setId(circleLike.getId());
             User circleLikeUser = users.stream().filter(user -> user.getId().equals(circleLike.getUserId())).findFirst().get();
