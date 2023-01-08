@@ -45,6 +45,21 @@ public class StealageController {
     private UserService userService;
 
     /**
+     * 失物招领列表
+     * @param userId userId
+     * @param pageNum pageNum
+     * @param pageSize pageSize
+     * @return
+     */
+    @RequestMapping(value = "/by/user_id", method = RequestMethod.GET)
+    public JsonResult<PageResult<StealageResp>> queryByUserId(@RequestParam(name = "user_id") Integer userId,
+                                                              @RequestParam(name = "page_num", defaultValue = "1") int pageNum,
+                                                              @RequestParam(name = "page_size", defaultValue = "2147483647") int pageSize) {
+        PageResult<Stealage> pageResult = stealageService.getByUserId(userId, (pageNum - 1) * pageSize, pageSize);
+        return query(pageResult);
+    }
+
+    /**
      * 添加失物招领
      */
     @RequestMapping(method = RequestMethod.POST, consumes = "multipart/form-data")
