@@ -44,7 +44,7 @@ public class UserController {
     /**
      * 用户登录
      */
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
     public JsonResult<UserResp> login(@RequestParam(name = "name") String name,
                                       @RequestParam(name = "password") String password) {
         User user = userService.login(name, password);
