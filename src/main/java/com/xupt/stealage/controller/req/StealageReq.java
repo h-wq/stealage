@@ -1,5 +1,6 @@
 package com.xupt.stealage.controller.req;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.xupt.stealage.data.StealageStatus;
 import com.xupt.stealage.model.Stealage;
@@ -37,6 +38,8 @@ public class StealageReq {
     private String place;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonProperty(value = "stealage_time", access = JsonProperty.Access.WRITE_ONLY)
     private Date stealageTime;
 
     @NotNull
