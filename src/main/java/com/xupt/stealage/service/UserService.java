@@ -12,6 +12,8 @@ public interface UserService {
 
     List<User> getByName(String name);
 
+    User login(String name, String password);
+
     Integer addUser(User user);
 
     Integer addFriend(Integer id, Integer friendId);

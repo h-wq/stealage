@@ -42,6 +42,22 @@ public class UserController {
     }
 
     /**
+     * 用户登录
+     */
+    @RequestMapping(method = RequestMethod.GET)
+    public JsonResult<UserResp> login(@RequestParam(name = "name") String name,
+                                      @RequestParam(name = "password") String password) {
+        User user = userService.login(name, password);
+        UserResp userResp;
+        if (user == null) {
+            userResp = null;
+        } else {
+            userResp = UserResp.convert(user);
+        }
+        return JsonResult.success(userResp);
+    }
+
+    /**
      * 添加用户
      */
     @RequestMapping(method = RequestMethod.POST, consumes = "multipart/form-data")
