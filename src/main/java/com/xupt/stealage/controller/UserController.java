@@ -70,7 +70,7 @@ public class UserController {
         if (Strings.isNullOrEmpty(userReq.getPassword()) || userReq.getPassword().length() < 6) {
             return JsonResult.fail(-1, "注册失败，密码长度必须大于等于6！");
         }
-        if (login(userReq.getName(), userReq.getPassword()) != null) {
+        if (login(userReq.getName(), userReq.getPassword()).getData() != null) {
             return JsonResult.fail(-1, "注册失败，昵称和密码已注册，请登录！");
         }
         // 图片上传处理
