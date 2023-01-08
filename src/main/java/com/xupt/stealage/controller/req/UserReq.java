@@ -5,7 +5,6 @@ import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
@@ -14,12 +13,8 @@ import java.util.Date;
 @Data
 public class UserReq {
 
-    @NotBlank
-    @Size(max = 10, min = 2, message = "学生昵称长度必须大于等于2或小于等于10")
     private String name;
 
-    @NotBlank
-    @Size(max = 20, min = 6, message = "学生昵称长度必须大于等于6或小于等于20")
     private String password;
 
     @NotBlank(message = "学生头像必须上传")

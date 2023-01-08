@@ -1,6 +1,7 @@
 package com.xupt.stealage.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.base.Strings;
 import com.xupt.stealage.common.result.JsonResult;
 import com.xupt.stealage.controller.req.UserReq;
 import com.xupt.stealage.controller.resp.UserResp;
@@ -63,12 +64,21 @@ public class UserController {
     @RequestMapping(method = RequestMethod.POST, consumes = "multipart/form-data")
     public JsonResult addUser(@Valid UserReq userReq,
                               @RequestParam(name = "file") MultipartFile file) {
+        if (Strings.isNullOrEmpty(userReq.getName()) || userReq.getName().length() < 2) {
+            return JsonResult.fail(-1, "注册失败，昵称长度必须大于等于2！");
+        }
+        if (Strings.isNullOrEmpty(userReq.getPassword()) || userReq.getPassword().length() < 6) {
+            return JsonResult.fail(-1, "注册失败，密码长度必须大于等于6！");
+        }
+        if (login(userReq.getName(), userReq.getPassword()) != null) {
+            return JsonResult.fail(-1, "注册失败，昵称和密码已注册，请登录！");
+        }
         // 图片上传处理
         String path = FileUtils.uploadFile(fileUploadPath, file);
         userReq.setPicture(path);
         User user = UserReq.convert(userReq);
         Integer result = userService.addUser(user);
-        return result == 1 ? JsonResult.success(user.getId()) : JsonResult.fail(-1, "添加用户失败！");
+        return result == 1 ? JsonResult.success(user.getId()) : JsonResult.fail(-1, "注册失败！");
     }
 
     /**
