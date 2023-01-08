@@ -44,10 +44,12 @@ public class StealageReq {
     @JsonProperty(value = "type_id", access = JsonProperty.Access.WRITE_ONLY)
     private Integer typeId;
 
-    public static Stealage convert(StealageReq req, String path) {
+    @NotBlank
+    private String picture;
+
+    public static Stealage convert(StealageReq req) {
         Stealage stealage = new Stealage();
         BeanUtils.copyProperties(req, stealage);
-        stealage.setPicture(path);
         stealage.setStatus(StealageStatus.PENDING.name());
         stealage.setCreateTime(new Date());
         stealage.setUpdateTime(new Date());

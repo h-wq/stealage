@@ -17,6 +17,7 @@ import com.xupt.stealage.util.FileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -60,13 +61,20 @@ public class StealageController {
     }
 
     /**
+     * 失物招领上传图片
+     */
+    @RequestMapping(value = "/upload_picture", method = RequestMethod.POST, consumes = "multipart/form-data")
+    public JsonResult uploadPictures(@RequestParam(name = "file") MultipartFile file) {
+        String path = FileUtils.uploadFile(fileUploadPath, file);
+        return !StringUtils.isEmpty(path) ? JsonResult.success(path) : JsonResult.fail(-1, "失物招领上传图片失败！");
+    }
+
+    /**
      * 添加失物招领
      */
-    @RequestMapping(method = RequestMethod.POST, consumes = "multipart/form-data")
-    public JsonResult addStealage(@Valid StealageReq stealageReq, @RequestParam("file") MultipartFile file) {
-        // 图片上传
-        String path = FileUtils.uploadFile(fileUploadPath, file);
-        Integer result = stealageService.addStealage(StealageReq.convert(stealageReq, path));
+    @RequestMapping(method = RequestMethod.POST)
+    public JsonResult addStealage(@Valid StealageReq stealageReq) {
+        Integer result = stealageService.addStealage(StealageReq.convert(stealageReq));
         return result == 1 ? JsonResult.success() : JsonResult.fail(-1, "添加失败！");
     }
 
