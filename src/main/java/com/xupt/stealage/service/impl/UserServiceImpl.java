@@ -43,6 +43,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User login(String name, String password) {
+        UserExample example = new UserExample();
+        example.createCriteria().andNameEqualTo(name).andPasswordEqualTo(password);
+        return userMapper.selectByExample(example).stream().findFirst().orElse(null);
+    }
+
+    @Override
     public Integer addUser(User user) {
         return userMapper.insertSelective(user);
     }
