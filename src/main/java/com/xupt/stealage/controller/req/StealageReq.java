@@ -39,7 +39,7 @@ public class StealageReq {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date stealageTime;
 
-    @NotBlank
+    @NotNull
     @Min(value = 1)
     @JsonProperty(value = "type_id", access = JsonProperty.Access.WRITE_ONLY)
     private Integer typeId;
