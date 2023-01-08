@@ -73,7 +73,7 @@ public class StealageController {
      * 添加失物招领
      */
     @RequestMapping(method = RequestMethod.POST)
-    public JsonResult addStealage(@Valid StealageReq stealageReq) {
+    public JsonResult addStealage(@RequestBody @Valid StealageReq stealageReq) {
         Integer result = stealageService.addStealage(StealageReq.convert(stealageReq));
         return result == 1 ? JsonResult.success() : JsonResult.fail(-1, "添加失败！");
     }
