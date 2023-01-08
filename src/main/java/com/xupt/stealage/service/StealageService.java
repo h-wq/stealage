@@ -10,6 +10,8 @@ public interface StealageService {
 
     Integer addStealage(Stealage stealage);
 
+    Integer deleteStealage(Integer id);
+
     Stealage getById(Integer id);
 
     List<Stealage> getByIds(List<Integer> ids);

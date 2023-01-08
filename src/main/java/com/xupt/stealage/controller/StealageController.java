@@ -67,7 +67,16 @@ public class StealageController {
         // 图片上传
         String path = FileUtils.uploadFile(fileUploadPath, file);
         Integer result = stealageService.addStealage(StealageReq.convert(stealageReq, path));
-        return result == 1 ? JsonResult.success() : JsonResult.fail(-1, "添加书失败！");
+        return result == 1 ? JsonResult.success() : JsonResult.fail(-1, "添加失败！");
+    }
+
+    /**
+     * 删除失物招领
+     */
+    @RequestMapping(value = "/{id}/delete", method = RequestMethod.POST)
+    public JsonResult deleteStealage(@PathVariable Integer id) {
+        Integer result = stealageService.deleteStealage(id);
+        return result == 1 ? JsonResult.success() : JsonResult.fail(-1, "删除失败！");
     }
 
     /**
