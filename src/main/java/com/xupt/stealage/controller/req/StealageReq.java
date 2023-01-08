@@ -32,7 +32,7 @@ public class StealageReq {
     private Boolean isRecruitment;
 
     @NotBlank
-    private String describe;
+    private String description;
 
     @NotBlank
     private String place;
