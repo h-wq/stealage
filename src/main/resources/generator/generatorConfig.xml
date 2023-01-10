@@ -66,5 +66,8 @@
         <table tableName="circle_likes" domainObjectName="CircleLike">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
+        <table tableName="stealage_process_contents" domainObjectName="StealageProcessContent">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
     </context>
 </generatorConfiguration>
