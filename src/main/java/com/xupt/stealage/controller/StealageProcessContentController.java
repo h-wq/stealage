@@ -7,6 +7,7 @@ import com.xupt.stealage.controller.resp.StealageProcessContentResp;
 import com.xupt.stealage.model.StealageProcessContent;
 import com.xupt.stealage.model.User;
 import com.xupt.stealage.service.StealageProcessContentService;
+import com.xupt.stealage.service.StealageService;
 import com.xupt.stealage.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class StealageProcessContentController {
     private StealageProcessContentService stealageProcessContentService;
 
     @Autowired
+    private StealageService stealageService;
+
+    @Autowired
     private UserService userService;
 
     /**
@@ -41,7 +45,8 @@ public class StealageProcessContentController {
     public JsonResult<List<StealageProcessContentResp>> queryContents(@RequestParam(name = "stealage_id") Integer stealageId,
                                                                       @RequestParam(name = "user_id") Integer userId) {
         List<StealageProcessContent> stealageProcessContents = stealageProcessContentService.getContents(stealageId);
-        if (!stealageProcessContents.stream().map(StealageProcessContent::getUserId).collect(Collectors.toList()).contains(userId)) {
+        int selfUserId = stealageService.getById(stealageId).getUserId();
+        if (!stealageProcessContents.stream().map(StealageProcessContent::getUserId).collect(Collectors.toList()).contains(userId) && !userId.equals(selfUserId)) {
             return JsonResult.success(Lists.newArrayList());
         }
         List<Integer> userIds = stealageProcessContents.stream().map(StealageProcessContent::getUserId).distinct().collect(Collectors.toList());
