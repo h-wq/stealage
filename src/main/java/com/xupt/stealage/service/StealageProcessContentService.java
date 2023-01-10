@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface StealageProcessContentService {
 
-    List<StealageProcessContent> getContents(int stealageId, int userId);
+    List<StealageProcessContent> getContents(int stealageId);
 
     Integer addStealageProcessContent(StealageProcessContent stealageProcessContent);
 }

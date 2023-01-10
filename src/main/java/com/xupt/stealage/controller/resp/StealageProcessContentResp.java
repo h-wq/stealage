@@ -19,8 +19,6 @@ public class StealageProcessContentResp {
 
     private int stealageId;
 
-    private boolean isSelf;
-
     private UserResp userResp;;
 
     private String content;
@@ -28,11 +26,10 @@ public class StealageProcessContentResp {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
-    public static StealageProcessContentResp convert(StealageProcessContent stealageProcessContent, int stealageUserId, User contentUser) {
+    public static StealageProcessContentResp convert(StealageProcessContent stealageProcessContent, User contentUser) {
         return StealageProcessContentResp.builder()
                 .id(stealageProcessContent.getId())
                 .stealageId(stealageProcessContent.getStealageId())
-                .isSelf(stealageUserId == contentUser.getId())
                 .userResp(UserResp.convert(contentUser))
                 .content(stealageProcessContent.getContent())
                 .createTime(stealageProcessContent.getCreateTime())
