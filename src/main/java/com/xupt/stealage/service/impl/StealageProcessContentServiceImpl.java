@@ -1,7 +1,9 @@
 package com.xupt.stealage.service.impl;
 
 import com.google.common.collect.Lists;
+import com.xupt.stealage.mapper.StealageMapper;
 import com.xupt.stealage.mapper.StealageProcessContentMapper;
+import com.xupt.stealage.model.Stealage;
 import com.xupt.stealage.model.StealageProcessContent;
 import com.xupt.stealage.model.StealageProcessContentExample;
 import com.xupt.stealage.service.StealageProcessContentService;
@@ -15,15 +17,18 @@ import java.util.List;
 public class StealageProcessContentServiceImpl implements StealageProcessContentService {
 
     @Autowired
+    private StealageMapper stealageMapper;
+
+    @Autowired
     private StealageProcessContentMapper stealageProcessContentMapper;
 
     @Override
     public List<StealageProcessContent> getContents(int stealageId, int userId) {
-        StealageProcessContent stealageProcessContent = stealageProcessContentMapper.selectByPrimaryKey(stealageId);
-        if (stealageProcessContent == null) {
+        Stealage stealage = stealageMapper.selectByPrimaryKey(stealageId);
+        if (stealage == null) {
             return Collections.emptyList();
         }
-        int selfUserId = stealageProcessContent.getUserId();
+        int selfUserId = stealage.getUserId();
         StealageProcessContentExample example = new StealageProcessContentExample();
         example.setOrderByClause("create_time asc");
         example.createCriteria().andUserIdIn(Lists.newArrayList(selfUserId, userId));
