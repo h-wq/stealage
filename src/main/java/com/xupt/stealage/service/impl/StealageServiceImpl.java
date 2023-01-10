@@ -32,6 +32,14 @@ public class StealageServiceImpl implements StealageService {
     }
 
     @Override
+    public Integer modifyStealageStatus(Integer id, StealageStatus stealageStatus) {
+        Stealage stealage = new Stealage();
+        stealage.setId(id);
+        stealage.setStatus(stealageStatus.name());
+        return stealageMapper.updateByPrimaryKeySelective(stealage);
+    }
+
+    @Override
     public Integer deleteStealage(Integer id) {
         return stealageMapper.deleteByPrimaryKey(id);
     }

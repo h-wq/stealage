@@ -79,6 +79,32 @@ public class StealageController {
     }
 
     /**
+     * 修改失物招领状态
+     */
+    @RequestMapping(value = "/{id}/modify/status", method = RequestMethod.POST)
+    public JsonResult modifyStealageStatus(@PathVariable Integer id,
+                                           @RequestParam(name = "user_id") Integer userId,
+                                           @RequestParam(name = "processing", required = false) Boolean processing,
+                                           @RequestParam(name = "completed", required = false) Boolean completed) {
+        Stealage stealage = stealageService.getById(id);
+        if (stealage == null) {
+            return JsonResult.fail(-1, "处理失败，该失物招领不存在！");
+        }
+        if (!userId.equals(stealage.getUserId())) {
+            return JsonResult.fail(-1, "处理失败，只有发布该失物招领的学生才可处理！");
+        }
+
+        StealageStatus stealageStatus = StealageStatus.PENDING;
+        if (processing != null && processing) {
+            stealageStatus = StealageStatus.PROCESSING;
+        } else if (completed != null && completed) {
+            stealageStatus = StealageStatus.COMPLETED;
+        }
+        Integer result = stealageService.modifyStealageStatus(id, stealageStatus);
+        return result == 1 ? JsonResult.success() : JsonResult.fail(-1, "处理失败！");
+    }
+
+    /**
      * 删除失物招领
      */
     @RequestMapping(value = "/{id}/delete", method = RequestMethod.POST)
