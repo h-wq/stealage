@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -46,10 +47,11 @@ public class StealageProcessContentController {
     public JsonResult<List<StealageProcessContentResp>> queryContents(@RequestParam(name = "stealage_id") Integer stealageId,
                                                                       @RequestParam(name = "user_id") Integer userId) {
         List<StealageProcessContent> stealageProcessContents = stealageProcessContentService.getContents(stealageId);
-        int selfUserId = stealageService.getById(stealageId).getUserId();
-        if (!stealageProcessContents.stream().map(StealageProcessContent::getUserId).collect(Collectors.toList()).contains(userId) && !userId.equals(selfUserId)) {
-            return JsonResult.success(Lists.newArrayList());
-        }
+        stealageProcessContents = stealageProcessContents.stream()
+                .filter(stealageProcessContent -> (stealageProcessContent.getUserId() != null && stealageProcessContent.getUserId().equals(userId)) ||
+                        (stealageProcessContent.getDialogueUserId() != null && stealageProcessContent.getDialogueUserId().equals(userId)))
+                .collect(Collectors.toList());
+
         List<Integer> userIds = stealageProcessContents.stream().map(StealageProcessContent::getUserId).distinct().collect(Collectors.toList());
         Map<Integer, User> userMap = userService.getByIds(userIds).stream().collect(Collectors.toMap(User::getId, Function.identity()));
 
@@ -69,7 +71,19 @@ public class StealageProcessContentController {
         if (selfUserId == stealageProcessContentReq.getUserId()) {
             stealageService.modifyStealageStatus(stealageProcessContentReq.getStealageId(), StealageStatus.PROCESSING);
         }
-        Integer result = stealageProcessContentService.addStealageProcessContent(StealageProcessContentReq.convert(stealageProcessContentReq));
+
+        Integer dialogueUserId = null;
+        if (stealageProcessContentReq.getUserId() != selfUserId) {
+            dialogueUserId = selfUserId;
+        } else {
+            List<StealageProcessContent> stealageProcessContents = stealageProcessContentService.getContents(stealageProcessContentReq.getStealageId());
+            Collections.reverse(stealageProcessContents);
+            StealageProcessContent stealageProcessContent = stealageProcessContents.stream().filter(content -> content.getUserId() != selfUserId).findFirst().orElse(null);
+            if (stealageProcessContent != null) {
+                dialogueUserId = stealageProcessContent.getUserId();
+            }
+        }
+        Integer result = stealageProcessContentService.addStealageProcessContent(StealageProcessContentReq.convert(stealageProcessContentReq, dialogueUserId));
         return result == 1 ? JsonResult.success() : JsonResult.fail(-1, "添加失败！");
     }
 }

@@ -28,9 +28,10 @@ public class StealageProcessContentReq {
     @NotBlank
     private String content;
 
-    public static StealageProcessContent convert(StealageProcessContentReq req) {
+    public static StealageProcessContent convert(StealageProcessContentReq req, Integer dialogueUserId) {
         StealageProcessContent stealageProcessContent = new StealageProcessContent();
         BeanUtils.copyProperties(req, stealageProcessContent);
+        stealageProcessContent.setDialogueUserId(dialogueUserId);
         stealageProcessContent.setCreateTime(new Date());
         stealageProcessContent.setUpdateTime(new Date());
         return stealageProcessContent;
