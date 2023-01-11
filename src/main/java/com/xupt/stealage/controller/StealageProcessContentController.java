@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.xupt.stealage.common.result.JsonResult;
 import com.xupt.stealage.controller.req.StealageProcessContentReq;
 import com.xupt.stealage.controller.resp.StealageProcessContentResp;
+import com.xupt.stealage.data.StealageStatus;
 import com.xupt.stealage.model.StealageProcessContent;
 import com.xupt.stealage.model.User;
 import com.xupt.stealage.service.StealageProcessContentService;
@@ -63,6 +64,11 @@ public class StealageProcessContentController {
      */
     @RequestMapping(method = RequestMethod.POST)
     public JsonResult addStealageProcessContent(@RequestBody @Valid StealageProcessContentReq stealageProcessContentReq) {
+        //发布失物招领的本人对话后，则把失物招领状态置为处理中
+        int selfUserId = stealageService.getById(stealageProcessContentReq.getStealageId()).getUserId();
+        if (selfUserId == stealageProcessContentReq.getUserId()) {
+            stealageService.modifyStealageStatus(stealageProcessContentReq.getStealageId(), StealageStatus.PROCESSING);
+        }
         Integer result = stealageProcessContentService.addStealageProcessContent(StealageProcessContentReq.convert(stealageProcessContentReq));
         return result == 1 ? JsonResult.success() : JsonResult.fail(-1, "添加失败！");
     }
