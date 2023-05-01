@@ -19,7 +19,7 @@
 
         <!--数据库链接URL，用户名、密码 -->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://47.94.241.172:3306/stealage?serverTimezone=Asia/Shanghai"
-                        userId="root" password="root">
+                        userId="root" password="2639252035Hwq&Lx">
             <property name="nullCatalogMeansCurrent" value="true"/>
         </jdbcConnection>
         <javaTypeResolver>
