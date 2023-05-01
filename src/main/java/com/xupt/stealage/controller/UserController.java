@@ -11,11 +11,13 @@ import com.xupt.stealage.util.FileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -108,5 +110,24 @@ public class UserController {
         }
         Integer result = userService.addFriend(id, friendId);
         return result == 1 ? JsonResult.success() : JsonResult.fail(-1, "添加好友失败！");
+    }
+
+    /**
+     * 查找目前的好友列表
+     */
+    @RequestMapping(value = "/{id}/friends", method = RequestMethod.GET)
+    public JsonResult<List<UserResp>> queryFriends(@PathVariable(name = "id") int id) {
+        User user = userService.getById(id);
+        if (user == null) {
+            return JsonResult.fail(-1, "查找好友列表失败，无此用户！");
+        }
+
+        List<Integer> friendIds = Strings.isNullOrEmpty(user.getFriendIds()) ? Collections.emptyList() : JSONObject.parseArray(user.getFriendIds(), Integer.class);
+        List<User> friends = Collections.emptyList();
+        if (!CollectionUtils.isEmpty(friendIds)) {
+            friends = userService.getByIds(friendIds);
+        }
+        List<UserResp> friendRespList = friends.stream().map(UserResp::convert).collect(Collectors.toList());
+        return JsonResult.success(friendRespList);
     }
 }
