@@ -6,8 +6,10 @@ import com.xupt.stealage.common.result.PageResult;
 import com.xupt.stealage.controller.req.StealageReq;
 import com.xupt.stealage.controller.resp.StealageResp;
 import com.xupt.stealage.controller.resp.StealageStatusResp;
+import com.xupt.stealage.controller.resp.StealageTopResp;
 import com.xupt.stealage.data.StealageStatus;
 import com.xupt.stealage.model.Stealage;
+import com.xupt.stealage.model.StealageTopUser;
 import com.xupt.stealage.model.StealageType;
 import com.xupt.stealage.model.User;
 import com.xupt.stealage.service.StealageService;
@@ -23,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -229,6 +232,22 @@ public class StealageController {
                                                            @RequestParam(name = "page_size", defaultValue = "2147483647") int pageSize) {
         PageResult<Stealage> pageResult = stealageService.getByDayOfThisMonth(day, (pageNum - 1) * pageSize, pageSize);
         return query(pageResult);
+    }
+
+    /**
+     * 失物招领列表
+     * @return
+     */
+    @RequestMapping(value = "/by/top", method = RequestMethod.GET)
+    public JsonResult<List<StealageTopResp>> queryByTop(@RequestParam(name = "top") int top,
+                                                        @RequestParam(name = "is_recruitment") boolean isRecruitment) {
+        List<StealageTopUser> stealageTopUsers = stealageService.getTopUser(top, isRecruitment);
+        List<Integer> userIds = stealageTopUsers.stream().map(StealageTopUser::getUserId).collect(Collectors.toList());
+        Map<Integer, User> userMap = userService.getByIds(userIds).stream().collect(Collectors.toMap(User::getId, Function.identity()));
+        List<StealageTopResp> stealageTopRespList = stealageTopUsers.stream()
+                .map(stealageTopUser -> StealageTopResp.convert(userMap.get(stealageTopUser.getUserId()), stealageTopUser.getCount()))
+                .collect(Collectors.toList());
+        return JsonResult.success(stealageTopRespList);
     }
 
     /**

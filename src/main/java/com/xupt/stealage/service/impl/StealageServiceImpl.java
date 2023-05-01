@@ -4,9 +4,11 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xupt.stealage.common.result.PageResult;
 import com.xupt.stealage.data.StealageStatus;
+import com.xupt.stealage.mapper.ExtendedStealageMapper;
 import com.xupt.stealage.mapper.StealageMapper;
 import com.xupt.stealage.model.Stealage;
 import com.xupt.stealage.model.StealageExample;
+import com.xupt.stealage.model.StealageTopUser;
 import com.xupt.stealage.service.StealageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,9 @@ public class StealageServiceImpl implements StealageService {
 
     @Autowired
     private StealageMapper stealageMapper;
+
+    @Autowired
+    private ExtendedStealageMapper extendedStealageMapper;
 
     @Override
     public Integer addStealage(Stealage stealage) {
@@ -148,6 +153,13 @@ public class StealageServiceImpl implements StealageService {
         example.createCriteria().andStealageTimeBetween(startDayDate, endDayDate);
         example.setOrderByClause("create_time desc, stealage_time desc");
         return getByPage(example, offset,size);
+    }
+
+    @Override
+    public List<StealageTopUser> getTopUser(int top, boolean isRecruitment) {
+        return extendedStealageMapper.selectTopUser(isRecruitment).stream()
+                .limit(top)
+                .collect(Collectors.toList());
     }
 
     @Override

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xupt.stealage.mapper.ExtendedStealageMapper">
+
+    <resultMap id="StealageTopUser" type="com.xupt.stealage.model.StealageTopUser">
+        <result column="userId" property="userId" jdbcType="INTEGER"/>
+        <result column="count" property="count" jdbcType="INTEGER"/>
+    </resultMap>
+    <select id="selectTopUser" resultType="StealageTopUser" parameterType="map">
+        select user_id as userId, count(user_id) as count from stealage where is_recruitment = #{isRecruitment} group by user_id order by count(user_id) desc;
+    </select>
+</mapper>

@@ -3,6 +3,7 @@ package com.xupt.stealage.service;
 import com.xupt.stealage.common.result.PageResult;
 import com.xupt.stealage.data.StealageStatus;
 import com.xupt.stealage.model.Stealage;
+import com.xupt.stealage.model.StealageTopUser;
 
 import java.util.List;
 
@@ -33,6 +34,8 @@ public interface StealageService {
     List<Integer> getDaysOfThisMonth();
 
     PageResult<Stealage> getByDayOfThisMonth(int day, int offset, int size);
+
+    List<StealageTopUser> getTopUser(int top, boolean isRecruitment);
 
     Integer updateStealageById(Stealage stealage);
 }
